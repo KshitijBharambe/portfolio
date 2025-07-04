@@ -1,0 +1,47 @@
+'use client';
+
+import React, { createContext, useContext, useRef, ReactNode } from 'react';
+
+interface ScrollContextType {
+  homeSectionRef: React.MutableRefObject<HTMLDivElement | null>;
+  aboutSectionRef: React.MutableRefObject<HTMLDivElement | null>;
+  projectsSectionRef: React.MutableRefObject<HTMLDivElement | null>;
+  contactSectionRef: React.MutableRefObject<HTMLDivElement | null>;
+  scrollToSection: (ref: React.MutableRefObject<HTMLDivElement | null>) => void;
+}
+
+const ScrollContext = createContext<ScrollContextType | null>(null);
+
+export const useScroll = () => {
+  return useContext(ScrollContext);
+};
+
+export const ScrollProvider = ({ children }: { children: ReactNode }) => {
+  const homeSectionRef = useRef<HTMLDivElement>(null);
+  const aboutSectionRef = useRef<HTMLDivElement>(null);
+  const projectsSectionRef = useRef<HTMLDivElement>(null);
+  const contactSectionRef = useRef<HTMLDivElement>(null);
+
+    const scrollToSection = (ref: React.MutableRefObject<HTMLDivElement | null>) => {
+    if (ref.current) {
+      window.scrollTo({
+        top: ref.current.offsetTop,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const value: ScrollContextType = {
+    homeSectionRef,
+    aboutSectionRef,
+    projectsSectionRef,
+    contactSectionRef,
+    scrollToSection,
+  };
+
+  return (
+    <ScrollContext.Provider value={value}>
+      {children}
+    </ScrollContext.Provider>
+  );
+};

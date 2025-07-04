@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Color palette */
+  --color-primary: #3b82f6; /* Vibrant blue */
+  --color-primary-dark: #2563eb;
+  --color-secondary: #10b981; /* Teal/green accent */
+  --color-dark-bg-1: #0a0a0a;
+  --color-dark-bg-2: #1f1f1f;
+  --color-dark-bg-3: #2d2d2d;
+  --color-text-primary: #f3f4f6;
+  --color-text-secondary: #d1d5db;
+
+  /* Base colors */
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--color-dark-bg-1);
+    --foreground: var(--color-text-primary);
+  }
+}
+
+/* Custom classes */
+.gradient-bg-main {
+  background: linear-gradient(to bottom, #000000, #0f172a);
+}
+
+.gradient-bg-about {
+  background: linear-gradient(to bottom, #0f172a, #000000);
+}
+
+.gradient-bg-projects {
+  background: linear-gradient(to bottom, #000000, #0f172a);
+}
+
+.gradient-bg-contact {
+  background: linear-gradient(to bottom, #0f172a, #000000);
+}
+
+/* Section styles for snap scrolling */
+.snap-container {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* Hide scrollbar for a cleaner look */
+.snap-container::-webkit-scrollbar {
+  display: none;
+}
+
+.snap-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.text-glow {
+  text-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-dark-bg-2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-dark-bg-3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dark);
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Typography adjustments */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+code,
+pre {
+  font-family: var(--font-geist-mono), monospace;
+}
