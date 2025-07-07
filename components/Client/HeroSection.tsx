@@ -93,14 +93,14 @@ export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
   };
 
   // Floating elements animation
-  const floatingAnimation = {
-    y: ["-10px", "10px", "-10px"],
-    transition: {
-      duration: 4,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  };
+  // const floatingAnimation = {
+  //   y: ["-10px", "10px", "-10px"],
+  //   transition: {
+  //     duration: 4,
+  //     repeat: Infinity,
+  //     ease: "easeInOut",
+  //   },
+  // };
 
   // Animation variants for content
 

@@ -1,6 +1,6 @@
 // app/resume/page.tsx
-import Link from 'next/link';
 import StarsCanvas from '@/components/Client/StarsBackground';
+import Link from 'next/link';
 
 export default function ResumePage() {
   return (
@@ -26,7 +26,7 @@ export default function ResumePage() {
                 <span className="hidden sm:inline">•</span>
                 <a href="https://github.com/kshitij-bharambe" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">GitHub</a>
                 <span className="hidden sm:inline">•</span>
-                <a href="/" className="text-blue-400 hover:underline">Portfolio</a>
+                <Link href="/" className="text-blue-400 hover:underline">Portfolio</Link>
               </p>
             </div>
             <a

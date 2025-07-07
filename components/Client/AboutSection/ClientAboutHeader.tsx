@@ -93,24 +93,25 @@ const AboutHeader = () => {
                 Background
               </h3>
               <div className="space-y-4 text-gray-300">
-                <p>
-                  With a background in Computer Engineering and hands-on experience
-                  as a Software Engineer Intern, I've contributed to backend development
-                  using Python, integrated secure REST APIs, and automated
-                  CI/CD workflows.
-                </p>
-                <p>
-                  My experience extends to cloud infrastructure, where I've assisted in
-                  provisioning and monitoring AWS services (EC2, S3, Lambda), and security,
-                  where I've conducted vulnerability assessments using tools like
-                  Burp Suite and Kali Linux.
-                </p>
-                <p>
-                  I am driven by the challenge of solving complex problems,
-                  whether it's tuning PostgreSQL queries to boost performance
-                  or developing innovative projects like an AI-powered university
-                  chatbot and a dynamic portfolio with Next.js.
-                </p>
+              <p>
+                With a background in Computer Engineering and hands-on experience
+                as a Software Engineer Intern, I&apos;ve contributed to backend development
+                using Python, integrated secure REST APIs, and automated
+                CI/CD workflows.
+              </p>
+              <p>
+                My experience extends to cloud infrastructure, where I&apos;ve assisted in
+                provisioning and monitoring AWS services (EC2, S3, Lambda), and security,
+                where I&apos;ve conducted vulnerability assessments using tools like
+                Burp Suite and Kali Linux.
+              </p>
+              <p>
+                I am driven by the challenge of solving complex problems,
+                whether it&apos;s tuning PostgreSQL queries to boost performance
+                or developing innovative projects like an AI-powered university
+                chatbot and a dynamic portfolio with Next.js.
+              </p>
+
               </div>
             </div>
           </motion.div>
