@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { sendEmail } from "../Server/Server-EmailSend";
 
+
 const ContactSection = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -15,12 +16,13 @@ const ContactSection = () => {
   const [submitStatus, setSubmitStatus] = useState<string | null>(null); // Specify type here
   const [statusMessage, setStatusMessage] = useState("");
   const [activeTab, setActiveTab] = useState("form"); // 'form' or 'info'
-  const [windowWidth, setWindowWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 1024
-  );
+  const [windowWidth, setWindowWidth] = useState(0);
 
   // Update window width on resize
   useEffect(() => {
+    // Set initial width after the component mounts
+    setWindowWidth(window.innerWidth);
+
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
@@ -129,7 +131,8 @@ const ContactSection = () => {
   };
 
   return (
-    <section className=" gradient-bg-contact bg-blur text-white py-20 md:py-32 px-4 relative overflow-hidden">
+    <section className="text-white px-4 relative overflow-hidden w-full">
+      <div className="flex-grow py-20 md:py-32 flex items-center justify-center">
       {/* Custom cursor effect */}
       {isHovering && (
         <motion.div
@@ -468,7 +471,7 @@ const ContactSection = () => {
                     initial="hidden"
                     animate="visible"
                   >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-start">
                       <motion.div variants={itemVariants}>
                         <label
                           htmlFor="name"
@@ -682,8 +685,10 @@ const ContactSection = () => {
         </div>
       </div>
 
-      {/* Bottom decorative elements */}
-      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black to-transparent pointer-events-none"></div>
+            </div>
+      
+
+
     </section>
   );
 };

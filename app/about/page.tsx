@@ -10,6 +10,7 @@ import {
   hobbiesData,
 } from "../../public/assets/data/aboutme-data";
 import { renderIcon } from "../../public/assets/data/iconMap";
+import StarsCanvas from "@/components/Client/StarsBackground";
 
 export default function AboutPage() {
   const [activeTab, setActiveTab] = useState("background");
@@ -35,7 +36,8 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black gradient-bg-main text-white pt-24 px-4">
+            <div className="min-h-screen text-white pt-24 px-4">
+            <StarsCanvas />
       <div className="max-w-5xl mx-auto pb-20">
         {/* Header Section */}
         <motion.div

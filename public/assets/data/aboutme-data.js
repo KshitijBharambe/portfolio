@@ -3,9 +3,9 @@ export const profileData = {
   title: "Software Engineer | Cloud, DevOps & Security",
   initials: "KB",
   bio: [
-    "With a strong foundation in Java, Data Structures & Algorithms, and Cybersecurity, I have expanded my expertise into AI, DevOps, and Cloud technologies.",
-    "My focus is on developing secure, scalable architectures and automating workflows to solve complex technical challenges. As a Master's student, I'm constantly exploring new technologies and methodologies.",
-    "I have experience working on projects that combine cutting-edge AI techniques with robust cloud infrastructure, creating solutions that are both innovative and production-ready.",
+    "I'm Kshitij — a recently graduated Computer Science Master’s student from Syracuse University, where I explored everything from AI to operating systems to cloud architecture. Before that, I earned my Bachelor's in Computer Engineering from NHITM, Mumbai.",
+    "Over the last few years, I’ve worked across backend development, cloud infrastructure, and security — from building REST APIs and streamlining CI workflows to conducting vulnerability assessments during a VAPT internship. My current focus? Diving deeper into DevOps and Cloud Engineering while building tools that are scalable, secure, and efficient.",
+    "Lately, I’ve been focused on building tools that blend cloud, automation, and data sanity — including a modular Data Hygiene Toolkit designed to streamline validation and anomaly tracking. My approach is all about writing clean, scalable code while staying grounded in security and real-world usability.",
   ],
 };
 
@@ -13,36 +13,36 @@ export const journeyData = [
   {
     title: "The Beginning",
     content: [
-      "I started my programming journey with Java development and quickly found my passion in creating robust, secure applications. During my undergraduate studies, I focused on foundational computer science principles and cybersecurity.",
-      "My interest in technology began early—I was always the kid taking apart electronics to see how they worked. This curiosity eventually led me to pursue computer science, where I discovered the perfect outlet for both my analytical thinking and creative problem-solving.",
+      "My tech journey started with a fascination for how things work — not just using software, but breaking it apart to understand what’s under the hood. During undergrad, I got into core CS concepts and started building small projects while learning the basics of security and infrastructure.",
+      "Python quickly became my go-to — I’ve used it for scripting, backend work, automation, and honestly anything that needed doing.",
     ],
   },
   {
     title: "The Evolution",
     content: [
-      "As I progressed in my studies, I became fascinated with how AI could be integrated with traditional software systems to create more intelligent solutions. This led me to pursue advanced studies in machine learning and cloud computing.",
-      "The rapid advancement of machine learning frameworks and cloud technologies opened up new possibilities. I began experimenting with neural networks and deploying them on cloud infrastructure, discovering the power of combining these technologies.",
+      "As I explored more, I started caring less about just writing code and more about where it runs, how it scales, and how secure it is. That naturally led me to DevOps and cloud.",
+      "In my internships, I built APIs with FastAPI, automated workflows using GitHub Actions, and did real-world VAPT — spotting vulnerabilities and thinking like an attacker to build better defenses. Every part of the stack started making sense as a system, not just isolated lines of code.",
     ],
   },
   {
-    title: "Today and Tomorrow",
+    title: "Today and Beyond",
     content: [
-      "Today, I'm working on cutting-edge projects that combine AI with secure cloud infrastructure, creating solutions that are both innovative and production-ready.",
-      "Looking forward, I aim to continue bridging the gap between theoretical AI research and practical implementation. My goal is to develop systems that not only leverage cutting-edge algorithms but are also secure, scalable, and accessible.",
+      "I’ve built tools that blend backend design, cloud infrastructure, and automation — including a modular data hygiene platform designed for scalable validation and anomaly tracking.",
+      "Moving forward, I aim to keep building systems that are secure, efficient, and easy to maintain — not just for users, but for the developers behind them.",
     ],
   },
 ];
 
 export const philosophyData = {
   intro:
-    "I believe that technology should be accessible, secure, and designed with users in mind. My approach to development emphasizes principles that create not just functional systems, but valuable solutions that make a difference.",
+    "I believe good tech isn’t just about working — it’s about being reliable, secure, and something people actually want to use. Whether I’m building backend systems, working in the cloud, or automating workflows, I focus on writing code that holds up in the real world, not just in ideal conditions.",
   principles: [
     {
       title: "Security-First Mindset",
       icon: "lock",
       color: "blue",
       description:
-        "I believe in building systems that protect user data and privacy from the ground up. Security isn't an afterthought—it's integrated into the development process from day one.",
+        "Security isn’t a patch or an afterthought — it’s built in from day one. I approach every system with a privacy-first attitude, making sure user data and infrastructure are protected by design. ",
     },
     {
       title: "Scalable Architecture",
@@ -92,49 +92,49 @@ export const philosophyData = {
 
 export const hobbiesData = {
   intro:
-    "While technology is my passion, I believe in maintaining a balanced life. Here's what I do when I'm not in front of a computer screen:",
+    "Tech’s a big part of my life — but it’s not the whole thing. When I’m not deep in a terminal or untangling infrastructure spaghetti, here’s what I’m usually up to:",
   interests: [
     {
-      title: "Chai & Conversations",
+      title: "Chai, Coffee & Conversations",
       icon: "zap",
       color: "yellow",
       description:
-        "I love making chai with ginger, cardamom, and cinnamon. It's my way to unwind and reflect, often paired with meaningful conversations or just enjoying the quiet moments.",
+        "Whether it’s a strong ginger chai or a perfectly timed specialty coffee, I’m all about good beverages and better vibes. They fuel my deep thinking, casual chats, and quiet solo moments. I take my brews seriously — but never too seriously.",
     },
     {
       title: "Planned & Unplanned Adventures",
       icon: "map",
       color: "blue",
       description:
-        "I enjoy planning efficient travel routes, ensuring smooth and well-structured trips. But unexpected detours and unplanned adventures often make the journey even better, adding excitement and new experiences along the way.",
+        "I love efficient travel routes and hyper-optimized itineraries… until I don’t. Some of the best memories have come from random detours and last-minute plans that completely went off-script.",
     },
     {
-      title: "Tech & Philosophy Reading",
+      title: "Reading That Bends My Brain",
       icon: "book",
       color: "purple",
       description:
-        "I stay updated on cloud, DevOps, and AI through research papers and blogs. I also enjoy philosophical discussions that challenge perspectives and encourage deeper thinking.",
+        "Whether it’s cloud, DevOps, or the philosophy of consciousness, I like reading things that make me stop and think. Papers, blogs, and late-night rabbit holes included.",
     },
     {
-      title: "Problem-Solving Challenges",
+      title: "Debugging Life (and Code)",
       icon: "trending-up",
       color: "green",
       description:
-        "I find joy in solving puzzles, whether it's debugging complex issues, working on LeetCode, or participating in hackathons to test my skills under pressure.",
+        "Solving problems — whether it’s a gnarly bug or a weird LeetCode edge case — is weirdly satisfying. I sometimes do hackathons for fun (and pain).",
     },
     {
-      title: "Music & Podcasts",
+      title: "Music as a Moodboard",
       icon: "music",
       color: "red",
       description:
-        "I listen to music and tech podcasts to relax and stay informed. A mix of music and technical discussions keeps my mind balanced.",
+        "Music is my mental reset. Whether I’m building, brainstorming, or just breathing, I’ve got something playing. From lo-fi and ambient to cinematic scores and Indian classical — it’s all part of the process.",
     },
     {
       title: "Helping Others Learn",
       icon: "users",
       color: "blue",
       description:
-        "I enjoy sharing knowledge and guiding others in tech, whether through discussions, mentoring, or contributing to open-source projects.",
+        "I genuinely enjoy helping others learn — whether it’s mentoring, breaking down tough concepts, or just explaining something in plain English. Knowledge is meant to be passed around.",
     },
   ],
 };

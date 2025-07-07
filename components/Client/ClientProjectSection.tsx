@@ -131,31 +131,40 @@ export default function ClientProjectsSection({
     setVisibleProjects(localProjects.length);
   };
 
-  // Render the tech tag with appropriate color based on technology name
+  // Render the tech tag with a more meaningful and organized color scheme
   const renderTechTag = (tag: string, index: number) => {
-    let bgColor = "bg-gray-700/70";
+    let tagStyle = "bg-gray-600/70 text-gray-200"; // Default
+    const lowerCaseTag = tag.toLowerCase();
 
-    // Assign specific colors based on technology
-    if (tag.toLowerCase().includes("react")) bgColor = "bg-blue-700/70";
-    else if (tag.toLowerCase().includes("python")) bgColor = "bg-yellow-700/70";
-    else if (tag.toLowerCase().includes("node")) bgColor = "bg-green-700/70";
-    else if (tag.toLowerCase().includes("tensor")) bgColor = "bg-orange-700/70";
-    else if (
-      tag.toLowerCase().includes("blockchain") ||
-      tag.toLowerCase().includes("ethereum")
-    )
-      bgColor = "bg-purple-700/70";
-    else if (tag.toLowerCase().includes("aws")) bgColor = "bg-indigo-700/70";
-    else if (tag.toLowerCase().includes("data")) bgColor = "bg-red-700/70";
-    else if (tag.toLowerCase().includes("docker")) bgColor = "bg-cyan-700/70";
-    else if (tag.toLowerCase().includes("elastic")) bgColor = "bg-green-700/70";
-    else if (tag.toLowerCase().includes("ai")) bgColor = "bg-violet-700/70";
-    else if (tag.toLowerCase().includes("nlp")) bgColor = "bg-purple-700/70";
+    // Frontend: Blue
+    if (lowerCaseTag.includes("react") || lowerCaseTag.includes("next")) {
+      tagStyle = "bg-blue-600/80 text-blue-100";
+    }
+    // Backend: Green/Yellow
+    else if (lowerCaseTag.includes("node")) {
+      tagStyle = "bg-green-600/80 text-green-100";
+    } else if (lowerCaseTag.includes("python")) {
+      tagStyle = "bg-yellow-500/90 text-yellow-900 font-medium";
+    }
+    // AI & Data Science: Purple/Teal
+    else if (lowerCaseTag.includes("ai") || lowerCaseTag.includes("tensor") || lowerCaseTag.includes("nlp")) {
+      tagStyle = "bg-purple-600/80 text-purple-100";
+    } else if (lowerCaseTag.includes("data") || lowerCaseTag.includes("elastic") || lowerCaseTag.includes("pandas") || lowerCaseTag.includes("kibana")) {
+      tagStyle = "bg-teal-600/80 text-teal-100";
+    }
+    // DevOps & Cloud: Orange/Indigo
+    else if (lowerCaseTag.includes("docker") || lowerCaseTag.includes("aws") || lowerCaseTag.includes("devops")) {
+      tagStyle = "bg-orange-600/80 text-orange-100";
+    }
+    // Blockchain: Indigo
+    else if (lowerCaseTag.includes("blockchain") || lowerCaseTag.includes("ethereum")) {
+      tagStyle = "bg-indigo-600/80 text-indigo-100";
+    }
 
     return (
       <span
         key={index}
-        className={`${bgColor} text-xs px-3 py-1 rounded-full text-gray-200 inline-block m-1`}
+        className={`text-xs px-3 py-1 rounded-full inline-block m-1 ${tagStyle}`}
       >
         {tag}
       </span>
@@ -166,14 +175,7 @@ export default function ClientProjectsSection({
   const displayedProjects = localProjects.slice(0, visibleProjects);
 
   return (
-    <section className="gradient-bg-projects text-white py-32 px-4 min-h-screen overflow-hidden relative">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-40 right-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-60 left-20 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute -top-10 left-1/3 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl"></div>
-      </div>
-
+    <section className="text-white py-24 px-4 relative">
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Section Header */}
         <motion.div
@@ -247,12 +249,12 @@ export default function ClientProjectsSection({
                 </p>
 
                 {/* Tags */}
-                <div className="flex flex-wrap mb-3">
+                                                <div className="flex flex-wrap mb-3">
                   {project.tags
                     .slice(0, 3)
                     .map((tag: string, index: number) => renderTechTag(tag, index))}
                   {project.tags.length > 3 && (
-                    <span key="more-tags" className="bg-gray-700/70 text-xs px-3 py-1 rounded-full text-gray-200 inline-block m-1">
+                                                            <span key="more-tags" className="bg-gray-700/70 text-xs px-3 py-1 rounded-full text-gray-200 inline-block m-1">
                       +{project.tags.length - 3}
                     </span>
                   )}
@@ -262,10 +264,10 @@ export default function ClientProjectsSection({
                 <div className="flex-grow"></div>
 
                 {/* Actions */}
-                <div className="flex gap-3 mt-auto">
+                <div className="flex justify-center mt-auto">
                   <button
                     onClick={() => openProjectDetails(project)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors flex items-center text-sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors flex items-center text-sm"
                     aria-label="View project details"
                   >
                     <svg
@@ -284,30 +286,6 @@ export default function ClientProjectsSection({
                     </svg>
                     View Details
                   </button>
-                  {project.demoLink && (
-                    <a
-                      href={project.demoLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md transition-colors flex items-center text-sm"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 mr-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                      Live Demo
-                    </a>
-                  )}
                 </div>
               </div>
             </motion.div>

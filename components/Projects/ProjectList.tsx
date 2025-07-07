@@ -17,14 +17,11 @@ export default function ProjectList({
   activeFilter, 
   searchQuery 
 }: ProjectListProps) {
-  // Memoize filtered projects to prevent unnecessary recalculations
   const filteredProjects = useMemo(() => {
     return projects.filter((project) => {
-      // Filter by category
       if (activeFilter !== 'all' && !project.tags.includes(activeFilter)) {
         return false;
       }
-      // Filter by search query
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         return (
@@ -47,17 +44,17 @@ export default function ProjectList({
     );
   }
 
-  return (
-    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+    return (
+    <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
       {filteredProjects.map((project) => (
         <motion.div
           key={project.id}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="overflow-hidden rounded-lg bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl dark:bg-gray-800"
+          className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-2xl dark:border-white/20 dark:bg-black/20"
         >
-          <div className="relative h-48 w-full">
+          <div className="relative h-48 w-full overflow-hidden rounded-lg">
             <Image
               src={project.image}
               alt={project.title}
@@ -66,40 +63,31 @@ export default function ProjectList({
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>
-          <div className="p-6">
-            <h3 className="mb-2 text-xl font-semibold">{project.title}</h3>
-            <p className="mb-4 text-gray-600 dark:text-gray-300">
+          <div className="flex flex-1 flex-col p-6">
+            <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white font-sans">{project.title}</h2>
+            <p className="mb-4 text-gray-700 dark:text-gray-300 font-sans">
               {project.description}
             </p>
             <div className="mb-4 flex flex-wrap gap-2">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-100"
+                  className="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-500 transition-colors duration-300 group-hover:bg-blue-500/20 dark:text-blue-400 font-sans"
                 >
                   {tag}
                 </span>
               ))}
             </div>
-            <div className="flex justify-between">
+            <div className="flex-grow"></div>
+            <div className="mt-auto flex justify-end">
               {project.githubLink && (
                 <Link
                   href={project.githubLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+                  className="inline-block rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-blue-600 group-hover:scale-105 dark:bg-blue-600 dark:hover:bg-blue-700"
                 >
-                  View Code
-                </Link>
-              )}
-              {project.demoLink && (
-                <Link
-                  href={project.demoLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
-                >
-                  Live Demo
+                  Github
                 </Link>
               )}
             </div>

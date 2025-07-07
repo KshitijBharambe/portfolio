@@ -1,13 +1,15 @@
 "use client";
 
 import React from "react";
-import Navbar from "@/components/layout/Navbar";
+
 import HeroSection from "./HeroSection";
 import AboutMeSection from "./AboutSection/ClientAboutSection";
 import ClientProjectsSection from "./ClientProjectSection";
 import ContactSection from "./ClientContactSection";
+
+import { useScroll } from "@/context/ScrollContext";
+import StarsCanvas from "./StarsBackground";
 import Footer from "@/components/layout/Footer";
-import { ScrollProvider, useScroll } from "@/context/ScrollContext";
 
 export interface ProjectData {
   id: number | string;
@@ -26,93 +28,69 @@ interface ClientHomePageProps {
   projects?: ProjectData[];
 }
 
-const PageContent: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
+const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
     const scrollContext = useScroll();
+
+        const { 
+        scrollContainerRef,
+        homeSectionRef, 
+        aboutSectionRef, 
+        projectsSectionRef, 
+        contactSectionRef 
+    } = scrollContext || {};
+
+        const handleScrollToAbout = () => {
+        if (scrollContext && scrollContext.aboutSectionRef) {
+            scrollContext.scrollToSection(scrollContext.aboutSectionRef);
+        }
+    };
+
+    React.useEffect(() => {
+        const hash = window.location.hash.replace('#', '');
+        if (hash && scrollContext) {
+            let refToScroll: React.RefObject<HTMLDivElement | null> | undefined;
+            if (hash === 'about') refToScroll = scrollContext.aboutSectionRef;
+            else if (hash === 'projects') refToScroll = scrollContext.projectsSectionRef;
+            else if (hash === 'contact') refToScroll = scrollContext.contactSectionRef;
+            else if (hash === 'home') refToScroll = scrollContext.homeSectionRef;
+
+            if (refToScroll) {
+                setTimeout(() => {
+                    scrollContext.scrollToSection(refToScroll);
+                }, 150);
+            }
+        }
+    }, [scrollContext]);
 
     if (!scrollContext) {
         return null;
     }
 
-    const { homeSectionRef, aboutSectionRef, projectsSectionRef, contactSectionRef, scrollToSection } = scrollContext;
-
-    const handleScrollToAbout = () => {
-        if (aboutSectionRef) {
-            scrollToSection(aboutSectionRef);
-        }
-    };
-
-    // Handle wheel event for section navigation
-    const handleWheel = (e: WheelEvent) => {
-        e.preventDefault();
-        const sections = [
-            homeSectionRef,
-            aboutSectionRef,
-            projectsSectionRef,
-            contactSectionRef
-        ].filter(Boolean) as React.RefObject<HTMLDivElement>[];
-
-        const currentSectionIndex = sections.findIndex(ref => {
-            const rect = ref.current?.getBoundingClientRect();
-            return rect && rect.top >= 0 && rect.top <= window.innerHeight / 2;
-        });
-
-        if (e.deltaY > 0 && currentSectionIndex < sections.length - 1) {
-            // Scroll down to next section
-            sections[currentSectionIndex + 1].current?.scrollIntoView({ behavior: 'smooth' });
-        } else if (e.deltaY < 0 && currentSectionIndex > 0) {
-            // Scroll up to previous section
-            sections[currentSectionIndex - 1].current?.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
-
-    // Add wheel event listener
-    React.useEffect(() => {
-        window.addEventListener('wheel', handleWheel, { passive: false });
-        return () => {
-            window.removeEventListener('wheel', handleWheel);
-        };
-    }, []);
-
     return (
-        <div className="bg-black text-white h-screen overflow-hidden">
-            <Navbar />
-            <main className="h-full overflow-y-auto snap-y snap-mandatory">
-                <section 
-                    ref={homeSectionRef} 
-                    className="h-screen w-full snap-start flex items-center justify-center"
-                >
+        <div className="min-h-screen text-white flex flex-col relative">
+            <StarsCanvas />
+            <div ref={scrollContainerRef} className="h-screen flex-1 overflow-y-auto snap-y snap-mandatory z-10">
+                                <section id="home" ref={homeSectionRef} className="snap-start min-h-screen w-full flex items-center justify-center">
                     <HeroSection handleScrollToAbout={handleScrollToAbout} />
                 </section>
-                <section 
-                    ref={aboutSectionRef} 
-                    className="h-screen w-full snap-start flex items-center justify-center"
-                >
+
+                                                <section id="about" ref={aboutSectionRef} className="snap-start min-h-screen w-full flex items-center justify-center scroll-mt-20">
                     <AboutMeSection />
                 </section>
-                <section 
-                    ref={projectsSectionRef} 
-                    className="h-screen w-full snap-start flex items-center justify-center"
-                >
+
+                                                                                                                                <section id="projects" ref={projectsSectionRef} className="snap-start w-full flex justify-center scroll-mt-20">
                     <ClientProjectsSection projects={projects} />
                 </section>
-                <section 
-                    ref={contactSectionRef} 
-                    className="h-screen w-full snap-start flex items-center justify-center"
-                >
+
+                                                                                                                                <section id="contact" ref={contactSectionRef} className="snap-start min-h-screen w-full flex items-center justify-center scroll-mt-20">
                     <ContactSection />
                 </section>
                 <Footer />
-            </main>
+            </div>
         </div>
     );
 };
 
-const ClientHomePage: React.FC<ClientHomePageProps> = (props) => {
-  return (
-    <ScrollProvider>
-      <PageContent {...props} />
-    </ScrollProvider>
-  );
-};
+
 
 export default ClientHomePage;

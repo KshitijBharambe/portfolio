@@ -2,6 +2,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Layout from "@/components/layout/Layout";
+import { ScrollProvider } from "@/context/ScrollContext";
 // import ThemeToggle from "@/components/Client/Themetoggle";
 
 const geistSans = Geist({
@@ -17,32 +19,19 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Kshitij B | Portfolio",
   description: "Showcasing AI, DevOps, and Cloud projects",
+  manifest: "/favicon/manifest.json",
   icons: {
     icon: [
       {
         url: "/favicon/favicon.svg",
         type: "image/svg+xml",
       },
-      {
-        url: "/favicon/favicon.ico",
-        type: "image/x-icon",
-      },
-      {
-        url: "/favicon/favicon-32x32.png",
-        sizes: "32x32",
-        type: "image/png",
-      },
-      {
-        url: "/favicon/favicon-16x16.png",
-        sizes: "16x16",
-        type: "image/png",
-      },
     ],
     apple: [
       {
-        url: "/favicon/apple-touch-icon.png",
+        url: "/favicon/apple-touch-icon.svg",
         sizes: "180x180",
-        type: "image/png",
+        type: "image/svg+xml",
       },
     ],
   },
@@ -57,9 +46,11 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased
-        theme-transition bg-theme-primary text-theme-primary`}
+        theme-transition text-theme-primary`}
       >
-        {children}
+        <ScrollProvider>
+          <Layout>{children}</Layout>
+        </ScrollProvider>
         {/* <ThemeToggle /> */}
       </body>
     </html>

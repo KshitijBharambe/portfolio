@@ -2,70 +2,70 @@
   "projects": [
     {
       "id": "1",
-      "title": "Log Analyzing System",
-      "description": "A comprehensive log analysis system built with Docker Compose, featuring real-time log generation, anomaly detection, and visualization using Elasticsearch, Kibana, and Grafana.",
+      "title": "Data Hygiene Toolkit",
+      "description": "A comprehensive data validation and standardization tool built with FastAPI and PostgreSQL, featuring 30+ validation rules and Power BI integration for data quality monitoring.",
       "image": "/projects/log-analyzing.webp",
       "tags": [
-        "Docker",
-        "Elasticsearch",
-        "Kibana",
-        "Grafana",
-        "Python",
-        "Java"
+        "FastAPI",
+        "PostgreSQL",
+        "Angular",
+        "Power BI",
+        "Data Validation",
+        "Data Standardization"
       ],
       "features": [
-        "Log Generation: Simulates application logs with various levels",
-        "Log Analysis: Processes logs in real-time to detect anomalies",
-        "Storage & Indexing: Uses Elasticsearch for efficient log storage",
-        "Visualization: Multiple dashboards with Kibana and Grafana",
-        "Streaming: Optional Kafka integration for high-throughput log processing"
+        "Modular validation system with 30+ built-in rules",
+        "Editable grid interface for efficient data correction",
+        "Power BI dashboards for rule-wise metrics and anomaly tracking",
+        "Support for multiple export formats (CSV, Excel, JSON)",
+        "User-friendly interface for managing validation workflows"
       ],
-      "technologies": "Docker Compose, Elasticsearch, Kibana, Grafana, Java, Python, Kafka",
-      "githubLink": "https://github.com/KshitijBharambe/log-monitoring-system",
+      "technologies": "FastAPI, PostgreSQL, Angular, Power BI, Python, TypeScript",
+      "githubLink": "#",
       "demoLink": "#",
-      "fullDescription": "A comprehensive log monitoring and analysis system built with Docker Compose, featuring real-time log generation, anomaly detection, and visualization using Elasticsearch, Kibana, and Grafana.\n\nThis system provides end-to-end log management capabilities:\n- Log Generation: Simulates application logs with various levels (INFO, WARN, ERROR)\n- Log Analysis: Processes logs in real-time to detect anomalies\n- Storage & Indexing: Uses Elasticsearch for efficient log storage and querying\n- Visualization: Multiple dashboards with Kibana and Grafana\n- Streaming: Optional Kafka integration for high-throughput log processing\n\nThe system consists of the following components:\n- Log Generator: Java application that produces simulated logs\n- Log Analyzer: Python service that processes logs and detects anomalies\n- Elasticsearch: Search and analytics engine for log storage\n- Kibana: Data visualization dashboard for Elasticsearch\n- Grafana: Advanced metrics visualization platform\n- Kafka (optional): Message broker for log streaming"
+      "fullDescription": "A comprehensive data hygiene solution designed to improve data quality through validation, standardization, and monitoring. The tool provides a modular framework for defining and applying data quality rules across various datasets.\n\nKey Features:\n- Modular validation system with 30+ built-in rules for common data quality checks\n- Editable grid interface for efficient data review and correction\n- Comprehensive Power BI dashboards for monitoring data quality metrics\n- Support for multiple export formats (CSV, Excel, JSON)\n- User management and permission system for team collaboration\n\nTechnical Implementation:\n- Backend: FastAPI with PostgreSQL for data storage and processing\n- Frontend: Angular with Material Design components\n- Analytics: Power BI integration for data visualization\n- Deployment: Containerized with Docker for easy deployment\n\nThis tool helps organizations maintain high-quality data by providing a centralized platform for data validation, cleaning, and monitoring."
     },
     {
       "id": "2",
-      "title": "InsightBot: University Recommendation System",
-      "description": "An intelligent chatbot that assists international students in selecting the right university and timing their studies in the United States, providing tailored recommendations based on various factors.",
+      "title": "Dynamic Portfolio Website",
+      "description": "A responsive and interactive portfolio website built with Next.js, Tailwind CSS, and Framer Motion, featuring server-side rendering and a secure contact form.",
       "image": "/projects/ChatBot.webp",
-      "tags": ["AI", "Python", "NLP", "Streamlit", "ChromaDB"],
-      "features": [
-        "Personalized university recommendations based on preferences",
-        "Cost of living analysis for different states",
-        "Weather and climate insights for regions",
-        "Job market trend analysis for various fields",
-        "Scholarship identification from universities and external sources"
+      "tags": [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion",
+        "Responsive Design"
       ],
-      "technologies": "Python, Streamlit, ChromaDB, OpenAI API, Python-docx, OpenWeather API",
-      "githubLink": "https://github.com/KshitijBharambe/insightbot",
+      "features": [
+        "Server-side rendering for improved performance and SEO",
+        "Responsive design that works on all devices",
+        "Smooth animations and transitions with Framer Motion",
+        "Secure contact form using Resend API",
+        "Dark/light mode support"
+      ],
+      "technologies": "Next.js, TypeScript, Tailwind CSS, Framer Motion, Resend API",
+      "githubLink": "#",
       "demoLink": "#",
-      "fullDescription": "InsightBot (Comprehensive Master's Program Assistant for Student Success) is an intelligent chatbot that assists international students in selecting the right university and timing their studies in the United States. The system provides tailored recommendations based on factors such as field of study, cost of living, weather preferences, job market outlook, and university strengths for specific courses.\n\nInsightBot helps international students make informed decisions through:\n- Personalized university recommendations\n- Cost of living analysis for different states\n- Weather and climate insights\n- Job market trend analysis for various fields\n- Scholarship identification from universities and external sources\n\nThe system uses several components:\n- Frontend: Streamlit web application\n- Vector Database: ChromaDB for storing embeddings\n- LLM Integration: OpenAI API for generating recommendations\n- External Data: OpenWeather API for climate information\n- Document Processing: Python-docx for handling document templates"
+      "fullDescription": "A modern, performant portfolio website showcasing my projects, skills, and experience. The website is built with a focus on performance, accessibility, and user experience.\n\nKey Features:\n- Server-side rendering for optimal performance and SEO\n- Responsive design that works seamlessly across all device sizes\n- Smooth animations and page transitions using Framer Motion\n- Secure contact form with server-side validation and spam protection\n- Dark/light mode support with system preference detection\n\nTechnical Implementation:\n- Built with Next.js and TypeScript for type safety\n- Styled with Tailwind CSS for rapid UI development\n- Animations powered by Framer Motion\n- Contact form integration with Resend API for reliable email delivery\n- Deployed on Vercel for optimal performance and global CDN distribution\n\nThis project demonstrates my frontend development skills and attention to detail in creating modern web experiences."
     },
     {
       "id": "3",
-      "title": "Social Media Influencer Analysis",
-      "description": "A detailed analysis of social media influencers, focusing on their impact on business marketing strategies across different platforms, categories, and regions.",
-      "image": "/projects/social-media.webp",
-      "tags": [
-        "Data Analysis",
-        "Python",
-        "Pandas",
-        "Visualization",
-        "Marketing"
-      ],
+      "title": "InsightBot – AI-Powered University Chatbot",
+      "description": "A Streamlit-based chatbot that helps international students explore universities by budget, weather, and field, with personalized recommendations using OpenAI API and ChromaDB.",
+      "image": "/projects/ChatBot.webp",
+      "tags": ["AI", "Python", "Streamlit", "OpenAI API", "ChromaDB"],
       "features": [
-        "Category Analysis: Analyzing popularity of different influencer categories",
-        "Regional Analysis: Understanding preferences across global regions",
-        "Engagement Analysis: Studying relationship between followers and engagement",
-        "Comprehensive Visualizations: Various plots to represent findings",
-        "Statistical Analysis: Identifying trends and anomalies"
+        "Personalized university recommendations based on budget and preferences",
+        "Integration with OpenWeather API for climate information",
+        "Cost and job data analysis across 25+ US states",
+        "Context-aware responses using ChromaDB for knowledge retrieval",
+        "User-friendly interface for exploring educational options"
       ],
-      "technologies": "Python, Jupyter Notebook, Pandas, Matplotlib, Seaborn, NumPy",
-      "githubLink": "https://github.com/KshitijBharambe/social-media-influencer-analysis",
+      "technologies": "Python, Streamlit, OpenAI API, ChromaDB, OpenWeather API",
+      "githubLink": "https://github.com/KshitijBharambe/insightbot",
       "demoLink": "#",
-      "fullDescription": "This project performs a detailed analysis of social media influencers, focusing on their impact on business marketing strategies. The analysis examines various aspects such as influencer category dominance, regional preferences, and engagement metrics across different social media platforms. The purpose is to provide insights that can help businesses optimize their influencer marketing strategies.\n\nThe analysis includes:\n- Category Analysis: Analyzes the popularity of different influencer categories across the global and regional spectra.\n- Engagement Analysis: Studies the relationship between follower counts and engagement rates to identify trends and anomalies.\n- Visualizations: Includes several plots and graphs to visually represent the data and findings.\n\nThe project is implemented in Python using Jupyter Notebook with libraries such as pandas for data manipulation, matplotlib and seaborn for visualization, and numpy for numerical operations."
+      "fullDescription": "InsightBot is an AI-powered chatbot designed to assist international students in making informed decisions about their higher education in the United States. The application provides personalized recommendations based on various factors including academic preferences, budget constraints, and lifestyle considerations.\n\nKey Features:\n- Natural language processing for intuitive user interactions\n- Context-aware recommendations using OpenAI's language models\n- Integration with OpenWeather API for climate information\n- Comprehensive database of universities with detailed program information\n- Cost of living and job market analysis for different regions\n\nTechnical Implementation:\n- Frontend: Streamlit for rapid application development\n- AI: OpenAI API for natural language understanding and generation\n- Database: ChromaDB for efficient vector storage and retrieval\n- External APIs: OpenWeather for climate data, various sources for cost and job data\n\nThis project demonstrates my ability to build practical AI applications that solve real-world problems by combining multiple technologies and data sources."
     }
   ]
 }

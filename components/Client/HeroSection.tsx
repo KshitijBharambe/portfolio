@@ -5,12 +5,12 @@ import { useScroll } from "@/context/ScrollContext";
 
 // Animated tech words that will rotate
 const techWords = [
-  "AI & ML",
-  "Cloud Computing",
+  "Cloud Infrastructure",
   "DevOps",
-  "Web Development",
+  "Backend Development",
   "Security",
-  "Full Stack",
+  "Automation",
+  "CI/CD Workflows",
 ];
 
 interface HeroSectionProps {
@@ -107,30 +107,8 @@ export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
   return (
     <div
       ref={heroSectionRef}
-      className="gradient-bg-main min-h-screen w-full relative flex items-center justify-center overflow-hidden"
+      className="min-h-screen w-full relative flex items-center justify-center"
     >
-      {/* Background animation elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          animate={floatingAnimation}
-          className="absolute -top-40 -right-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"
-        ></motion.div>
-        <motion.div
-          animate={{
-            ...floatingAnimation,
-            transition: { ...floatingAnimation.transition, delay: 1 },
-          }}
-          className="absolute top-1/4 -left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"
-        ></motion.div>
-        <motion.div
-          animate={{
-            ...floatingAnimation,
-            transition: { ...floatingAnimation.transition, delay: 2 },
-          }}
-          className="absolute bottom-20 right-1/4 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl"
-        ></motion.div>
-      </div>
-
       {/* Content container */}
       <div className="z-10 container mx-auto px-8 md:px-12 lg:max-w-6xl">
         <motion.div
@@ -144,7 +122,7 @@ export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
             variants={itemVariants}
             className="font-mono font-bold text-6xl sm:text-7xl md:text-8xl text-white mb-6 tracking-tighter text-glow"
           >
-            KSHITIJ <span className="text-blue-500">B.</span>
+            Kshitij <span className="text-blue-500">B</span>
           </motion.h1>
 
           {/* Developer byline with typing animation */}
@@ -177,8 +155,7 @@ export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
             variants={itemVariants}
             className="text-lg md:text-xl text-gray-300 max-w-xl mb-10"
           >
-            Master&apos;s student passionate about AI, DevOps, and Cloud Computing,
-            crafting secure & intelligent solutions for tomorrow&apos;s challenges.
+            DevOps and Cloud enthusiast building secure, scalable backend systems that actually work in production.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -245,49 +222,6 @@ export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
           </motion.div>
         </motion.div>
       </div>
-
-      {/* Bottom decorative element */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0f172a] to-transparent"></div>
-
-      {/* Floating code snippets for background decoration */}
-      <motion.div
-        className="absolute top-1/4 right-10 hidden lg:block"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 0.2, x: 0 }}
-        transition={{ duration: 1, delay: 1 }}
-      >
-        <pre className="text-xs text-blue-300 font-mono">
-          {`function optimizeSystem(data) {
-  return data
-    .filter(item => item.priority > 0.8)
-    .map(item => ({
-      ...item,
-      optimized: true
-    }));
-}`}
-        </pre>
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-1/4 left-10 hidden lg:block"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 0.2, x: 0 }}
-        transition={{ duration: 1, delay: 1.5 }}
-      >
-        <pre className="text-xs text-green-300 font-mono">
-          {`class AIAgent {
-  constructor(params) {
-    this.learning = true;
-    this.accuracy = 0.95;
-    this.models = params.models;
-  }
-  
-  async predict(input) {
-    // ML logic here
-  }
-}`}
-        </pre>
-      </motion.div>
     </div>
   );
 }

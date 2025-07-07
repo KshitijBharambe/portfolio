@@ -1,0 +1,16 @@
+{
+  "name": "Kshitij Bharambe - Portfolio",
+  "short_name": "KB Portfolio",
+  "description": "A portfolio showcasing projects in AI, cloud, and web development.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    {
+      "src": "/favicon/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

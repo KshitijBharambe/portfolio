@@ -132,7 +132,7 @@ const Navbar: React.FC = () => {
               whileHover={{ scale: 1.05 }}
             >
               <span className="text-blue-500">KSHITIJ </span>
-              <span className="hidden md:inline">B.</span>
+              <span className="hidden md:inline">B</span>
             </motion.div>
           </Link>
 

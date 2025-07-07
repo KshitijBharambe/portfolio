@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useRef, ReactNode } from 'react';
 
 interface ScrollContextType {
+  scrollContainerRef: React.MutableRefObject<HTMLDivElement | null>;
   homeSectionRef: React.MutableRefObject<HTMLDivElement | null>;
   aboutSectionRef: React.MutableRefObject<HTMLDivElement | null>;
   projectsSectionRef: React.MutableRefObject<HTMLDivElement | null>;
@@ -17,21 +18,23 @@ export const useScroll = () => {
 };
 
 export const ScrollProvider = ({ children }: { children: ReactNode }) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const homeSectionRef = useRef<HTMLDivElement>(null);
   const aboutSectionRef = useRef<HTMLDivElement>(null);
   const projectsSectionRef = useRef<HTMLDivElement>(null);
   const contactSectionRef = useRef<HTMLDivElement>(null);
 
     const scrollToSection = (ref: React.MutableRefObject<HTMLDivElement | null>) => {
-    if (ref.current) {
-      window.scrollTo({
-        top: ref.current.offsetTop,
-        behavior: 'smooth',
-      });
-    }
-  };
+        if (ref?.current) {
+            ref.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
 
-  const value: ScrollContextType = {
+    const value: ScrollContextType = {
+    scrollContainerRef,
     homeSectionRef,
     aboutSectionRef,
     projectsSectionRef,
