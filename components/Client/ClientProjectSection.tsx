@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, useAnimation, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
-import projectsData from "@/lib/projects_data.json";
+import projectsData from "@/public/assets/data/projects_data.json";
 import { ProjectData } from "./ClientHomePage";
 
 interface ClientProjectsSectionProps {

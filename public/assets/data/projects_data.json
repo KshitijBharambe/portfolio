@@ -4,12 +4,11 @@
       "id": "1",
       "title": "Data Hygiene Toolkit",
       "description": "A comprehensive data validation and standardization tool built with FastAPI and PostgreSQL, featuring 30+ validation rules and Power BI integration for data quality monitoring.",
-      "image": "/projects/log-analyzing.webp",
+      "image": "/assets/projects/Data-hygiene.png",
       "tags": [
         "FastAPI",
         "PostgreSQL",
-        "Angular",
-        "Power BI",
+        "Nextjs",
         "Data Validation",
         "Data Standardization"
       ],
@@ -27,33 +26,9 @@
     },
     {
       "id": "2",
-      "title": "Dynamic Portfolio Website",
-      "description": "A responsive and interactive portfolio website built with Next.js, Tailwind CSS, and Framer Motion, featuring server-side rendering and a secure contact form.",
-      "image": "/projects/ChatBot.webp",
-      "tags": [
-        "Next.js",
-        "TypeScript",
-        "Tailwind CSS",
-        "Framer Motion",
-        "Responsive Design"
-      ],
-      "features": [
-        "Server-side rendering for improved performance and SEO",
-        "Responsive design that works on all devices",
-        "Smooth animations and transitions with Framer Motion",
-        "Secure contact form using Resend API",
-        "Dark/light mode support"
-      ],
-      "technologies": "Next.js, TypeScript, Tailwind CSS, Framer Motion, Resend API",
-      "githubLink": "#",
-      "demoLink": "#",
-      "fullDescription": "A modern, performant portfolio website showcasing my projects, skills, and experience. The website is built with a focus on performance, accessibility, and user experience.\n\nKey Features:\n- Server-side rendering for optimal performance and SEO\n- Responsive design that works seamlessly across all device sizes\n- Smooth animations and page transitions using Framer Motion\n- Secure contact form with server-side validation and spam protection\n- Dark/light mode support with system preference detection\n\nTechnical Implementation:\n- Built with Next.js and TypeScript for type safety\n- Styled with Tailwind CSS for rapid UI development\n- Animations powered by Framer Motion\n- Contact form integration with Resend API for reliable email delivery\n- Deployed on Vercel for optimal performance and global CDN distribution\n\nThis project demonstrates my frontend development skills and attention to detail in creating modern web experiences."
-    },
-    {
-      "id": "3",
       "title": "InsightBot – AI-Powered University Chatbot",
       "description": "A Streamlit-based chatbot that helps international students explore universities by budget, weather, and field, with personalized recommendations using OpenAI API and ChromaDB.",
-      "image": "/projects/ChatBot.webp",
+      "image": "/assets/projects/ChatBot.png",
       "tags": ["AI", "Python", "Streamlit", "OpenAI API", "ChromaDB"],
       "features": [
         "Personalized university recommendations based on budget and preferences",
@@ -66,6 +41,29 @@
       "githubLink": "https://github.com/KshitijBharambe/insightbot",
       "demoLink": "#",
       "fullDescription": "InsightBot is an AI-powered chatbot designed to assist international students in making informed decisions about their higher education in the United States. The application provides personalized recommendations based on various factors including academic preferences, budget constraints, and lifestyle considerations.\n\nKey Features:\n- Natural language processing for intuitive user interactions\n- Context-aware recommendations using OpenAI's language models\n- Integration with OpenWeather API for climate information\n- Comprehensive database of universities with detailed program information\n- Cost of living and job market analysis for different regions\n\nTechnical Implementation:\n- Frontend: Streamlit for rapid application development\n- AI: OpenAI API for natural language understanding and generation\n- Database: ChromaDB for efficient vector storage and retrieval\n- External APIs: OpenWeather for climate data, various sources for cost and job data\n\nThis project demonstrates my ability to build practical AI applications that solve real-world problems by combining multiple technologies and data sources."
+    }, 
+    {
+      "id": "3",
+      "title": "Influencer Analysis for Business Marketing",
+      "description": "A comprehensive data analysis project that evaluates influencer marketing effectiveness across TikTok, Instagram, and YouTube, providing actionable insights for business marketing strategies.",
+      "image": "/assets/projects/Influencer-analysis.png",
+      "tags": [
+        "Python",
+        "Pandas",
+        "Data Analysis",
+        "Matplotlib"
+      ],
+      "features": [
+        "Cross-platform analysis of 3,000+ influencers (TikTok, Instagram, YouTube)",
+        "Engagement rate analysis and performance metrics comparison",
+        "Data visualization of influencer reach and audience demographics",
+        "Statistical modeling of engagement patterns",
+        "Actionable insights for influencer selection and campaign strategy"
+      ],
+      "technologies": "Python, Pandas, NumPy, Matplotlib, Seaborn, Jupyter",
+      "githubLink": "https://github.com/KshitijBharambe/influencer-Analysis-For-Business-Marketing",
+      "demoLink": "#",
+      "fullDescription": "This project provides a data-driven approach to influencer marketing by analyzing performance metrics across multiple social media platforms. The analysis helps businesses identify the most effective influencers and optimize their marketing strategies.\n\nKey Insights and Analysis:\n- Platform Comparison: Evaluated performance differences between TikTok, Instagram, and YouTube influencers\n- Engagement Metrics: Analyzed likes, comments, shares, and views to determine true engagement rates\n- Follower Analysis: Studied the relationship between follower count and engagement quality\n- Content Performance: Identified which types of content generate the highest engagement\n- Demographic Insights: Mapped influencer reach across different regions and audience segments\n\nTechnical Implementation:\n- Data Collection: Aggregated data from multiple social media platforms\n- Data Cleaning: Processed and normalized datasets using Pandas and NumPy\n- Statistical Analysis: Performed correlation and regression analysis on engagement metrics\n- Visualization: Created interactive visualizations using Matplotlib and Seaborn\n- Tools: Jupyter Notebook for reproducible analysis and documentation\n\nBusiness Impact:\n- Helps businesses identify cost-effective influencers with high engagement rates\n- Provides data-backed recommendations for influencer selection\n- Enables precise targeting of marketing campaigns\n- Reduces marketing spend wastage by focusing on high-performing content types\n\nThis project showcases my ability to transform raw social media data into actionable business intelligence, demonstrating strong skills in data analysis, visualization, and strategic thinking."
     }
   ]
 }

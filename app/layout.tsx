@@ -4,7 +4,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Layout from "@/components/layout/Layout";
 import { ScrollProvider } from "@/context/ScrollContext";
-// import ThemeToggle from "@/components/Client/Themetoggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,9 +48,10 @@ export default function RootLayout({
         theme-transition text-theme-primary`}
       >
         <ScrollProvider>
-          <Layout>{children}</Layout>
+          <Layout>
+            {children}
+          </Layout>
         </ScrollProvider>
-        {/* <ThemeToggle /> */}
       </body>
     </html>
   );

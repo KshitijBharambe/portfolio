@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 const AboutSection = () => {
   return (
-    <section className="text-white py-12 px-4 relative">
+    <section className="text-white py-12 px-6 md:px-8 lg:px-12 relative">
 
       {/* Header section with About title on left and Profile on right */}
       <AboutHeader />

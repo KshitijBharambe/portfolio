@@ -294,7 +294,7 @@ const SkillsTabsSection = () => {
                         } else if (tech.icon === 'nessus') {
                           return (
                             <Image
-                              src="/Tenable SVG Icon.svg"
+                              src="/assets/Tenable SVG Icon.svg"
                               alt="Tenable Nessus"
                               width={32}
                               height={32}

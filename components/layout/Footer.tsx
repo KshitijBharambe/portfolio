@@ -196,10 +196,10 @@ const Footer = () => {
                   />
                 </svg>
                 <a
-                  href="mailto:kbharamb@syr.edu"
+                  href="mailto:kshitij.bharambe@gmail.com"
                   className="hover:text-white transition-colors"
                 >
-                  kbharamb@syr.edu
+                  kshitij.bharambe@gmail.com
                 </a>
               </li>
               <li className="flex items-start">

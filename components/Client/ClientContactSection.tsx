@@ -278,7 +278,7 @@ const ContactSection = () => {
                           href="mailto:kshitij.bharambe@gmail.com"
                           className="text-gray-300 hover:text-blue-400 transition-colors"
                         >
-                          kbharamb@syr.edu
+                          kshitij.bharambe@gmail.com
                         </a>
                       </div>
                     </motion.div>
