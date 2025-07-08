@@ -69,7 +69,7 @@ export default function AboutPage() {
               <div className="relative">
                 <div className="w-48 h-48 rounded-full overflow-hidden border-2 border-blue-500">
                   <Image
-                    src="/profile-pic.jpeg"
+                    src="/assets/profile-pic.jpeg"
                     alt="Profile picture"
                     width={192}
                     height={192}

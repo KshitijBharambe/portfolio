@@ -132,7 +132,7 @@ const AboutHeader = () => {
                 <div className="relative">
                   <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-gray-700 shadow-lg relative">
                     <Image
-                      src="/profile-pic.jpeg"
+                      src="/assets/profile-pic.jpeg"
                       alt="Kshitij Bharambe"
                       fill
                       sizes="(max-width: 768px) 12rem, (max-width: 1200px) 12rem, 12rem"
