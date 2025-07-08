@@ -4,7 +4,7 @@
       "id": "1",
       "title": "Data Hygiene Toolkit",
       "description": "A centralized platform for managing data quality workflows at scale — this toolkit enables teams to define, execute, and monitor custom data validation and cleaning rules across datasets. It blends rule-based logic with flexibility for custom SQL checks, while supporting collaboration, user roles, and auditability.",
-      "image": "/assets/projects/Data-hygiene.png",
+      "image": "/assets/projects/Datahygiene.png",
       "tags": [
         "Python",
         "PostgreSQL",
@@ -29,7 +29,7 @@
       "id": "2",
       "title": "InsightBot – AI-Powered University Chatbot",
       "description": "A Streamlit-based chatbot that helps international students explore universities by budget, weather, and field, with personalized recommendations using OpenAI API and ChromaDB.",
-      "image": "/assets/projects/ChatBot.png",
+      "image": "/assets/projects/chatbot.png",
       "tags": ["AI", "Python", "Streamlit", "OpenAI API", "ChromaDB"],
       "features": [
         "Personalized university recommendations based on budget and preferences",
@@ -47,7 +47,7 @@
       "id": "3",
       "title": "Influencer Analysis for Business Marketing",
       "description": "A comprehensive data analysis project that evaluates influencer marketing effectiveness across TikTok, Instagram, and YouTube, providing actionable insights for business marketing strategies.",
-      "image": "/assets/projects/Influencer-analysis.png",
+      "image": "/assets/projects/IA.png",
       "tags": [
         "Python",
         "Pandas",
