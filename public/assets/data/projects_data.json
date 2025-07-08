@@ -29,7 +29,7 @@
       "id": "2",
       "title": "InsightBot – AI-Powered University Chatbot",
       "description": "A Streamlit-based chatbot that helps international students explore universities by budget, weather, and field, with personalized recommendations using OpenAI API and ChromaDB.",
-      "image": "/assets/projects/chatbot.png",
+      "image": "/assets/projects/CB.png",
       "tags": ["AI", "Python", "Streamlit", "OpenAI API", "ChromaDB"],
       "features": [
         "Personalized university recommendations based on budget and preferences",
