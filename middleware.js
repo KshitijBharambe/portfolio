@@ -1,6 +1,6 @@
 export function middleware(request) {
   // Check if maintenance mode is enabled
-  const maintenanceMode = process.env.MAINTENANCE_MODE === 'true';
+  const maintenanceMode = process.env.MAINTENANCE_MODE === 'false';
   
   if (maintenanceMode) {
     // Get the URL of the maintenance page
