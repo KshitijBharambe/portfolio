@@ -304,7 +304,7 @@ const SkillsTabsSection = () => {
                         } else if (tech.icon === 'burpsuite') {
                           return (
                             <Image
-                              src="/assests/burpsuite.png"
+                              src="/assets/burpsuite.png"
                               alt="Burp Suite"
                               width={32}
                               height={32}
