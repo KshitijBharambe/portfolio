@@ -3,25 +3,26 @@
     {
       "id": "1",
       "title": "Data Hygiene Toolkit",
-      "description": "A comprehensive data validation and standardization tool built with FastAPI and PostgreSQL, featuring 30+ validation rules and Power BI integration for data quality monitoring.",
+      "description": "A centralized platform for managing data quality workflows at scale — this toolkit enables teams to define, execute, and monitor custom data validation and cleaning rules across datasets. It blends rule-based logic with flexibility for custom SQL checks, while supporting collaboration, user roles, and auditability.",
       "image": "/assets/projects/Data-hygiene.png",
       "tags": [
-        "FastAPI",
+        "Python",
         "PostgreSQL",
         "Nextjs",
         "Data Validation",
         "Data Standardization"
       ],
       "features": [
-        "Modular validation system with 30+ built-in rules",
-        "Editable grid interface for efficient data correction",
-        "Power BI dashboards for rule-wise metrics and anomaly tracking",
-        "Support for multiple export formats (CSV, Excel, JSON)",
-        "User-friendly interface for managing validation workflows"
+        "Custom Rule Engine where users define their own validation logic",
+        "Schema-aware rule builder with a flexible form-based interface",
+        "Multi-format export support (CSV, Excel, JSON)",
+        "User auth system with roles (admin, analyst, viewer) and secure access control",
+        "Integration tests simulating full validation workflows",
+        "Fully containerized for local dev & production deploys"
       ],
-      "technologies": "FastAPI, PostgreSQL, Angular, Power BI, Python, TypeScript",
+      "technologies": "FastAPI, PostgreSQL, Next.js, Tailwindcss, Power BI, Python, Docker",
       "githubLink": "#",
-      "demoLink": "#",
+      "demoLink": "https://github.com/KshitijBharambe/DataHygiene",
       "fullDescription": "A comprehensive data hygiene solution designed to improve data quality through validation, standardization, and monitoring. The tool provides a modular framework for defining and applying data quality rules across various datasets.\n\nKey Features:\n- Modular validation system with 30+ built-in rules for common data quality checks\n- Editable grid interface for efficient data review and correction\n- Comprehensive Power BI dashboards for monitoring data quality metrics\n- Support for multiple export formats (CSV, Excel, JSON)\n- User management and permission system for team collaboration\n\nTechnical Implementation:\n- Backend: FastAPI with PostgreSQL for data storage and processing\n- Frontend: Angular with Material Design components\n- Analytics: Power BI integration for data visualization\n- Deployment: Containerized with Docker for easy deployment\n\nThis tool helps organizations maintain high-quality data by providing a centralized platform for data validation, cleaning, and monitoring."
     },
     {
