@@ -5,12 +5,12 @@ import { useScroll } from "@/context/ScrollContext";
 
 // Animated tech words that will rotate
 const techWords = [
-  "Cloud Infrastructure",
-  "DevOps",
-  "Backend Development",
-  "Security",
-  "Automation",
-  "CI/CD Workflows",
+ "Backend Engineer",
+  "DevOps Enthusiast",
+  "Cloud Builder",
+  "CI/CD Tinkerer",
+  "Automation Guy",
+  "Python in One Hand, Bash in the Other",
 ];
 
 interface HeroSectionProps {
@@ -135,8 +135,8 @@ export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
                 &gt;
               </span>
               <span className="text-lg sm:text-xl text-gray-200 mr-2">
-                <span className="text-blue-400">const</span>{" "}
-                <span className="text-yellow-400">developer</span> =
+{/*                 <span className="text-blue-400">const</span>{" "} */}
+                <span className="text-yellow-400">iAm:</span>{" "}
               </span>
               <motion.span className="font-mono text-lg sm:text-xl text-purple-400">
                 &quot;{currentText}&quot;
@@ -155,7 +155,7 @@ export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
             variants={itemVariants}
             className="text-lg md:text-xl text-gray-300 max-w-xl mb-10"
           >
-            DevOps and Cloud enthusiast building secure, scalable backend systems that actually work in production.
+            DevOps and Cloud enthusiast building secure, scalable backend systems that aspire to run in production someday.
           </motion.p>
 
           {/* CTA Buttons */}
