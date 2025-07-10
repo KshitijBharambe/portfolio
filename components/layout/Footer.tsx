@@ -41,8 +41,8 @@ const Footer = () => {
               <span className="text-blue-500">K</span>shitij B.
             </Link>
             <p className="mb-4 text-sm max-w-md">
-              Master&apos;s student passionate about AI, DevOps, and Cloud Computing,
-              building scalable and intelligent systems.
+              DevOps and Cloud enthusiast building secure,
+              scalable backend systems that aspire to run in production someday.
             </p>
             <div className="flex space-x-4 mt-6">
               <motion.a
