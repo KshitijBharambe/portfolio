@@ -74,8 +74,8 @@ export default function ResumePage() {
                 Summary
               </h3>
               <p className="text-gray-300">
-                Cloud-native engineer with a Master's in CS, specializing in
-                AWS, Docker, and Terraform automation. Expert in building
+                Cloud-native engineer with a Master&apos;s in CS, specializing
+                in AWS, Docker, and Terraform automation. Expert in building
                 resilient CI/CD pipelines and eliminating configuration drift
                 for scalable microservices. Combines strong backend expertise
                 (Python) with security-first Infrastructure-as-Code management.
@@ -91,7 +91,7 @@ export default function ResumePage() {
                 <div>
                   <div className="flex justify-between items-start">
                     <h4 className="text-lg font-medium">
-                      Master's in Computer Science
+                      Master&apos;s in Computer Science
                     </h4>
                     <span className="text-gray-400 text-sm whitespace-nowrap">
                       Aug 2023 – May 2025
@@ -104,7 +104,7 @@ export default function ResumePage() {
                 <div>
                   <div className="flex justify-between items-start">
                     <h4 className="text-lg font-medium">
-                      Bachelor's in Computer Engineering
+                      Bachelor&apos;s in Computer Engineering
                     </h4>
                     <span className="text-gray-400 text-sm whitespace-nowrap">
                       Aug 2019 – May 2023
@@ -168,7 +168,9 @@ export default function ResumePage() {
                       June 2022 – May 2023
                     </span>
                   </div>
-                  <p className="text-gray-300">CBRAINTECH LLP - Mumbai</p>
+                  <p className="text-gray-300">
+                    Cognologix Technologies Pvt. Ltd. - Remote
+                  </p>
                   <ul className="list-disc list-inside text-gray-400 text-sm mt-2 space-y-1">
                     <li>
                       Designed and optimized RESTful APIs with FastAPI and
