@@ -7,6 +7,22 @@ interface Vector2D {
   y: number
 }
 
+/* ── Color palettes — emerald/amber scheme ── */
+const COLOR_PALETTES = [
+  // emerald (initial)
+  { from: { r: 16, g: 185, b: 129 }, to: { r: 16, g: 185, b: 129 } },
+  // emerald → amber gradient
+  { from: { r: 16, g: 185, b: 129 }, to: { r: 245, g: 158, b: 11 } },
+  // teal → emerald gradient
+  { from: { r: 20, g: 184, b: 166 }, to: { r: 52, g: 211, b: 153 } },
+  // amber → warm orange gradient
+  { from: { r: 245, g: 158, b: 11 }, to: { r: 249, g: 115, b: 22 } },
+  // sage → emerald
+  { from: { r: 132, g: 204, b: 22 }, to: { r: 16, g: 185, b: 129 } },
+  // pure emerald (reset)
+  { from: { r: 16, g: 185, b: 129 }, to: { r: 16, g: 185, b: 129 } },
+]
+
 class Particle {
   pos: Vector2D = { x: 0, y: 0 }
   vel: Vector2D = { x: 0, y: 0 }
@@ -73,7 +89,7 @@ class Particle {
 
   kill(width: number, height: number) {
     if (!this.isKilled) {
-      const pos = generateRandomPos(width / 2, height / 2, (width + height) / 2)
+      const pos = generateEdgePos(width, height)
       this.target.x = pos.x
       this.target.y = pos.y
       this.startColor = {
@@ -88,25 +104,27 @@ class Particle {
   }
 }
 
-function generateRandomPos(x: number, y: number, mag: number): Vector2D {
-  const randomX = Math.random() * 1000
-  const randomY = Math.random() * 500
-  const direction = { x: randomX - x, y: randomY - y }
-  const magnitude = Math.sqrt(direction.x * direction.x + direction.y * direction.y)
-  if (magnitude > 0) {
-    direction.x = (direction.x / magnitude) * mag
-    direction.y = (direction.y / magnitude) * mag
+/** Spawn position from the edges of the canvas */
+function generateEdgePos(width: number, height: number): Vector2D {
+  const edge = Math.floor(Math.random() * 4)
+  const margin = 50 // overshoot past edge
+  switch (edge) {
+    case 0: // top
+      return { x: Math.random() * width, y: -margin }
+    case 1: // right
+      return { x: width + margin, y: Math.random() * height }
+    case 2: // bottom
+      return { x: Math.random() * width, y: height + margin }
+    default: // left
+      return { x: -margin, y: Math.random() * height }
   }
-  return { x: x + direction.x, y: y + direction.y }
 }
 
 /* ─────────────────────────────────────────────
    Hero variant: renders two lines (KSHITIJ + BHARAMBE)
-   once on mount with a configurable delay.
-   Background is #050508 to match the portfolio bg.
+   Particles spawn from screen edges and converge inward.
 ───────────────────────────────────────────── */
 interface HeroParticleNameProps {
-  /** Milliseconds before the animation starts */
   delay?: number
 }
 
@@ -116,19 +134,21 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
   const particlesRef = useRef<Particle[]>([])
   const startedRef = useRef(false)
   const frameCountRef = useRef(0)
-  const settledRef = useRef(false)
+  const paletteIndexRef = useRef(0)
+  const lastRespawnRef = useRef(0)
 
   const pixelSteps = 6
   const W = 1000
   const H = 320
+  const RESPAWN_INTERVAL = 240
+  const SETTLE_FRAMES = 180
 
-  function spawnText() {
+  function spawnText(paletteIndex: number) {
     const offscreen = document.createElement("canvas")
     offscreen.width = W
     offscreen.height = H
     const octx = offscreen.getContext("2d")!
 
-    // Two-line name
     const fontSize = 130
     octx.fillStyle = "white"
     octx.font = `900 ${fontSize}px Arial`
@@ -140,8 +160,7 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     const imageData = octx.getImageData(0, 0, W, H)
     const pixels = imageData.data
 
-    // Target color: indigo-400 (#818cf8)
-    const targetColor = { r: 129, g: 140, b: 248 }
+    const palette = COLOR_PALETTES[paletteIndex % COLOR_PALETTES.length]
 
     const particles = particlesRef.current
     let particleIndex = 0
@@ -161,6 +180,13 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
         const x = (coordIndex / 4) % W
         const y = Math.floor(coordIndex / 4 / W)
 
+        const t = x / W
+        const targetColor = {
+          r: Math.round(palette.from.r + (palette.to.r - palette.from.r) * t),
+          g: Math.round(palette.from.g + (palette.to.g - palette.from.g) * t),
+          b: Math.round(palette.from.b + (palette.to.b - palette.from.b) * t),
+        }
+
         let particle: Particle
         if (particleIndex < particles.length) {
           particle = particles[particleIndex]
@@ -168,9 +194,10 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
           particleIndex++
         } else {
           particle = new Particle()
-          const randomPos = generateRandomPos(W / 2, H / 2, (W + H) / 2)
-          particle.pos.x = randomPos.x
-          particle.pos.y = randomPos.y
+          // Spawn from edges of the canvas
+          const edgePos = generateEdgePos(W, H)
+          particle.pos.x = edgePos.x
+          particle.pos.y = edgePos.y
           particle.maxSpeed = Math.random() * 6 + 4
           particle.maxForce = particle.maxSpeed * 0.05
           particle.particleSize = Math.random() * 6 + 6
@@ -198,7 +225,6 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     const ctx = canvas.getContext("2d")!
     const particles = particlesRef.current
 
-    // Fully clear canvas each frame for true transparency
     ctx.clearRect(0, 0, W, H)
 
     for (let i = particles.length - 1; i >= 0; i--) {
@@ -212,10 +238,13 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
 
     frameCountRef.current++
 
-    // Once particles have settled, start pulse on the canvas itself
-    if (!settledRef.current && frameCountRef.current > 180) {
-      settledRef.current = true
-      canvas.style.animation = "hero-pulse 3s ease-in-out infinite"
+    if (frameCountRef.current > SETTLE_FRAMES) {
+      const framesSinceLastRespawn = frameCountRef.current - lastRespawnRef.current
+      if (framesSinceLastRespawn >= RESPAWN_INTERVAL) {
+        paletteIndexRef.current++
+        lastRespawnRef.current = frameCountRef.current
+        spawnText(paletteIndexRef.current)
+      }
     }
 
     animationRef.current = requestAnimationFrame(() => animate(canvas))
@@ -228,14 +257,14 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     canvas.width = W
     canvas.height = H
 
-    // Start with transparent canvas
     const ctx = canvas.getContext("2d")!
     ctx.clearRect(0, 0, W, H)
 
     const timer = setTimeout(() => {
       if (!startedRef.current) {
         startedRef.current = true
-        spawnText()
+        lastRespawnRef.current = 0
+        spawnText(0)
         animate(canvas)
       }
     }, delay)
@@ -306,7 +335,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
           particle = particles[particleIndex]; particle.isKilled = false; particleIndex++
         } else {
           particle = new Particle()
-          const pos = generateRandomPos(canvas.width / 2, canvas.height / 2, (canvas.width + canvas.height) / 2)
+          const pos = generateEdgePos(canvas.width, canvas.height)
           particle.pos.x = pos.x; particle.pos.y = pos.y
           particle.maxSpeed = Math.random() * 6 + 4
           particle.maxForce = particle.maxSpeed * 0.05

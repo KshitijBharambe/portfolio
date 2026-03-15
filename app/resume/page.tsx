@@ -9,7 +9,7 @@ const Section = ({ title, num, children }: { title: string; num: string; childre
     <div className="flex items-center gap-4 mb-6">
       <span className="font-mono text-[9px] text-[var(--accent)] tracking-[0.3em] uppercase">{num}</span>
       <h3 className="text-xs font-mono tracking-[0.25em] uppercase text-[var(--accent)]">{title}</h3>
-      <div className="flex-1 h-px bg-white/5" />
+      <div className="flex-1 h-px" style={{ background: "var(--divider)" }} />
     </div>
     {children}
   </section>
@@ -40,12 +40,7 @@ const BulletList = ({ items }: { items: string[] }) => (
 
 export default function ResumePage() {
   return (
-    <div className="min-h-screen text-white pt-20 pb-16 px-4 relative">
-      {/* Atmospheric orbs */}
-      <div className="fixed top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(129,140,248,0.04) 0%, transparent 70%)" }} />
-      <div className="fixed bottom-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(244,114,182,0.04) 0%, transparent 70%)" }} />
+    <div className="min-h-screen pt-20 pb-16 px-4 relative" style={{ background: "var(--bg)", color: "var(--foreground)" }}>
 
       <div className="max-w-4xl mx-auto relative z-10">
         {/* Header card */}

@@ -6,22 +6,7 @@ import { motion } from "framer-motion";
 
 const AboutSection = () => {
   return (
-    <section className="text-white py-24 px-6 md:px-10 lg:px-14 relative w-full overflow-hidden">
-      {/* Atmospheric orb glows */}
-      <div
-        className="absolute -top-40 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(244,114,182,0.06) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(129,140,248,0.04) 0%, transparent 70%)",
-        }}
-      />
+    <section className="py-24 px-6 md:px-10 lg:px-14 relative w-full overflow-hidden">
 
       <AboutHeader />
 

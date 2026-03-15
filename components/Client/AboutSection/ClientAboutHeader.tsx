@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { LiquidGlass } from "@/components/ui/liquid-glass";
 
 const stats = [
   { value: "3+",  label: "Years Exp",      color: "var(--accent)" },
@@ -61,14 +62,15 @@ const AboutHeader = () => {
 
           {/* Name + role */}
           <div className="text-center lg:text-left">
-            <h3 className="text-xl font-bold text-white tracking-tight">Kshitij Bharambe</h3>
+            <h3 className="text-xl font-bold tracking-tight" style={{ color: "var(--foreground)" }}>Kshitij Bharambe</h3>
             <p className="text-sm font-mono text-[var(--accent)] mt-1 tracking-wider">
               Cloud Engineer &middot; DevOps &middot; AWS
             </p>
           </div>
 
           {/* Available badge */}
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--green)]/25 bg-[var(--green)]/5">
+          <LiquidGlass rounded="rounded-full" intensity="subtle" className="border border-[var(--green)]/25 bg-[var(--green)]/5">
+          <div className="flex items-center gap-2 px-4 py-2">
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--green)] opacity-70" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--green)]" />
@@ -77,6 +79,7 @@ const AboutHeader = () => {
               Available for hire
             </span>
           </div>
+          </LiquidGlass>
 
           {/* Socials */}
           <div className="flex gap-3">
@@ -92,18 +95,23 @@ const AboutHeader = () => {
                 d: "M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z",
               },
             ].map((s) => (
-              <a
+              <LiquidGlass
                 key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.label}
-                className="w-10 h-10 flex items-center justify-center border border-white/[0.08] hover:border-[var(--accent)]/40 text-white/30 hover:text-[var(--accent)] transition-all duration-300 rounded-xl bg-white/[0.02]"
+                rounded="rounded-xl"
+                intensity="subtle"
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d={s.d} />
-                </svg>
-              </a>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="w-10 h-10 flex items-center justify-center border border-white/[0.08] hover:border-[var(--accent)]/40 text-[var(--text-muted)] hover:text-[var(--accent)] transition-all duration-300 rounded-xl bg-white/[0.02]"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d={s.d} />
+                  </svg>
+                </a>
+              </LiquidGlass>
             ))}
           </div>
 
@@ -116,17 +124,22 @@ const AboutHeader = () => {
                 variants={fadeUp}
                 initial="hidden"
                 animate="visible"
-                className="p-3 rounded-xl border border-white/[0.06] bg-white/[0.02] text-center"
               >
-                <div
-                  className="text-lg font-black mb-0.5"
-                  style={{ color: stat.color }}
+                <LiquidGlass
+                  rounded="rounded-xl"
+                  intensity="subtle"
+                  className="p-3 border border-white/[0.06] bg-white/[0.02] text-center"
                 >
-                  {stat.value}
-                </div>
-                <div className="text-[9px] font-mono text-white/30 tracking-wider uppercase">
-                  {stat.label}
-                </div>
+                  <div
+                    className="text-lg font-black mb-0.5"
+                    style={{ color: stat.color }}
+                  >
+                    {stat.value}
+                  </div>
+                  <div className="text-[9px] font-mono text-[var(--text-muted)] tracking-wider uppercase">
+                    {stat.label}
+                  </div>
+                </LiquidGlass>
               </motion.div>
             ))}
           </div>
@@ -143,7 +156,7 @@ const AboutHeader = () => {
             className="flex items-center gap-4"
           >
             <span className="font-mono text-[10px] text-[var(--accent)] tracking-[0.3em] uppercase">02 / About</span>
-            <div className="flex-1 h-px bg-white/5" />
+            <div className="flex-1 h-px" style={{ background: "var(--divider)" }} />
           </motion.div>
 
           {/* Heading */}
@@ -168,19 +181,19 @@ const AboutHeader = () => {
             animate="visible"
             className="space-y-4"
           >
-            <p className="text-white/50 text-base leading-relaxed">
+            <p className="text-[var(--text-secondary)] text-base leading-relaxed">
               Cloud-native Infrastructure Engineer with a Master&apos;s in Computer
               Science and deep expertise in AWS, Terraform, and DevSecOps. Proven
               track record of architecting resilient CI/CD pipelines, optimizing
               backend performance using FastAPI, and enforcing cost governance.
             </p>
-            <p className="text-white/50 text-base leading-relaxed">
+            <p className="text-[var(--text-secondary)] text-base leading-relaxed">
               Currently deploying Percept EDR across multi-tenant Azure environments
               at Sequretek. Previously provisioned scalable AWS infrastructure via
               Terraform, engineered automated workflows in GitHub Actions, and
               optimized high-traffic REST APIs with FastAPI and PostgreSQL.
             </p>
-            <p className="text-white/40 text-sm leading-relaxed">
+            <p className="text-[var(--text-tertiary)] text-sm leading-relaxed">
               AWS Certified Solutions Architect &middot; ISO 27001 Lead Auditor.
               Specialist in infrastructure automation, container orchestration, and
               eliminating configuration drift for scalable systems.
@@ -196,12 +209,16 @@ const AboutHeader = () => {
             className="flex flex-wrap gap-2"
           >
             {["AWS", "Terraform", "Docker", "GitHub Actions", "Python", "FastAPI", "PostgreSQL", "Ansible", "Grafana", "CI/CD"].map((skill) => (
-              <span
+              <LiquidGlass
                 key={skill}
-                className="text-[11px] font-mono px-3 py-1 rounded-lg border border-white/[0.07] text-white/40 bg-white/[0.02] hover:border-[var(--accent)]/30 hover:text-[var(--accent)]/80 transition-all duration-300 cursor-default"
+                rounded="rounded-lg"
+                intensity="subtle"
+                className="border border-white/[0.07] bg-white/[0.02] hover:border-[var(--accent)]/30 transition-all duration-300 cursor-default"
               >
-                {skill}
-              </span>
+                <span className="text-[11px] font-mono px-3 py-1 text-[var(--text-tertiary)] hover:text-[var(--accent)]/80 transition-colors duration-300">
+                  {skill}
+                </span>
+              </LiquidGlass>
             ))}
           </motion.div>
         </div>

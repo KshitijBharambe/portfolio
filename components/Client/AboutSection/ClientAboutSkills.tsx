@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { LiquidGlass } from "@/components/ui/liquid-glass";
 
 const skillCategories = [
   {
@@ -119,6 +120,17 @@ const SkillsTabsSection = () => {
   const [activeTab, setActiveTab] = useState("skills");
   const [activeSkillCategory, setActiveSkillCategory] = useState(skillCategories[0].id);
   const [failedIcons, setFailedIcons] = useState<Record<string, "retry" | "failed">>({});
+  const tabContainerRef = useRef<HTMLDivElement>(null);
+
+  // Prevent scroll jump when switching tabs
+  const handleTabChange = useCallback((tabId: string) => {
+    const scrollY = window.scrollY;
+    setActiveTab(tabId);
+    // Restore scroll position after React re-renders
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollY);
+    });
+  }, []);
 
   const activeCategory =
     skillCategories.find((c) => c.id === activeSkillCategory) ||
@@ -204,20 +216,21 @@ const SkillsTabsSection = () => {
   return (
     <div className="max-w-7xl mx-auto w-full">
       {/* Glass pill tab navigation */}
-      <div className="glass rounded-xl p-1 flex items-center gap-1 mb-8 w-fit">
+      <LiquidGlass rounded="rounded-xl" intensity="medium" className="mb-8 w-fit">
+      <div className="glass rounded-xl p-1 flex items-center gap-1">
         {tabs.map(({ id, label, num }) => (
           <button
             key={id}
-            onClick={() => setActiveTab(id)}
+            onClick={() => handleTabChange(id)}
             className={`relative flex items-center gap-2 px-5 py-2.5 text-sm font-medium transition-all duration-300 rounded-lg ${
               activeTab === id
-                ? "bg-[var(--accent)]/10 text-white border border-[var(--accent)]/30"
-                : "text-gray-500 hover:text-gray-300 hover:bg-white/5"
+                ? "bg-[var(--accent)]/10 text-[var(--foreground)] border border-[var(--accent)]/30"
+                : "text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-white/5"
             }`}
           >
             <span
               className={`font-mono text-[10px] ${
-                activeTab === id ? "text-[var(--accent)]" : "text-gray-600"
+                activeTab === id ? "text-[var(--accent)]" : "text-[var(--text-muted)]"
               }`}
             >
               {num}
@@ -234,7 +247,9 @@ const SkillsTabsSection = () => {
           </button>
         ))}
       </div>
+      </LiquidGlass>
 
+      <div ref={tabContainerRef} style={{ minHeight: 300 }}>
       <AnimatePresence mode="wait">
         {/* ── SKILLS TAB ── */}
         {activeTab === "skills" && (
@@ -254,7 +269,7 @@ const SkillsTabsSection = () => {
                   className={`flex items-center gap-2 px-4 py-2 text-xs font-mono rounded-lg border transition-all duration-300 ${
                     activeSkillCategory === cat.id
                       ? "border-[var(--accent)]/40 text-[var(--accent)] bg-[var(--accent)]/8"
-                      : "border-white/8 text-gray-400 hover:border-white/15 hover:text-gray-200 bg-white/[0.02]"
+                      : "border-white/8 text-[var(--text-tertiary)] hover:border-white/15 hover:text-[var(--text-secondary)] bg-white/[0.02]"
                   }`}
                 >
                   <span className="text-[9px] opacity-60">{cat.num}</span>
@@ -264,22 +279,22 @@ const SkillsTabsSection = () => {
             </div>
 
             {/* Spotlight card with category info + tech grid */}
-            <div className="spotlight-card rounded-2xl p-6 md:p-8 relative overflow-hidden">
+            <LiquidGlass rounded="rounded-2xl" intensity="medium" className="spotlight-card p-6 md:p-8 overflow-hidden">
               <div className="absolute top-0 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
 
               <div className="flex flex-col md:flex-row gap-8">
                 {/* Category info */}
                 <div className="md:w-1/3">
-                  <h4 className="text-lg font-bold text-white mb-2">
+                  <h4 className="text-lg font-bold text-[var(--foreground)] mb-2">
                     {activeCategory.title}
                   </h4>
-                  <p className="text-sm text-gray-400 leading-relaxed">
+                  <p className="text-sm text-[var(--text-tertiary)] leading-relaxed">
                     {activeCategory.description}
                   </p>
 
                   <div className="mt-6 flex items-center gap-3">
                     <div className="w-px h-12 bg-gradient-to-b from-[var(--accent)]/40 to-transparent" />
-                    <span className="font-mono text-[10px] text-gray-600 tracking-widest uppercase">
+                    <span className="font-mono text-[10px] text-[var(--text-muted)] tracking-widest uppercase">
                       {activeCategory.technologies.length} tools
                     </span>
                   </div>
@@ -287,7 +302,7 @@ const SkillsTabsSection = () => {
 
                 {/* Tech grid */}
                 <div className="md:w-2/3">
-                  <p className="text-xs font-mono text-gray-600 tracking-widest uppercase mb-5">
+                  <p className="text-xs font-mono text-[var(--text-muted)] tracking-widest uppercase mb-5">
                     Technologies &amp; Tools
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -303,7 +318,7 @@ const SkillsTabsSection = () => {
                         <div className="w-8 h-8 flex items-center justify-center text-[var(--accent)]">
                           {renderTechIcon(tech)}
                         </div>
-                        <span className="text-[11px] text-center text-gray-400 group-hover:text-gray-200 font-mono">
+                        <span className="text-[11px] text-center text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] font-mono">
                           {tech.name}
                         </span>
                       </motion.div>
@@ -311,7 +326,7 @@ const SkillsTabsSection = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </LiquidGlass>
           </motion.div>
         )}
 
@@ -331,47 +346,48 @@ const SkillsTabsSection = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="spotlight-card rounded-2xl p-6 relative overflow-hidden group"
               >
-                {/* Left accent */}
-                <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[var(--accent)]/40 to-transparent" />
+                <LiquidGlass rounded="rounded-2xl" intensity="medium" className="spotlight-card p-6 overflow-hidden group">
+                  {/* Left accent */}
+                  <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[var(--accent)]/40 to-transparent" />
 
-                {/* Watermark number */}
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 font-black text-8xl text-white/[0.025] select-none pointer-events-none">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
-                <div className="flex flex-wrap justify-between items-start gap-3 mb-4">
-                  <div>
-                    <h4 className="text-base font-bold text-white">
-                      {item.position}
-                    </h4>
-                    <a
-                      href={item.companyUrl || undefined}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[var(--accent)] text-sm font-mono hover:underline"
-                    >
-                      {item.company}
-                    </a>
-                  </div>
-                  <span className="font-mono text-[11px] text-gray-500 border border-white/10 px-3 py-1 rounded-lg bg-white/[0.02]">
-                    {item.period}
+                  {/* Watermark number */}
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 font-black text-8xl text-white/[0.025] select-none pointer-events-none">
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                </div>
-                <ul className="space-y-2">
-                  {item.responsibilities.map((r, j) => (
-                    <li
-                      key={j}
-                      className="flex items-start gap-2 text-sm text-gray-400"
-                    >
-                      <span className="text-[var(--accent)] mt-1 flex-shrink-0">
-                        ›
-                      </span>
-                      <span>{r}</span>
-                    </li>
-                  ))}
-                </ul>
+
+                  <div className="flex flex-wrap justify-between items-start gap-3 mb-4">
+                    <div>
+                      <h4 className="text-base font-bold text-[var(--foreground)]">
+                        {item.position}
+                      </h4>
+                      <a
+                        href={item.companyUrl || undefined}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[var(--accent)] text-sm font-mono hover:underline"
+                      >
+                        {item.company}
+                      </a>
+                    </div>
+                    <span className="font-mono text-[11px] text-[var(--text-muted)] border border-white/10 px-3 py-1 rounded-lg bg-white/[0.02]">
+                      {item.period}
+                    </span>
+                  </div>
+                  <ul className="space-y-2">
+                    {item.responsibilities.map((r, j) => (
+                      <li
+                        key={j}
+                        className="flex items-start gap-2 text-sm text-[var(--text-tertiary)]"
+                      >
+                        <span className="text-[var(--accent)] mt-1 flex-shrink-0">
+                          ›
+                        </span>
+                        <span>{r}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </LiquidGlass>
               </motion.div>
             ))}
           </motion.div>
@@ -393,33 +409,35 @@ const SkillsTabsSection = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="spotlight-card rounded-2xl p-6 relative overflow-hidden"
               >
-                {/* Watermark number */}
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 font-black text-8xl text-white/[0.025] select-none pointer-events-none">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
-                {/* Top accent */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-2)]/30 to-transparent" />
-
-                <div className="flex flex-wrap justify-between items-start gap-3 mb-2">
-                  <h4 className="text-base font-bold text-white max-w-lg">
-                    {item.degree}
-                  </h4>
-                  <span className="font-mono text-[11px] text-gray-500 border border-white/10 px-3 py-1 rounded-lg bg-white/[0.02]">
-                    {item.period}
+                <LiquidGlass rounded="rounded-2xl" intensity="medium" className="spotlight-card p-6 overflow-hidden">
+                  {/* Watermark number */}
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 font-black text-8xl text-white/[0.025] select-none pointer-events-none">
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                </div>
-                <p className="text-[var(--accent)] text-sm font-mono mb-3">
-                  {item.institution}
-                </p>
-                <p className="text-xs text-gray-500">{item.coursework}</p>
+
+                  {/* Top accent */}
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-2)]/30 to-transparent" />
+
+                  <div className="flex flex-wrap justify-between items-start gap-3 mb-2">
+                    <h4 className="text-base font-bold text-[var(--foreground)] max-w-lg">
+                      {item.degree}
+                    </h4>
+                    <span className="font-mono text-[11px] text-[var(--text-muted)] border border-white/10 px-3 py-1 rounded-lg bg-white/[0.02]">
+                      {item.period}
+                    </span>
+                  </div>
+                  <p className="text-[var(--accent)] text-sm font-mono mb-3">
+                    {item.institution}
+                  </p>
+                  <p className="text-xs text-[var(--text-muted)]">{item.coursework}</p>
+                </LiquidGlass>
               </motion.div>
             ))}
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 };

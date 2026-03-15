@@ -1,11 +1,16 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
 import projectsData from "@/public/assets/data/projects_data.json";
 import { ProjectData } from "./ClientHomePage";
+import {
+  CardHoverReveal,
+  CardHoverRevealMain,
+  CardHoverRevealContent,
+} from "@/components/ui/reveal-on-hover";
 
 interface ClientProjectsSectionProps {
   projects?: ProjectData[];
@@ -13,12 +18,12 @@ interface ClientProjectsSectionProps {
 
 /* ─── Tag colour mapping ─── */
 const tagColors: Record<string, string> = {
-  react:   "#818cf8",
-  next:    "#818cf8",
-  python:  "#fbbf24",
-  ai:      "#a78bfa",
-  nlp:     "#a78bfa",
-  tensor:  "#a78bfa",
+  react:   "#2dd4bf",
+  next:    "#2dd4bf",
+  python:  "#f59e0b",
+  ai:      "#10b981",
+  nlp:     "#10b981",
+  tensor:  "#10b981",
   data:    "#34d399",
   elastic: "#34d399",
   pandas:  "#34d399",
@@ -63,7 +68,6 @@ const CheckIcon = () => (
 
 /* ─── Component ─── */
 export default function ClientProjectsSection({ projects = [] }: ClientProjectsSectionProps) {
-  // FIX: Initialize with data immediately (not in useEffect) so stagger animation works
   const [localProjects] = useState<ProjectData[]>(
     projects.length > 0 ? projects : (projectsData.projects as ProjectData[])
   );
@@ -72,14 +76,6 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
   const [visibleProjects, setVisibleProjects] = useState(3);
 
   const [ref, inView] = useInView({ threshold: 0.05, triggerOnce: true });
-
-  /* Spotlight mouse handler */
-  const handleSpotlightMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
-    card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
-  }, []);
 
   /* Modal helpers */
   const openModal = (project: ProjectData) => {
@@ -95,18 +91,13 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
   const displayedProjects = localProjects.slice(0, visibleProjects);
 
   return (
-    <section className="text-white py-28 px-4 relative w-full">
-      {/* Atmospheric orbs */}
-      <div className="absolute top-20 right-0 w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(129,140,248,0.05) 0%, transparent 70%)" }} />
-      <div className="absolute bottom-20 left-0 w-[350px] h-[350px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(244,114,182,0.05) 0%, transparent 70%)" }} />
+    <section className="py-28 px-4 relative w-full">
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Section label */}
         <div className="flex items-center gap-4 mb-16">
           <span className="font-mono text-[10px] text-[var(--accent)] tracking-[0.3em] uppercase">03 / Projects</span>
-          <div className="flex-1 h-px bg-white/5" />
+          <div className="flex-1 h-px" style={{ background: "var(--divider)" }} />
         </div>
 
         {/* Heading */}
@@ -122,105 +113,112 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
             <br />
             <span className="gradient-text">WORK.</span>
           </h2>
-          <p className="text-white/40 text-base max-w-xl leading-relaxed">
+          <p className="text-[var(--text-tertiary)] text-base max-w-xl leading-relaxed">
             A selection of projects in AI, cloud, and full-stack development —
             each designed to solve real problems with modern tools.
           </p>
         </motion.div>
 
-        {/* Cards grid */}
+        {/* Cards grid — hover-reveal style */}
         <motion.div
           ref={ref}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
           variants={{
             hidden: {},
-            visible: { transition: { staggerChildren: 0.12 } },
+            visible: { transition: { staggerChildren: 0.15 } },
           }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {displayedProjects.map((project, index) => (
+          {displayedProjects.map((project) => (
             <motion.div
               key={project.id}
               variants={{
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
               }}
-              className="spotlight-card group rounded-2xl flex flex-col cursor-pointer"
-              style={{ willChange: "transform" }}
-              onMouseMove={handleSpotlightMove}
-              onClick={() => openModal(project)}
-              whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
+              whileHover={{ y: -8, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
             >
-              {/* Watermark */}
-              <span className="absolute top-3 right-4 font-black text-6xl text-white/[0.035] select-none pointer-events-none z-[1]">
-                {String(index + 1).padStart(2, "0")}
-              </span>
+              <CardHoverReveal
+                className="h-[420px] rounded-2xl cursor-pointer border border-[var(--card-border)] hover:border-[var(--accent)]/30 transition-[border-color,box-shadow] duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.3),0_0_40px_rgba(16,185,129,0.06)]"
+                onClick={() => openModal(project)}
+              >
+                <CardHoverRevealMain>
+                  <Image
+                    src={project.image || "/api/placeholder/400/420"}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="inline-block size-full max-h-full max-w-full object-cover align-middle"
+                  />
+                </CardHoverRevealMain>
 
-              {/* Image */}
-              <div className="relative h-44 rounded-t-2xl overflow-hidden bg-[var(--surface)]">
-                <Image
-                  src={project.image || "/api/placeholder/400/200"}
-                  alt={project.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface)] via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 w-full h-px bg-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-
-              {/* Content */}
-              <div className="relative z-[1] p-5 flex flex-col flex-1">
-                <h3 className="text-base font-bold text-white/90 mb-2 group-hover:text-[var(--accent)] transition-colors duration-300 leading-snug">
-                  {project.title}
-                </h3>
-                <p className="text-sm text-white/35 mb-4 line-clamp-2 leading-relaxed">
-                  {project.description}
-                </p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {project.tags.slice(0, 4).map((tag: string, i: number) => (
-                    <span
-                      key={i}
-                      className="text-[10px] font-mono px-2 py-0.5 rounded"
-                      style={{
-                        color: getTagColor(tag),
-                        background: `${getTagColor(tag)}14`,
-                        border: `1px solid ${getTagColor(tag)}30`,
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                  {project.tags.length > 4 && (
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-white/10 text-white/25">
-                      +{project.tags.length - 4}
-                    </span>
-                  )}
-                </div>
-
-                {/* Footer */}
-                <div className="mt-auto flex items-center justify-between">
-                  <span className="text-[11px] font-mono text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    View Details →
-                  </span>
-                  <div className="flex gap-3">
-                    {project.githubLink && project.githubLink !== "#" && (
-                      <a
-                        href={project.githubLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-white/20 hover:text-white/70 transition-colors"
-                      >
-                        <GitHubIcon />
-                      </a>
-                    )}
+                <CardHoverRevealContent className="space-y-3 rounded-2xl bg-zinc-900/75 text-zinc-50">
+                  {/* Title */}
+                  <div className="space-y-1">
+                    <h3 className="text-base font-bold leading-snug">{project.title}</h3>
+                    <p className="text-sm text-zinc-300 line-clamp-2 leading-relaxed">
+                      {project.description}
+                    </p>
                   </div>
-                </div>
-              </div>
+
+                  {/* Tech Stack */}
+                  <div className="space-y-2">
+                    <h4 className="text-[10px] font-mono text-[var(--accent)] tracking-widest uppercase">Stack</h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.tags.slice(0, 5).map((tag: string, i: number) => (
+                        <span
+                          key={i}
+                          className="text-[10px] font-mono px-2 py-0.5 rounded-full"
+                          style={{
+                            color: getTagColor(tag),
+                            background: `${getTagColor(tag)}20`,
+                            border: `1px solid ${getTagColor(tag)}40`,
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {project.tags.length > 5 && (
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-[var(--card-border)] text-[var(--text-tertiary)]">
+                          +{project.tags.length - 5}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-3 pt-1">
+                    <span className="text-[11px] font-mono text-[var(--accent)]">
+                      View Details →
+                    </span>
+                    <div className="flex gap-2 ml-auto">
+                      {project.githubLink && project.githubLink !== "#" && (
+                        <a
+                          href={project.githubLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[var(--text-tertiary)] hover:text-[var(--foreground)] transition-colors"
+                        >
+                          <GitHubIcon />
+                        </a>
+                      )}
+                      {project.demoLink && project.demoLink !== "#" && (
+                        <a
+                          href={project.demoLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[var(--text-tertiary)] hover:text-[var(--foreground)] transition-colors"
+                        >
+                          <ExternalLinkIcon />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </CardHoverRevealContent>
+              </CardHoverReveal>
             </motion.div>
           ))}
         </motion.div>
@@ -284,7 +282,7 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
               <div className="p-6 space-y-6">
                 <div>
                   <p className="text-[10px] font-mono text-[var(--accent)] mb-2 tracking-widest uppercase">Overview</p>
-                  <p className="text-white/40 text-sm leading-relaxed whitespace-pre-line">{selectedProject.fullDescription}</p>
+                  <p className="text-[var(--text-tertiary)] text-sm leading-relaxed whitespace-pre-line">{selectedProject.fullDescription}</p>
                 </div>
                 <div>
                   <p className="text-[10px] font-mono text-[var(--accent)] mb-3 tracking-widest uppercase">Technologies</p>
@@ -301,7 +299,7 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
                   <p className="text-[10px] font-mono text-[var(--accent)] mb-3 tracking-widest uppercase">Key Features</p>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {selectedProject.features.map((feature: string, i: number) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-white/40">
+                      <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-tertiary)]">
                         <span className="text-[var(--green)] mt-0.5"><CheckIcon /></span>
                         <span>{feature}</span>
                       </li>

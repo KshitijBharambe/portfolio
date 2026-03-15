@@ -27,17 +27,17 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative border-t border-white/5">
+    <footer className="relative" style={{ borderTop: "1px solid var(--divider)" }}>
       <div className="max-w-6xl mx-auto px-6 md:px-10 py-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
           {/* Brand */}
           <div>
             <Link href="/">
-              <span className="font-mono font-bold text-xl text-[var(--accent)] text-glow-accent tracking-widest">
+              <span className="font-mono font-bold text-xl text-[var(--accent)] tracking-widest">
                 KB_
               </span>
             </Link>
-            <p className="text-xs text-gray-600 mt-1 font-mono">
+            <p className="text-xs mt-1 font-mono" style={{ color: "var(--text-muted)" }}>
               Cloud Engineer · DevOps · AWS
             </p>
           </div>
@@ -48,7 +48,8 @@ const Footer = () => {
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-xs font-mono text-gray-500 hover:text-[var(--accent)] transition-colors tracking-wider uppercase"
+                className="text-xs font-mono hover:text-[var(--accent)] transition-colors tracking-wider uppercase"
+                style={{ color: "var(--text-muted)" }}
               >
                 {l.label}
               </Link>
@@ -63,7 +64,8 @@ const Footer = () => {
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 flex items-center justify-center border border-white/8 rounded-lg text-gray-600 hover:text-[var(--accent)] hover:border-[var(--accent)]/30 transition-all duration-300"
+                className="w-8 h-8 flex items-center justify-center rounded-lg hover:text-[var(--accent)] hover:border-[var(--accent)]/30 transition-all duration-300"
+                style={{ border: "1px solid var(--card-border)", color: "var(--text-muted)" }}
                 aria-label={s.label}
               >
                 <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -78,10 +80,10 @@ const Footer = () => {
         <div className="neon-line my-8" />
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
-          <p className="text-[11px] font-mono text-gray-600">
+          <p className="text-[11px] font-mono" style={{ color: "var(--text-muted)" }}>
             &copy; {year} Kshitij Bharambe
           </p>
-          <p className="text-[11px] font-mono text-gray-700">
+          <p className="text-[11px] font-mono" style={{ color: "var(--text-tertiary)" }}>
             Next.js · Tailwind · Framer Motion
           </p>
         </div>

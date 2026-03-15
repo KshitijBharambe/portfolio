@@ -1,12 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { useState, useCallback } from "react";
 import HeroSection from "./HeroSection";
 import AboutMeSection from "./AboutSection/ClientAboutSection";
 import ClientProjectsSection from "./ClientProjectSection";
 import ContactSection from "./ClientContactSection";
 import { useScroll } from "@/context/ScrollContext";
 import Footer from "@/components/layout/Footer";
+import IntroSplash from "./IntroSplash";
+import { EtheralShadow } from "@/components/ui/etheral-shadow";
+import { LiquidGlassFilter, LiquidGlassToggle } from "@/components/ui/liquid-glass";
 
 export interface ProjectData {
   id: number | string;
@@ -27,6 +30,11 @@ interface ClientHomePageProps {
 
 const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
   const scrollContext = useScroll();
+  const [introComplete, setIntroComplete] = useState(false);
+
+  const handleIntroComplete = useCallback(() => {
+    setIntroComplete(true);
+  }, []);
 
   const {
     homeSectionRef,
@@ -40,6 +48,14 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
       scrollContext.scrollToSection(scrollContext.aboutSectionRef);
     }
   };
+
+  // Scroll to top on every page load/refresh
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
 
   React.useEffect(() => {
     const hash = window.location.hash.replace("#", "");
@@ -61,48 +77,72 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
   if (!scrollContext) return null;
 
   return (
-    <div className="min-h-screen text-white flex flex-col relative bg-[var(--bg)]">
-      {/* HERO */}
-      <section
-        id="home"
-        ref={homeSectionRef}
-        className="min-h-screen w-full flex items-center justify-center relative"
-      >
-        <HeroSection handleScrollToAbout={handleScrollToAbout} />
-      </section>
+    <>
+      {/* INTRO SPLASH — outside main wrapper so it's unaffected by fade */}
+      <IntroSplash onComplete={handleIntroComplete} />
 
-      {/* ABOUT */}
-      <section
-        id="about"
-        ref={aboutSectionRef}
-        className="min-h-screen w-full flex items-center justify-center relative"
+      <div
+        className="min-h-screen flex flex-col relative"
+        style={{ background: "var(--bg)", color: "var(--foreground)" }}
       >
-        <div className="absolute top-0 left-0 w-full neon-line" />
-        <AboutMeSection />
-      </section>
+        {/* Liquid glass SVG filter — rendered once for all panels */}
+        <LiquidGlassFilter />
+        <LiquidGlassToggle />
 
-      {/* PROJECTS */}
-      <section
-        id="projects"
-        ref={projectsSectionRef}
-        className="w-full flex justify-center relative"
-      >
-        <div className="absolute top-0 left-0 w-full neon-line" />
-        <ClientProjectsSection projects={projects} />
-      </section>
+        {/* ETHEREAL BACKGROUND — across entire page */}
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <EtheralShadow
+            color="rgba(160,160,150,0.6)"
+            animation={{ scale: 80, speed: 70 }}
+            noise={{ opacity: 0.6, scale: 1.2 }}
+            sizing="fill"
+          />
+        </div>
 
-      {/* CONTACT */}
-      <section
-        id="contact"
-        ref={contactSectionRef}
-        className="min-h-screen w-full flex items-center justify-center relative"
-      >
-        <div className="absolute top-0 left-0 w-full neon-line" />
-        <ContactSection />
-      </section>
+        {/* HERO */}
+        <section
+          id="home"
+          ref={homeSectionRef}
+          className="min-h-screen w-full flex items-center justify-center relative z-[1]"
+        >
+          <HeroSection handleScrollToAbout={handleScrollToAbout} introComplete={introComplete} />
+        </section>
 
-      <Footer />
-    </div>
+        {/* ABOUT */}
+        <section
+          id="about"
+          ref={aboutSectionRef}
+          className="min-h-screen w-full flex items-center justify-center relative z-[1]"
+        >
+          <div className="absolute top-0 left-0 w-full neon-line" />
+          <AboutMeSection />
+        </section>
+
+        {/* PROJECTS */}
+        <section
+          id="projects"
+          ref={projectsSectionRef}
+          className="w-full flex justify-center relative z-[1]"
+        >
+          <div className="absolute top-0 left-0 w-full neon-line" />
+          <ClientProjectsSection projects={projects} />
+        </section>
+
+        {/* CONTACT */}
+        <section
+          id="contact"
+          ref={contactSectionRef}
+          className="min-h-screen w-full flex items-center justify-center relative z-[1]"
+        >
+          <div className="absolute top-0 left-0 w-full neon-line" />
+          <ContactSection />
+        </section>
+
+        <div className="relative z-[1]">
+          <Footer />
+        </div>
+      </div>
+    </>
   );
 };
 

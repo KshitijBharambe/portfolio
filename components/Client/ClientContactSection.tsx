@@ -2,6 +2,7 @@
 import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { sendEmail } from "../Server/Server-EmailSend";
+import { LiquidGlass } from "@/components/ui/liquid-glass";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
@@ -105,18 +106,13 @@ const ContactSection = () => {
   ];
 
   return (
-    <section className="text-white py-24 px-4 relative w-full min-h-screen flex items-center overflow-hidden">
-      {/* Atmospheric glows */}
-      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(244,114,182,0.06) 0%, transparent 70%)" }} />
-      <div className="absolute bottom-0 left-0 w-[350px] h-[350px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(129,140,248,0.05) 0%, transparent 70%)" }} />
+    <section className="py-24 px-4 relative w-full min-h-screen flex items-center overflow-hidden">
 
       <div className="max-w-5xl mx-auto w-full relative z-10">
         {/* Section label */}
         <div className="flex items-center gap-4 mb-16">
           <span className="font-mono text-[10px] text-[var(--accent)] tracking-[0.3em] uppercase">04 / Contact</span>
-          <div className="flex-1 h-px bg-white/5" />
+          <div className="flex-1 h-px" style={{ background: "var(--divider)" }} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -138,7 +134,7 @@ const ContactSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.15 }}
-              className="text-gray-400 text-base leading-relaxed mb-10 max-w-sm"
+              className="text-[var(--text-tertiary)] text-base leading-relaxed mb-10 max-w-sm"
             >
               Open to collaborations, opportunities, or just a friendly conversation.
             </motion.p>
@@ -148,9 +144,9 @@ const ContactSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.25 }}
-              className="spotlight-card rounded-2xl p-6 space-y-4"
-              onMouseMove={handleSpotlight}
+              className="space-y-4"
             >
+              <LiquidGlass rounded="rounded-2xl" intensity="medium" className="spotlight-card p-6" onMouseMove={handleSpotlight}>
               {contactLinks.map((link, i) => (
                 <motion.div
                   key={link.label}
@@ -163,22 +159,23 @@ const ContactSection = () => {
                     {link.icon}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[9px] font-mono text-gray-600 tracking-widest uppercase">{link.label}</p>
+                    <p className="text-[9px] font-mono text-[var(--text-muted)] tracking-widest uppercase">{link.label}</p>
                     {link.href ? (
                       <a
                         href={link.href}
                         target={link.href.startsWith("http") ? "_blank" : undefined}
                         rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="text-xs text-gray-300 hover:text-[var(--accent)] transition-colors truncate block"
+                        className="text-xs text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors truncate block"
                       >
                         {link.value}
                       </a>
                     ) : (
-                      <p className="text-xs text-gray-300">{link.value}</p>
+                      <p className="text-xs text-[var(--text-secondary)]">{link.value}</p>
                     )}
                   </div>
                 </motion.div>
               ))}
+              </LiquidGlass>
             </motion.div>
           </div>
 
@@ -187,19 +184,19 @@ const ContactSection = () => {
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="spotlight-card shimmer rounded-2xl p-8"
             onMouseMove={handleSpotlight}
           >
+            <LiquidGlass rounded="rounded-2xl" intensity="medium" className="spotlight-card shimmer p-8">
             <form onSubmit={handleSubmit} className="relative z-[1] space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label htmlFor="name" className="block text-[10px] font-mono tracking-[0.2em] text-gray-500 uppercase mb-2">
+                  <label htmlFor="name" className="block text-[10px] font-mono tracking-[0.2em] text-[var(--text-muted)] uppercase mb-2">
                     Your Name <span className="text-[var(--accent)]">*</span>
                   </label>
                   <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required placeholder="John Doe" className="input-glass" />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-[10px] font-mono tracking-[0.2em] text-gray-500 uppercase mb-2">
+                  <label htmlFor="email" className="block text-[10px] font-mono tracking-[0.2em] text-[var(--text-muted)] uppercase mb-2">
                     Email <span className="text-[var(--accent)]">*</span>
                   </label>
                   <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required placeholder="john@example.com" className="input-glass" />
@@ -207,12 +204,12 @@ const ContactSection = () => {
               </div>
 
               <div>
-                <label htmlFor="subject" className="block text-[10px] font-mono tracking-[0.2em] text-gray-500 uppercase mb-2">Subject</label>
+                <label htmlFor="subject" className="block text-[10px] font-mono tracking-[0.2em] text-[var(--text-muted)] uppercase mb-2">Subject</label>
                 <input type="text" id="subject" name="subject" value={formData.subject} onChange={handleChange} placeholder="How can I help?" className="input-glass" />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-[10px] font-mono tracking-[0.2em] text-gray-500 uppercase mb-2">
+                <label htmlFor="message" className="block text-[10px] font-mono tracking-[0.2em] text-[var(--text-muted)] uppercase mb-2">
                   Message <span className="text-[var(--accent)]">*</span>
                 </label>
                 <textarea id="message" name="message" value={formData.message} onChange={handleChange} required rows={5} placeholder="Your message..." className="input-glass resize-none" />
@@ -262,6 +259,7 @@ const ContactSection = () => {
                 </AnimatePresence>
               </div>
             </form>
+            </LiquidGlass>
           </motion.div>
         </div>
       </div>
