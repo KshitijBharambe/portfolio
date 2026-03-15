@@ -1,185 +1,212 @@
-import React, { useEffect, useRef } from "react";
-//import "./AboutSection.css";
+"use client";
+import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+const stats = [
+  { value: "2+",  label: "Years Exp",   color: "var(--accent)" },
+  { value: "20+", label: "Vulns Found", color: "var(--accent-2)" },
+  { value: "10+", label: "APIs Built",  color: "var(--accent)" },
+  { value: "30%", label: "Perf Boost",  color: "var(--accent-2)" },
+];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] },
+  }),
+};
+
 const AboutHeader = () => {
-  const glassCardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const element = glassCardRef.current;
-    if (!element) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!element) return;
-      const rect = element.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const filter = document.querySelector('#glass-distortion feDisplacementMap');
-      if (filter) {
-        const scaleX = (x / rect.width) * 30;
-        const scaleY = (y / rect.height) * 30;
-        filter.setAttribute('scale', Math.min(scaleX, scaleY).toString());
-      }
-
-      const specular = element.querySelector('.glass-specular') as HTMLElement;
-      if (specular) {
-        specular.style.background = `radial-gradient(
-          circle 220px at ${x}px ${y}px,
-          rgba(255,255,255,0.15) 0%,
-          rgba(255,255,255,0.05) 50%,
-          rgba(255,255,255,0) 80%
-        )`;
-      }
-    };
-
-    const handleMouseLeave = () => {
-      const filter = document.querySelector('#glass-distortion feDisplacementMap');
-      if (filter) {
-        filter.setAttribute('scale', '77');
-      }
-
-      if (element) {
-        const specular = element.querySelector('.glass-specular') as HTMLElement;
-        if (specular) {
-          specular.style.background = 'none';
-        }
-      }
-    };
-
-    element.addEventListener('mousemove', handleMouseMove);
-    element.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      element.removeEventListener('mousemove', handleMouseMove);
-      element.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, []);
   return (
-    <>
-      <svg style={{ display: "none" }}>
-        <filter id="glass-distortion">
-          <feTurbulence
-            type="turbulence"
-            baseFrequency="0.008"
-            numOctaves="2"
-            result="noise"
-          />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="77" />
-        </filter>
-      </svg>
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Top section with reversed layout */}
-        <div className="flex flex-col lg:flex-row gap-8 mb-12">
-          {/* LEFT SIDE - Title and Description */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="lg:w-1/2 flex flex-col justify-center"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-glow">
-              About Me
-            </h2>
-            <div className="w-24 h-1 bg-blue-500 mb-6"></div>
-            <p className="text-lg sm:text-xl text-gray-300">
-              Designing secure, scalable & intelligent tech solutions with
-              expertise in AI, DevOps, and Cloud Computing
-            </p>
+    <div className="max-w-6xl mx-auto w-full">
+      {/* ── Section number watermark ── */}
+      <div className="absolute right-0 top-0 font-black text-[160px] leading-none text-white/[0.015] select-none pointer-events-none hidden lg:block" style={{ letterSpacing: "-0.05em" }}>
+        02
+      </div>
 
-            <div className="mt-8">
-              <h3 className="text-2xl font-semibold mb-4 text-blue-400">
-                Background
-              </h3>
-              <div className="space-y-4 text-gray-300">
-              <p>
-                With a background in Computer Engineering and hands-on experience
-                as a Software Engineer Intern, I&apos;ve contributed to backend development
-                using Python, integrated secure REST APIs, and automated
-                CI/CD workflows.
-              </p>
-              <p>
-                My experience extends to cloud infrastructure, where I&apos;ve assisted in
-                provisioning and monitoring AWS services (EC2, S3, Lambda), and security,
-                where I&apos;ve conducted vulnerability assessments using tools like
-                Burp Suite and Kali Linux.
-              </p>
-              <p>
-                I am driven by the challenge of solving complex problems,
-                whether it&apos;s tuning PostgreSQL queries to boost performance
-                or developing innovative projects like an AI-powered university
-                chatbot and a dynamic portfolio with Next.js.
-              </p>
-
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
+        {/* ── LEFT: Profile column ── */}
+        <motion.div
+          custom={0}
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          className="lg:col-span-2 flex flex-col items-center lg:items-start gap-6"
+        >
+          {/* Profile photo with gradient ring */}
+          <div className="relative">
+            <div
+              className="absolute inset-[-3px] rounded-full animate-spin-slow"
+              style={{
+                background: "conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent))",
+              }}
+            />
+            <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-[var(--bg)]">
+              <Image
+                src="/assets/profile-pic.jpeg"
+                alt="Kshitij Bharambe"
+                fill
+                sizes="10rem"
+                className="object-cover object-center"
+                priority
+              />
             </div>
+            {/* Available dot */}
+            <div className="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-[var(--bg)] flex items-center justify-center">
+              <div className="w-3 h-3 rounded-full bg-[var(--green)] shadow-[0_0_8px_var(--green)]" />
+            </div>
+          </div>
+
+          {/* Name + role */}
+          <div className="text-center lg:text-left">
+            <h3 className="text-xl font-bold text-white tracking-tight">Kshitij Bharambe</h3>
+            <p className="text-sm font-mono text-[var(--accent)] mt-1 tracking-wider">
+              Software Eng &middot; Cloud &middot; Security
+            </p>
+          </div>
+
+          {/* Available badge */}
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--green)]/25 bg-[var(--green)]/5">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--green)] opacity-70" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--green)]" />
+            </span>
+            <span className="text-[10px] font-mono text-[var(--green)] tracking-[0.15em] uppercase">
+              Available for hire
+            </span>
+          </div>
+
+          {/* Socials */}
+          <div className="flex gap-3">
+            {[
+              {
+                href: "https://github.com/KshitijBharambe",
+                label: "GitHub",
+                d: "M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z",
+              },
+              {
+                href: "https://www.linkedin.com/in/kshitijbharambe/",
+                label: "LinkedIn",
+                d: "M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z",
+              },
+            ].map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="w-10 h-10 flex items-center justify-center border border-white/[0.08] hover:border-[var(--accent)]/40 text-white/30 hover:text-[var(--accent)] transition-all duration-300 rounded-xl bg-white/[0.02]"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d={s.d} />
+                </svg>
+              </a>
+            ))}
+          </div>
+
+          {/* Stats row */}
+          <div className="grid grid-cols-2 gap-2 w-full mt-2">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                custom={i + 2}
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                className="p-3 rounded-xl border border-white/[0.06] bg-white/[0.02] text-center"
+              >
+                <div
+                  className="text-lg font-black mb-0.5"
+                  style={{ color: stat.color }}
+                >
+                  {stat.value}
+                </div>
+                <div className="text-[9px] font-mono text-white/30 tracking-wider uppercase">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* ── RIGHT: Bio content ── */}
+        <div className="lg:col-span-3 space-y-8">
+          {/* Section label */}
+          <motion.div
+            custom={0}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            className="flex items-center gap-4"
+          >
+            <span className="font-mono text-[10px] text-[var(--accent)] tracking-[0.3em] uppercase">02 / About</span>
+            <div className="flex-1 h-px bg-white/5" />
           </motion.div>
 
-          {/* RIGHT SIDE - Profile Card */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:w-1/2 about-profile-card"
+          {/* Heading */}
+          <motion.h2
+            custom={1}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            className="font-black leading-[0.88] tracking-tight"
+            style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)" }}
           >
-            <div className="glass-card" ref={glassCardRef}>
-              <div className="glass-filter"></div>
-              <div className="glass-overlay"></div>
-              <div className="glass-specular"></div>
-              <div className="glass-content">
-                {/* Profile Image */}
-                <div className="relative">
-                  <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-gray-700 shadow-lg relative">
-                    <Image
-                      src="/assets/profile-pic.jpeg"
-                      alt="Kshitij Bharambe"
-                      fill
-                      sizes="(max-width: 768px) 12rem, (max-width: 1200px) 12rem, 12rem"
-                      className="object-cover object-center"
-                      priority
-                    />
-                  </div>
-                  <div className="absolute -bottom-2 -right-2 bg-green-500 text-xs font-medium px-3 py-1 rounded-full text-white">
-                    Available for hire
-                  </div>
-                </div>
+            I BUILD
+            <br />
+            <span className="gradient-text">THINGS.</span>
+          </motion.h2>
 
-                <div className="mt-6">
-                  <h3 className="text-2xl font-bold text-white">Kshitij Bharambe</h3>
-                  <p className="text-blue-400 font-medium">
-                    Software Engineer | Cloud, DevOps & Security
-                  </p>
-                </div>
+          {/* Bio */}
+          <motion.div
+            custom={2}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            className="space-y-4"
+          >
+            <p className="text-white/50 text-base leading-relaxed">
+              With a background in Computer Engineering and hands-on experience
+              as a Software Engineer Intern, I&apos;ve contributed to backend
+              development using Python, integrated secure REST APIs, and
+              automated CI/CD workflows.
+            </p>
+            <p className="text-white/50 text-base leading-relaxed">
+              My experience extends to cloud infrastructure — provisioning and
+              monitoring AWS services (EC2, S3, Lambda) — and security, where
+              I&apos;ve conducted vulnerability assessments using Burp Suite and
+              Kali Linux, identifying 20+ vulnerabilities across 15+ applications.
+            </p>
+            <p className="text-white/40 text-sm leading-relaxed">
+              Currently pursuing M.S. in Computational Sciences at Syracuse University.
+              Driven by complex problems — from tuning PostgreSQL queries for performance
+              to building AI-powered systems from scratch.
+            </p>
+          </motion.div>
 
-                <div className="flex gap-3 mt-6">
-                  <a
-                    href="/resume"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors flex items-center text-sm"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-2"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                    Resume
-                  </a>
-                </div>
-              </div>
-            </div>
+          {/* Quick skill tags */}
+          <motion.div
+            custom={3}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-wrap gap-2"
+          >
+            {["Python", "FastAPI", "AWS", "Docker", "Next.js", "TypeScript", "PostgreSQL", "Burp Suite", "Kali Linux", "GitHub Actions"].map((skill) => (
+              <span
+                key={skill}
+                className="text-[11px] font-mono px-3 py-1 rounded-lg border border-white/[0.07] text-white/40 bg-white/[0.02] hover:border-[var(--accent)]/30 hover:text-[var(--accent)]/80 transition-all duration-300 cursor-default"
+              >
+                {skill}
+              </span>
+            ))}
           </motion.div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

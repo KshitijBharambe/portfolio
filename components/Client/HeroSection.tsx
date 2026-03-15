@@ -1,228 +1,271 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
-import { useScroll } from "@/context/ScrollContext";
 
-// Animated tech words that will rotate
-const techWords = [
-  "Backend Engineer",
-  "DevOps Enthusiast",
-  "Cloud Builder",
-  "CI/CD Tinkerer",
-  "Automation Guy",
-  "Python in One Hand, Bash in the Other",
-];
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { HeroParticleName } from "@/components/ui/particle-text-effect";
+
+/* ── Elegant floating shape (from 21st.dev HeroGeometric pattern) ── */
+function ElegantShape({
+  className,
+  delay = 0,
+  width = 400,
+  height = 100,
+  rotate = 0,
+  gradient = "from-white/[0.08]",
+}: {
+  className?: string;
+  delay?: number;
+  width?: number;
+  height?: number;
+  rotate?: number;
+  gradient?: string;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -150, rotate: rotate - 15 }}
+      animate={{ opacity: 1, y: 0, rotate }}
+      transition={{
+        duration: 2.4,
+        delay,
+        ease: [0.23, 0.86, 0.39, 0.96],
+        opacity: { duration: 1.2 },
+      }}
+      className={cn("absolute pointer-events-none", className)}
+    >
+      <motion.div
+        animate={{ y: [0, 15, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        style={{ width, height }}
+        className="relative"
+      >
+        <div
+          className={cn(
+            "absolute inset-0 rounded-full",
+            "bg-gradient-to-r to-transparent",
+            gradient,
+            "backdrop-blur-[2px] border border-white/[0.08]",
+            "shadow-[0_8px_32px_0_rgba(255,255,255,0.04)]",
+            "after:absolute after:inset-0 after:rounded-full",
+            "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.08),transparent_70%)]"
+          )}
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ── Animation variants ── */
+const fadeUp = {
+  hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 1,
+      delay: 0.5 + i * 0.2,
+      ease: [0.25, 0.4, 0.25, 1],
+    },
+  }),
+};
 
 interface HeroSectionProps {
-  handleScrollToAbout?: () => void;
+  handleScrollToAbout: () => void;
 }
 
 export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [currentText, setCurrentText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-  const scrollContext = useScroll();
-
-  // Handle scroll to about section
-  const handleScrollToAboutClick = () => {
-    if (handleScrollToAbout) {
-      handleScrollToAbout();
-    } else if (scrollContext?.aboutSectionRef?.current) {
-      scrollContext.scrollToSection(scrollContext.aboutSectionRef);
-    }
-  };
-
-  // Ref for the hero section container
-  const heroSectionRef = useRef<HTMLDivElement>(null);
-
-  // Typing and backspacing effect
-  useEffect(() => {
-    const currentWord = techWords[currentWordIndex];
-
-    const handleTyping = () => {
-      if (!isDeleting) {
-        // Typing phase
-        if (currentText.length < currentWord.length) {
-          setCurrentText(currentWord.substring(0, currentText.length + 1));
-        } else {
-          // Wait before deleting
-          setTimeout(() => setIsDeleting(true), 1000);
-        }
-      } else {
-        // Deleting phase
-        if (currentText.length > 0) {
-          setCurrentText(currentWord.substring(0, currentText.length - 1));
-        } else {
-          // Move to next word after deleting
-          setIsDeleting(false);
-          setCurrentWordIndex((prev) => (prev + 1) % techWords.length);
-        }
-      }
-    };
-
-    const timer = setTimeout(handleTyping, isDeleting ? 100 : 150);
-    return () => clearTimeout(timer);
-  }, [currentText, isDeleting, currentWordIndex]);
-
-  // Determine if cursor should blink
-  const shouldBlink =
-    !isDeleting && currentText === techWords[currentWordIndex];
-
-  // Variants for main content
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  // Floating elements animation
-  // const floatingAnimation = {
-  //   y: ["-10px", "10px", "-10px"],
-  //   transition: {
-  //     duration: 4,
-  //     repeat: Infinity,
-  //     ease: "easeInOut",
-  //   },
-  // };
-
-  // Animation variants for content
-
   return (
-    <div
-      ref={heroSectionRef}
-      className="min-h-screen w-full relative flex items-center justify-center"
-    >
-      {/* Content container */}
-      <div className="z-10 container mx-auto px-8 md:px-12 lg:max-w-6xl">
-        <motion.div
-          className="relative"
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-        >
-          {/* Main title with glowing effect */}
-          <motion.h1
-            variants={itemVariants}
-            className="font-mono font-bold text-6xl sm:text-7xl md:text-8xl text-white mb-6 tracking-tighter text-glow"
-          >
-            Kshitij <span className="text-blue-500">B</span>
-          </motion.h1>
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+      {/* ── Background gradient ── */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/[0.04] via-transparent to-[var(--accent-2)]/[0.04] pointer-events-none" />
 
-          {/* Developer byline with typing animation */}
+      {/* ── Floating elegant shapes ── */}
+      <div className="absolute inset-0 overflow-hidden">
+        <ElegantShape
+          delay={0.3}
+          width={600}
+          height={140}
+          rotate={12}
+          gradient="from-[var(--accent)]/20"
+          className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
+        />
+        <ElegantShape
+          delay={0.5}
+          width={500}
+          height={120}
+          rotate={-15}
+          gradient="from-[var(--accent-2)]/20"
+          className="right-[-5%] md:right-[0%] top-[65%] md:top-[70%]"
+        />
+        <ElegantShape
+          delay={0.4}
+          width={300}
+          height={80}
+          rotate={-8}
+          gradient="from-violet-400/15"
+          className="left-[5%] md:left-[10%] bottom-[8%] md:bottom-[12%]"
+        />
+        <ElegantShape
+          delay={0.6}
+          width={200}
+          height={60}
+          rotate={20}
+          gradient="from-[var(--accent)]/10"
+          className="right-[15%] md:right-[20%] top-[8%] md:top-[12%]"
+        />
+        <ElegantShape
+          delay={0.7}
+          width={150}
+          height={40}
+          rotate={-25}
+          gradient="from-[var(--accent-2)]/10"
+          className="left-[20%] md:left-[25%] top-[4%] md:top-[8%]"
+        />
+      </div>
+
+      {/* ── Main content ── */}
+      <div className="relative z-10 container mx-auto px-4 md:px-8">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Badge */}
           <motion.div
-            variants={itemVariants}
-            className="inline-flex items-center bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 px-4 py-2 rounded-full mb-8"
+            custom={0}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] mb-10"
           >
-            <div className="flex items-center">
-              <span className="text-green-400 text-lg sm:text-xl mr-2">
-                &gt;
-              </span>
-              <span className="text-lg sm:text-xl text-gray-200 mr-2">
-                {/*                 <span className="text-blue-400">const</span>{" "} */}
-                <span className="text-yellow-400">iAm:</span>{" "}
-              </span>
-              <motion.span className="font-mono text-lg sm:text-xl text-purple-400">
-                &quot;{currentText}&quot;
-                <span
-                  className={`text-white text-lg sm:text-xl ml-1 ${
-                    shouldBlink ? "animate-blink" : "opacity-100"
-                  }`}
-                >
-                  |
-                </span>
-              </motion.span>
-            </div>
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-70" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--accent)]" />
+            </span>
+            <span className="text-xs font-mono tracking-[0.25em] text-white/50 uppercase">
+              Software Engineer &middot; Cloud &middot; Security
+            </span>
           </motion.div>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-lg md:text-xl text-gray-300 max-w-xl mb-10"
+          {/* Display name — particle effect */}
+          <motion.div
+            custom={1}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            className="w-full max-w-3xl mx-auto -my-4"
           >
-            DevOps and Cloud enthusiast building secure, scalable backend
-            systems that actually work in production.
+            <HeroParticleName delay={900} />
+          </motion.div>
+
+          {/* Description */}
+          <motion.p
+            custom={2}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            className="mt-8 text-base sm:text-lg text-white/40 max-w-lg mx-auto leading-relaxed font-light tracking-wide"
+          >
+            Building secure, scalable cloud infrastructure and backend systems.
+            Passionate about DevOps, automation, and breaking things before the
+            bad guys do.
           </motion.p>
 
           {/* CTA Buttons */}
-          <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
-            <motion.button
-              onClick={handleScrollToAboutClick}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-full transition-all duration-300 flex items-center shadow-lg shadow-blue-500/20"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
+          <motion.div
+            custom={3}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            className="mt-10 flex flex-wrap items-center justify-center gap-4"
+          >
+            <motion.a
+              href="#projects"
+              className="btn-primary"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
             >
-              Explore My Work
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 ml-2 animate-bounce"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                />
+              View Projects
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 17l9.2-9.2M17 17V8H8" />
               </svg>
-            </motion.button>
+            </motion.a>
+            <motion.a
+              href="#contact"
+              className="btn-outline"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              Get In Touch
+            </motion.a>
           </motion.div>
 
-          {/* Social Links */}
-          <motion.div variants={itemVariants} className="flex gap-4 mt-10">
-            <motion.a
-              href="https://github.com/KshitijBharambe"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ y: -5, color: "#ffffff" }}
-              className="text-gray-400 hover:text-white transition-colors"
+          {/* Floating stat pills (desktop only) */}
+          <div className="hidden lg:block">
+            <motion.div
+              initial={{ opacity: 0, x: -60 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.6, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute left-[4%] top-1/2 -translate-y-1/2 flex flex-col gap-3"
             >
-              <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-              </svg>
-            </motion.a>
-            <motion.a
-              href="https://www.linkedin.com/in/kshitijbharambe/"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ y: -5, color: "#ffffff" }}
-              className="text-gray-400 hover:text-white transition-colors"
+              {[
+                { num: "2+", label: "Years Exp" },
+                { num: "20+", label: "Vulns Found" },
+              ].map((s) => (
+                <div
+                  key={s.num}
+                  className="px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm text-center"
+                >
+                  <div className="text-xl font-black text-[var(--accent)]">{s.num}</div>
+                  <div className="text-[9px] font-mono text-white/30 tracking-wider uppercase mt-0.5">{s.label}</div>
+                </div>
+              ))}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 60 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.8, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute right-[4%] top-1/2 -translate-y-1/2 flex flex-col gap-3"
             >
-              <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-              </svg>
-            </motion.a>
-            <motion.a
-              href="https://twitter.com/KSHTJ30"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ y: -5, color: "#ffffff" }}
-              className="text-gray-400 hover:text-white transition-colors"
-            >
-              <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
-              </svg>
-            </motion.a>
-          </motion.div>
-        </motion.div>
+              {[
+                { num: "10+", label: "APIs Built" },
+                { num: "AWS", label: "Certified" },
+              ].map((s) => (
+                <div
+                  key={s.num}
+                  className="px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm text-center"
+                >
+                  <div className="text-xl font-black text-[var(--accent-2)]">{s.num}</div>
+                  <div className="text-[9px] font-mono text-white/30 tracking-wider uppercase mt-0.5">{s.label}</div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
       </div>
+
+      {/* ── Scroll indicator (sibling of content, not nested inside it) ── */}
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.2, duration: 0.8 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer bg-transparent border-none z-10"
+        onClick={handleScrollToAbout}
+        aria-label="Scroll down"
+      >
+        <span className="font-mono text-[9px] text-white/20 tracking-[0.35em] uppercase">
+          Scroll
+        </span>
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          className="text-white/20"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </motion.div>
+      </motion.button>
+
+      {/* ── Bottom + top fade ── */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-[var(--bg)]/70 pointer-events-none" />
     </div>
   );
 }

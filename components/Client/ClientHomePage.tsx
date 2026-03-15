@@ -1,14 +1,11 @@
 "use client";
 
 import React from "react";
-
 import HeroSection from "./HeroSection";
 import AboutMeSection from "./AboutSection/ClientAboutSection";
 import ClientProjectsSection from "./ClientProjectSection";
 import ContactSection from "./ClientContactSection";
-
 import { useScroll } from "@/context/ScrollContext";
-import StarsCanvas from "./StarsBackground";
 import Footer from "@/components/layout/Footer";
 
 export interface ProjectData {
@@ -29,68 +26,84 @@ interface ClientHomePageProps {
 }
 
 const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
-    const scrollContext = useScroll();
+  const scrollContext = useScroll();
 
-        const { 
-        scrollContainerRef,
-        homeSectionRef, 
-        aboutSectionRef, 
-        projectsSectionRef, 
-        contactSectionRef 
-    } = scrollContext || {};
+  const {
+    homeSectionRef,
+    aboutSectionRef,
+    projectsSectionRef,
+    contactSectionRef,
+  } = scrollContext || {};
 
-        const handleScrollToAbout = () => {
-        if (scrollContext && scrollContext.aboutSectionRef) {
-            scrollContext.scrollToSection(scrollContext.aboutSectionRef);
-        }
-    };
-
-    React.useEffect(() => {
-        const hash = window.location.hash.replace('#', '');
-        if (hash && scrollContext) {
-            let refToScroll: React.RefObject<HTMLDivElement | null> | undefined;
-            if (hash === 'about') refToScroll = scrollContext.aboutSectionRef;
-            else if (hash === 'projects') refToScroll = scrollContext.projectsSectionRef;
-            else if (hash === 'contact') refToScroll = scrollContext.contactSectionRef;
-            else if (hash === 'home') refToScroll = scrollContext.homeSectionRef;
-
-            if (refToScroll) {
-                setTimeout(() => {
-                    scrollContext.scrollToSection(refToScroll);
-                }, 150);
-            }
-        }
-    }, [scrollContext]);
-
-    if (!scrollContext) {
-        return null;
+  const handleScrollToAbout = () => {
+    if (scrollContext?.aboutSectionRef) {
+      scrollContext.scrollToSection(scrollContext.aboutSectionRef);
     }
+  };
 
-    return (
-        <div className="min-h-screen text-white flex flex-col relative">
-            <StarsCanvas />
-            <div ref={scrollContainerRef} className="h-screen flex-1 overflow-y-auto snap-y snap-mandatory z-10">
-                                <section id="home" ref={homeSectionRef} className="snap-start min-h-screen w-full flex items-center justify-center">
-                    <HeroSection handleScrollToAbout={handleScrollToAbout} />
-                </section>
+  React.useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash && scrollContext) {
+      const map: Record<
+        string,
+        React.RefObject<HTMLDivElement | null> | undefined
+      > = {
+        about: scrollContext.aboutSectionRef,
+        projects: scrollContext.projectsSectionRef,
+        contact: scrollContext.contactSectionRef,
+        home: scrollContext.homeSectionRef,
+      };
+      const ref = map[hash];
+      if (ref) setTimeout(() => scrollContext.scrollToSection(ref), 150);
+    }
+  }, [scrollContext]);
 
-                                                <section id="about" ref={aboutSectionRef} className="snap-start min-h-screen w-full flex items-center justify-center scroll-mt-20">
-                    <AboutMeSection />
-                </section>
+  if (!scrollContext) return null;
 
-                                                                                                                                <section id="projects" ref={projectsSectionRef} className="snap-start w-full flex justify-center scroll-mt-20">
-                    <ClientProjectsSection projects={projects} />
-                </section>
+  return (
+    <div className="min-h-screen text-white flex flex-col relative bg-[var(--bg)]">
+      {/* HERO */}
+      <section
+        id="home"
+        ref={homeSectionRef}
+        className="min-h-screen w-full flex items-center justify-center relative"
+      >
+        <HeroSection handleScrollToAbout={handleScrollToAbout} />
+      </section>
 
-                                                                                                                                <section id="contact" ref={contactSectionRef} className="snap-start min-h-screen w-full flex items-center justify-center scroll-mt-20">
-                    <ContactSection />
-                </section>
-                <Footer />
-            </div>
-        </div>
-    );
+      {/* ABOUT */}
+      <section
+        id="about"
+        ref={aboutSectionRef}
+        className="min-h-screen w-full flex items-center justify-center relative"
+      >
+        <div className="absolute top-0 left-0 w-full neon-line" />
+        <AboutMeSection />
+      </section>
+
+      {/* PROJECTS */}
+      <section
+        id="projects"
+        ref={projectsSectionRef}
+        className="w-full flex justify-center relative"
+      >
+        <div className="absolute top-0 left-0 w-full neon-line" />
+        <ClientProjectsSection projects={projects} />
+      </section>
+
+      {/* CONTACT */}
+      <section
+        id="contact"
+        ref={contactSectionRef}
+        className="min-h-screen w-full flex items-center justify-center relative"
+      >
+        <div className="absolute top-0 left-0 w-full neon-line" />
+        <ContactSection />
+      </section>
+
+      <Footer />
+    </div>
+  );
 };
-
-
 
 export default ClientHomePage;
