@@ -115,6 +115,8 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
   const animationRef = useRef<number>(0)
   const particlesRef = useRef<Particle[]>([])
   const startedRef = useRef(false)
+  const frameCountRef = useRef(0)
+  const settledRef = useRef(false)
 
   const pixelSteps = 6
   const W = 1000
@@ -196,9 +198,8 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     const ctx = canvas.getContext("2d")!
     const particles = particlesRef.current
 
-    // Use page bg color for motion-blur trail
-    ctx.fillStyle = "rgba(5, 5, 8, 0.15)"
-    ctx.fillRect(0, 0, W, H)
+    // Fully clear canvas each frame for true transparency
+    ctx.clearRect(0, 0, W, H)
 
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i]
@@ -207,6 +208,14 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
       if (p.isKilled && (p.pos.x < 0 || p.pos.x > W || p.pos.y < 0 || p.pos.y > H)) {
         particles.splice(i, 1)
       }
+    }
+
+    frameCountRef.current++
+
+    // Once particles have settled, start pulse on the canvas itself
+    if (!settledRef.current && frameCountRef.current > 180) {
+      settledRef.current = true
+      canvas.style.animation = "hero-pulse 3s ease-in-out infinite"
     }
 
     animationRef.current = requestAnimationFrame(() => animate(canvas))
@@ -219,10 +228,9 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     canvas.width = W
     canvas.height = H
 
-    // Fill with bg color initially
+    // Start with transparent canvas
     const ctx = canvas.getContext("2d")!
-    ctx.fillStyle = "#050508"
-    ctx.fillRect(0, 0, W, H)
+    ctx.clearRect(0, 0, W, H)
 
     const timer = setTimeout(() => {
       if (!startedRef.current) {

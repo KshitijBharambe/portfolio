@@ -38,7 +38,7 @@ const Footer = () => {
               </span>
             </Link>
             <p className="text-xs text-gray-600 mt-1 font-mono">
-              Software Eng · Cloud · Security
+              Cloud Engineer · DevOps · AWS
             </p>
           </div>
 

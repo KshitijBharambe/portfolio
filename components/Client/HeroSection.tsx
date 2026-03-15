@@ -139,7 +139,7 @@ export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--accent)]" />
             </span>
             <span className="text-xs font-mono tracking-[0.25em] text-white/50 uppercase">
-              Software Engineer &middot; Cloud &middot; Security
+              Cloud Engineer &middot; DevOps &middot; AWS
             </span>
           </motion.div>
 
@@ -162,9 +162,9 @@ export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
             animate="visible"
             className="mt-8 text-base sm:text-lg text-white/40 max-w-lg mx-auto leading-relaxed font-light tracking-wide"
           >
-            Building secure, scalable cloud infrastructure and backend systems.
-            Passionate about DevOps, automation, and breaking things before the
-            bad guys do.
+            Cloud-native Infrastructure Engineer with deep expertise in AWS,
+            Terraform, and DevSecOps. Building resilient CI/CD pipelines and
+            eliminating configuration drift at scale.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -205,8 +205,8 @@ export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
               className="absolute left-[4%] top-1/2 -translate-y-1/2 flex flex-col gap-3"
             >
               {[
-                { num: "2+", label: "Years Exp" },
-                { num: "20+", label: "Vulns Found" },
+                { num: "3+", label: "Years Exp" },
+                { num: "40%", label: "Faster Deploys" },
               ].map((s) => (
                 <div
                   key={s.num}
@@ -225,7 +225,7 @@ export default function HeroSection({ handleScrollToAbout }: HeroSectionProps) {
               className="absolute right-[4%] top-1/2 -translate-y-1/2 flex flex-col gap-3"
             >
               {[
-                { num: "10+", label: "APIs Built" },
+                { num: "30%", label: "Cost Saved" },
                 { num: "AWS", label: "Certified" },
               ].map((s) => (
                 <div

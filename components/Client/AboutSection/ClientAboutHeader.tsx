@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 const stats = [
-  { value: "2+",  label: "Years Exp",   color: "var(--accent)" },
-  { value: "20+", label: "Vulns Found", color: "var(--accent-2)" },
-  { value: "10+", label: "APIs Built",  color: "var(--accent)" },
-  { value: "30%", label: "Perf Boost",  color: "var(--accent-2)" },
+  { value: "3+",  label: "Years Exp",      color: "var(--accent)" },
+  { value: "40%", label: "Faster Deploys", color: "var(--accent-2)" },
+  { value: "30%", label: "Cost Saved",     color: "var(--accent)" },
+  { value: "AWS", label: "Certified",      color: "var(--accent-2)" },
 ];
 
 const fadeUp = {
@@ -63,7 +63,7 @@ const AboutHeader = () => {
           <div className="text-center lg:text-left">
             <h3 className="text-xl font-bold text-white tracking-tight">Kshitij Bharambe</h3>
             <p className="text-sm font-mono text-[var(--accent)] mt-1 tracking-wider">
-              Software Eng &middot; Cloud &middot; Security
+              Cloud Engineer &middot; DevOps &middot; AWS
             </p>
           </div>
 
@@ -169,21 +169,21 @@ const AboutHeader = () => {
             className="space-y-4"
           >
             <p className="text-white/50 text-base leading-relaxed">
-              With a background in Computer Engineering and hands-on experience
-              as a Software Engineer Intern, I&apos;ve contributed to backend
-              development using Python, integrated secure REST APIs, and
-              automated CI/CD workflows.
+              Cloud-native Infrastructure Engineer with a Master&apos;s in Computer
+              Science and deep expertise in AWS, Terraform, and DevSecOps. Proven
+              track record of architecting resilient CI/CD pipelines, optimizing
+              backend performance using FastAPI, and enforcing cost governance.
             </p>
             <p className="text-white/50 text-base leading-relaxed">
-              My experience extends to cloud infrastructure — provisioning and
-              monitoring AWS services (EC2, S3, Lambda) — and security, where
-              I&apos;ve conducted vulnerability assessments using Burp Suite and
-              Kali Linux, identifying 20+ vulnerabilities across 15+ applications.
+              Currently deploying Percept EDR across multi-tenant Azure environments
+              at Sequretek. Previously provisioned scalable AWS infrastructure via
+              Terraform, engineered automated workflows in GitHub Actions, and
+              optimized high-traffic REST APIs with FastAPI and PostgreSQL.
             </p>
             <p className="text-white/40 text-sm leading-relaxed">
-              Currently pursuing M.S. in Computational Sciences at Syracuse University.
-              Driven by complex problems — from tuning PostgreSQL queries for performance
-              to building AI-powered systems from scratch.
+              AWS Certified Solutions Architect &middot; ISO 27001 Lead Auditor.
+              Specialist in infrastructure automation, container orchestration, and
+              eliminating configuration drift for scalable systems.
             </p>
           </motion.div>
 
@@ -195,7 +195,7 @@ const AboutHeader = () => {
             animate="visible"
             className="flex flex-wrap gap-2"
           >
-            {["Python", "FastAPI", "AWS", "Docker", "Next.js", "TypeScript", "PostgreSQL", "Burp Suite", "Kali Linux", "GitHub Actions"].map((skill) => (
+            {["AWS", "Terraform", "Docker", "GitHub Actions", "Python", "FastAPI", "PostgreSQL", "Ansible", "Grafana", "CI/CD"].map((skill) => (
               <span
                 key={skill}
                 className="text-[11px] font-mono px-3 py-1 rounded-lg border border-white/[0.07] text-white/40 bg-white/[0.02] hover:border-[var(--accent)]/30 hover:text-[var(--accent)]/80 transition-all duration-300 cursor-default"

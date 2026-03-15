@@ -56,7 +56,7 @@ export default function ResumePage() {
                 Kshitij Bharambe
               </h1>
               <p className="text-sm font-mono text-[var(--accent)] tracking-wider mb-4">
-                Software Engineer · Cloud · Security
+                Cloud Infrastructure Engineer · DevOps · AWS
               </p>
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/40 font-mono">
                 <a href="mailto:kshitij.bharambe@gmail.com" className="hover:text-[var(--accent)] transition-colors">
@@ -65,7 +65,7 @@ export default function ResumePage() {
                 <span className="text-white/10">·</span>
                 <span>315-374-9649</span>
                 <span className="text-white/10">·</span>
-                <span>Syracuse, NY</span>
+                <span>Princeton, NJ</span>
                 <span className="text-white/10">·</span>
                 <a href="https://www.linkedin.com/in/kshitijbharambe/" target="_blank" rel="noopener noreferrer"
                   className="hover:text-[var(--accent)] transition-colors">LinkedIn</a>
@@ -93,10 +93,10 @@ export default function ResumePage() {
             {/* Summary */}
             <Section title="Summary" num="01">
               <p className="text-white/50 text-sm leading-relaxed">
-                Cloud-native engineer with a Master&apos;s in Computational Sciences, specializing in
-                AWS, Docker, and CI/CD automation. Combines backend expertise (Python, FastAPI) with
-                security-first infrastructure management. Experienced in vulnerability assessment,
-                penetration testing, and cloud provisioning across scalable microservices architectures.
+                Cloud-native Infrastructure Engineer with a Master&apos;s in Computer Science and deep expertise in
+                AWS, Terraform, and DevSecOps. Proven track record of architecting resilient CI/CD pipelines,
+                optimizing backend performance using FastAPI, and enforcing cost governance (FinOps). Specialist
+                in infrastructure automation, container orchestration, and eliminating configuration drift for scalable systems.
               </p>
             </Section>
 
@@ -105,23 +105,17 @@ export default function ResumePage() {
               <div className="space-y-5">
                 <div>
                   <EntryHeader
-                    title="M.S. Computational & Informational Sciences"
+                    title="M.S. Computer Science"
                     sub="Syracuse University — Syracuse, NY"
                     period="Aug 2023 – May 2025"
                   />
-                  <p className="text-xs text-white/30 font-mono">
-                    Data Mining · AI · OS · DBMS · Algorithms · IoT Security · NLP
-                  </p>
                 </div>
                 <div>
                   <EntryHeader
                     title="B.E. Computer Engineering"
-                    sub="New Horizon Institute of Technology & Management — Mumbai"
+                    sub="University of Mumbai — Thane, India"
                     period="Aug 2019 – May 2023"
                   />
-                  <p className="text-xs text-white/30 font-mono">
-                    Software Engineering · Security · Computer Architecture
-                  </p>
                 </div>
               </div>
             </Section>
@@ -131,29 +125,38 @@ export default function ResumePage() {
               <div className="space-y-7">
                 <div>
                   <EntryHeader
-                    title="Vulnerability & Penetration Testing Intern"
-                    sub="Sequretek Pvt. Ltd. — Andheri, India"
-                    period="Jun 2024 – Aug 2024"
+                    title="Cloud Deployment Engineer"
+                    sub="Sequretek Pvt. Ltd. — Princeton, NJ"
+                    period="Feb 2026 – Present"
                   />
                   <BulletList items={[
-                    "Conducted vulnerability assessments across 15+ web applications using Burp Suite and Kali Linux.",
-                    "Identified 20+ vulnerabilities including XSS, SQLi, and misconfigurations with actionable mitigation steps.",
-                    "Supported ISO 27001-aligned infrastructure audits, resulting in 20% reduction in recurring security vulnerabilities.",
-                    "Engineered automated build-and-deploy workflows in GitHub Actions integrated with Docker, reducing release latency by 40%.",
-                    "Collaborated with backend teams to improve network security posture and remediate 15+ critical configuration issues.",
+                    "Spearheading phased deployment of Percept EDR across complex multi-tenant Azure cloud infrastructure, serving as primary technical anchor for client integration.",
+                    "Orchestrated secure network communication by configuring firewall rules and establishing IPsec tunnels between client Azure environments and centralized management servers.",
+                    "Executed targeted staging and manual validation on 15+ servers, ensuring agent compatibility and system stability prior to scaling deployment.",
                   ]} />
                 </div>
                 <div>
                   <EntryHeader
-                    title="Software Engineer Intern"
-                    sub="CBRAINTECH LLP — Mumbai"
+                    title="DevOps Intern"
+                    sub="Sequretek Pvt. Ltd. — Andheri, India"
+                    period="Jun 2024 – Aug 2024"
+                  />
+                  <BulletList items={[
+                    "Provisioned scalable AWS environments (EC2, S3, IAM) via Terraform to support backend infrastructure for Percept XDR, reducing provisioning time by 30% through reusable modules.",
+                    "Engineered automated build-and-deploy workflows in GitHub Actions for Percept XDR microservices, cutting release latency by 40% and eliminating manual intervention errors.",
+                    "Slashed cloud infrastructure costs by 10% by enforcing strict resource tagging strategies and identifying idle instances for termination.",
+                  ]} />
+                </div>
+                <div>
+                  <EntryHeader
+                    title="Software & Cloud Engineer"
+                    sub="Cognologix — Remote"
                     period="Jun 2022 – May 2023"
                   />
                   <BulletList items={[
-                    "Designed and optimized RESTful APIs with FastAPI and PostgreSQL — implemented async endpoints and query optimization for 10+ high-traffic APIs, improving responsiveness by 30%.",
-                    "Streamlined build-test-deploy pipelines using GitHub Actions with automated unit testing and coverage reports.",
-                    "Containerized services with Docker and orchestrated AWS deployments (EC2, S3, Lambda) via IaC templates.",
-                    "Assisted in AWS provisioning and monitoring to reduce infrastructure costs by 15%.",
+                    "Optimized high-traffic REST APIs using FastAPI and PostgreSQL, improving data retrieval speeds by 30% for data-heavy client applications via query indexing.",
+                    "Streamlined release cycles by architecting CI/CD pipelines in GitHub Actions, integrating automated unit testing and coverage reports.",
+                    "Eliminated configuration drift across staging and production environments by containerizing legacy applications using Docker and orchestrating deployments on AWS.",
                   ]} />
                 </div>
               </div>
@@ -165,11 +168,11 @@ export default function ResumePage() {
                 <div>
                   <EntryHeader
                     title="Data Hygiene Toolkit — Cloud-Native Data Validation Platform"
-                    period="Aug 2025 – Present"
+                    period="Aug 2025 – Jan 2025"
                   />
                   <BulletList items={[
-                    "Engineered a full-stack data hygiene platform using FastAPI, Next.js, and PostgreSQL with 8 validator types and batch validation supporting datasets exceeding 1M rows.",
-                    "Automated infrastructure provisioning via Terraform and GitHub Actions, achieving instant rollbacks and multi-environment parity.",
+                    "Engineered a full-stack data hygiene platform using FastAPI, Next.js, and PostgreSQL, featuring 8 validator types, rule templates, and batch validation with memory-optimized chunking for datasets exceeding 1M rows.",
+                    "Automated infrastructure provisioning and deployment through Terraform and GitHub Actions, achieving instant rollbacks, multi-environment parity, and unified MinIO/GCS storage management.",
                   ]} />
                 </div>
                 <div>
@@ -178,18 +181,8 @@ export default function ResumePage() {
                     period="Feb 2025 – Apr 2025"
                   />
                   <BulletList items={[
-                    "Built an IaC framework using Terraform and Ansible to provision secure AWS environments (VPC, EC2, networking) with CloudWatch monitoring.",
-                    "Established DevSecOps workflows with CI/CD integration, reducing setup effort by 60% through reusable templates.",
-                  ]} />
-                </div>
-                <div>
-                  <EntryHeader
-                    title="InsightBot — AI-Powered University Chatbot"
-                    period="Oct 2024 – Dec 2024"
-                  />
-                  <BulletList items={[
-                    "Implemented a RAG system using OpenAI and ChromaDB for personalized university recommendations, leveraging vector embeddings across 25+ states.",
-                    "Built a full-stack Streamlit application with persistent memory, external API integrations, and instant DOCX checklist generation.",
+                    "Built an Automated Infrastructure Framework (IaC) using Terraform and Ansible to provision secure AWS environments (VPC, EC2, networking), integrating server hardening and CloudWatch monitoring.",
+                    "Established DevSecOps workflows with CI/CD integration and Makefile automation, designed to reduce setup effort by 60% through reusable templates and standardized tagging.",
                   ]} />
                 </div>
               </div>
@@ -199,10 +192,10 @@ export default function ResumePage() {
             <Section title="Skills" num="05">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { label: "Cloud & DevOps", items: "AWS (EC2, S3, IAM, Lambda, VPC), Terraform, Docker, Linux, GitHub Actions, CI/CD" },
-                  { label: "Infrastructure & Automation", items: "Ansible, Bash, PowerShell, IaC, Monitoring & Incident Response" },
-                  { label: "Programming & Databases", items: "Python, FastAPI, REST APIs, PostgreSQL, MySQL, Next.js, TypeScript" },
-                  { label: "Security", items: "Burp Suite, Kali Linux, Nessus, VAPT, ISO 27001, OWASP Top 10" },
+                  { label: "Cloud & DevOps", items: "AWS (EC2, S3, IAM, Lambda, VPC), Terraform, Docker, Linux, GitHub Actions, CI/CD Pipelines" },
+                  { label: "Infrastructure & Automation", items: "Ansible, Bash, PowerShell, Infrastructure-as-Code (IaC), Monitoring & Incident Response" },
+                  { label: "Programming & Databases", items: "Python, FastAPI, REST APIs, PostgreSQL, MySQL" },
+                  { label: "Monitoring & Observability", items: "AWS CloudWatch, Grafana, Log Management, Performance Metrics" },
                 ].map((skill) => (
                   <div key={skill.label} className="p-4 rounded-xl border border-white/[0.06] bg-white/[0.02]">
                     <h4 className="text-xs font-mono text-[var(--accent)] tracking-wider uppercase mb-2">{skill.label}</h4>
