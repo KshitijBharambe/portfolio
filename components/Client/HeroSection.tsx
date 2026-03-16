@@ -185,8 +185,8 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
               className="absolute left-[4%] top-1/2 -translate-y-1/2 flex flex-col gap-3"
             >
               {[
-                { num: "3+", label: "Years Exp" },
-                { num: "40%", label: "Faster Deploys" },
+                { num: "3+",   label: "Years Exp" },
+                { num: "M.S.", label: "CS Degree"  },
               ].map((s) => (
                 <div
                   key={s.num}
@@ -205,8 +205,8 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
               className="absolute right-[4%] top-1/2 -translate-y-1/2 flex flex-col gap-3"
             >
               {[
-                { num: "30%", label: "Cost Saved" },
-                { num: "AWS", label: "Certified" },
+                { num: "AWS", label: "Certified"     },
+                { num: "ISO", label: "27001 Auditor" },
               ].map((s) => (
                 <div
                   key={s.num}

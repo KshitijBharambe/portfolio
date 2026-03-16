@@ -3,8 +3,15 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-export function ShaderAnimation() {
+interface ShaderAnimationProps {
+  paused?: boolean;
+}
+
+export function ShaderAnimation({ paused = false }: ShaderAnimationProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
+
   const sceneRef = useRef<{
     camera: THREE.Camera;
     scene: THREE.Scene;
@@ -85,10 +92,10 @@ export function ShaderAnimation() {
     window.addEventListener("resize", onWindowResize, false);
 
     const animate = () => {
-      const animationId = requestAnimationFrame(animate);
+      if (pausedRef.current) return; // stop loop when paused
       uniforms.time.value += 0.05;
       renderer.render(scene, camera);
-
+      const animationId = requestAnimationFrame(animate);
       if (sceneRef.current) {
         sceneRef.current.animationId = animationId;
       }

@@ -518,15 +518,48 @@ code, pre, .font-mono {
 
 /* Zinc overrides for project cards in light mode */
 .light .bg-zinc-900\/75 {
-  background-color: rgba(255,255,255,0.9);
+  background-color: rgba(255,255,255,0.95);
   border: 1px solid rgba(0,0,0,0.1);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
 }
 .light .text-zinc-50 {
   color: var(--foreground);
 }
 .light .text-zinc-300 {
   color: var(--text-secondary);
+}
+
+/* ── Light mode: stronger borders + backgrounds for glass/frosted elements ── */
+/* Hero badge, stat pills, skill tags, social buttons */
+.light .border-white\/\[0\.06\],
+.light .border-white\/\[0\.07\],
+.light .border-white\/\[0\.08\] {
+  border-color: rgba(0,0,0,0.12);
+}
+.light .bg-white\/\[0\.02\],
+.light .bg-white\/\[0\.03\] {
+  background-color: rgba(0,0,0,0.04);
+}
+
+/* Give frosted glass pills visible elevation in light mode */
+.light [class*="backdrop-blur"] {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* glass-card hover shadow in light mode */
+.light .glass-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 0 20px rgba(5,150,105,0.08);
+}
+
+/* spotlight-card light mode: ensure card surface is visible */
+.light .spotlight-card {
+  background: rgba(255,255,255,0.6);
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.light .spotlight-card:hover {
+  border-color: rgba(5,150,105,0.25);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 0 20px rgba(5,150,105,0.06);
 }
 
 /* ═══════════════════════════════════════════════════

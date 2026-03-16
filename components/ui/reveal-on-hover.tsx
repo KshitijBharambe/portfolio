@@ -84,9 +84,9 @@ const CardHoverRevealContent = React.forwardRef<
         className,
       )}
       style={{
-        transform: isHovered ? "translateY(0)" : "translateY(110%)",
+        transform: isHovered ? "translateY(0)" : "translateY(12px)",
         opacity: isHovered ? 1 : 0,
-        transition: "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease",
+        transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease",
         ...style,
       }}
       {...props}

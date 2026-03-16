@@ -5,10 +5,10 @@ import Image from "next/image";
 import { LiquidGlass } from "@/components/ui/liquid-glass";
 
 const stats = [
-  { value: "3+",  label: "Years Exp",      color: "var(--accent)" },
-  { value: "40%", label: "Faster Deploys", color: "var(--accent-2)" },
-  { value: "30%", label: "Cost Saved",     color: "var(--accent)" },
-  { value: "AWS", label: "Certified",      color: "var(--accent-2)" },
+  { value: "3+",   label: "Years Exp",    color: "var(--accent)" },
+  { value: "M.S.", label: "CS Degree",    color: "var(--accent-2)" },
+  { value: "AWS",  label: "Certified",    color: "var(--accent)" },
+  { value: "ISO",  label: "27001 Auditor",color: "var(--accent-2)" },
 ];
 
 const fadeUp = {
@@ -179,24 +179,17 @@ const AboutHeader = () => {
             variants={fadeUp}
             initial="hidden"
             animate="visible"
-            className="space-y-4"
+            className="space-y-3"
           >
             <p className="text-[var(--text-secondary)] text-base leading-relaxed">
               Cloud-native Infrastructure Engineer with a Master&apos;s in Computer
-              Science and deep expertise in AWS, Terraform, and DevSecOps. Proven
-              track record of architecting resilient CI/CD pipelines, optimizing
-              backend performance using FastAPI, and enforcing cost governance.
-            </p>
-            <p className="text-[var(--text-secondary)] text-base leading-relaxed">
-              Currently deploying Percept EDR across multi-tenant Azure environments
-              at Sequretek. Previously provisioned scalable AWS infrastructure via
-              Terraform, engineered automated workflows in GitHub Actions, and
-              optimized high-traffic REST APIs with FastAPI and PostgreSQL.
+              Science, specializing in AWS, Terraform, and DevSecOps. Currently
+              building resilient multi-tenant security infrastructure at Sequretek
+              &mdash; previously architecting CI/CD pipelines, automating cloud
+              infrastructure, and optimizing high-traffic APIs at scale.
             </p>
             <p className="text-[var(--text-tertiary)] text-sm leading-relaxed">
               AWS Certified Solutions Architect &middot; ISO 27001 Lead Auditor.
-              Specialist in infrastructure automation, container orchestration, and
-              eliminating configuration drift for scalable systems.
             </p>
           </motion.div>
 

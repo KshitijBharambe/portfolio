@@ -75,7 +75,7 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibleProjects, setVisibleProjects] = useState(3);
 
-  const [ref, inView] = useInView({ threshold: 0.05, triggerOnce: true });
+  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
 
   /* Modal helpers */
   const openModal = (project: ProjectData) => {
@@ -126,7 +126,7 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
           animate={inView ? "visible" : "hidden"}
           variants={{
             hidden: {},
-            visible: { transition: { staggerChildren: 0.15 } },
+            visible: { transition: { staggerChildren: 0.12 } },
           }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
@@ -134,10 +134,10 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
             <motion.div
               key={project.id}
               variants={{
-                hidden: { opacity: 0, y: 50 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+                hidden: { opacity: 0, y: 40, scale: 0.97 },
+                visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
               }}
-              whileHover={{ y: -8, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
+              whileHover={{ y: -6, transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] } }}
             >
               <CardHoverReveal
                 className="h-[420px] rounded-2xl cursor-pointer border border-[var(--card-border)] hover:border-[var(--accent)]/30 transition-[border-color,box-shadow] duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.3),0_0_40px_rgba(16,185,129,0.06)]"

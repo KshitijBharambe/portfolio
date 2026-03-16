@@ -8,6 +8,8 @@ interface IntroSplashProps {
   onComplete?: () => void;
 }
 
+const SPLASH_KEY = "splashShown";
+
 export default function IntroSplash({ onComplete }: IntroSplashProps) {
   const [phase, setPhase] = useState<
     "playing" | "zoomOut" | "reveal" | "done"
@@ -17,7 +19,15 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
   onCompleteRef.current = onComplete;
 
   useEffect(() => {
-    // Faster, smoother timeline
+    // Issues 6 & 7: skip animation on page nav or subsequent reloads
+    if (sessionStorage.getItem(SPLASH_KEY)) {
+      setPhase("done");
+      onCompleteRef.current?.();
+      return;
+    }
+
+    sessionStorage.setItem(SPLASH_KEY, "1");
+
     const t1 = setTimeout(() => setPhase("zoomOut"), 2000);
     const t2 = setTimeout(() => {
       setPhase("reveal");
@@ -32,7 +42,8 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
     };
   }, []);
 
-  const zooming = phase === "zoomOut" || phase === "reveal";
+  // Issue 5: pause shader RAF as soon as exit begins → smoother fade FPS
+  const shaderPaused = phase === "zoomOut" || phase === "reveal";
   const revealing = phase === "reveal";
 
   return (
@@ -53,14 +64,14 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
             transition={{ duration: 1.5, ease: "easeInOut" }}
           />
 
-          {/* Shader layer */}
+          {/* Shader layer — paused during exit so GPU isn't fighting the fade */}
           <motion.div
             className="absolute inset-0"
             style={{ zIndex: 1 }}
-            animate={{ opacity: zooming ? 0 : 1 }}
+            animate={{ opacity: shaderPaused ? 0 : 1 }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
           >
-            <ShaderAnimation />
+            <ShaderAnimation paused={shaderPaused} />
           </motion.div>
 
           {/* KB_ logo — zooms toward viewer */}
@@ -75,9 +86,9 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
                   "0 0 40px rgba(16,185,129,0.5), 0 0 80px rgba(16,185,129,0.2)",
               }}
               animate={{
-                scale: zooming ? 8 : 1,
-                opacity: zooming ? 0 : 1,
-                filter: zooming ? "blur(12px)" : "blur(0px)",
+                scale: shaderPaused ? 8 : 1,
+                opacity: shaderPaused ? 0 : 1,
+                filter: shaderPaused ? "blur(12px)" : "blur(0px)",
               }}
               transition={{
                 scale: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
