@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { ShaderAnimation } from "@/components/ui/shader-animation";
 
 interface IntroSplashProps {
@@ -11,48 +11,75 @@ interface IntroSplashProps {
 const SPLASH_KEY = "splashShown";
 
 export default function IntroSplash({ onComplete }: IntroSplashProps) {
-  const [phase, setPhase] = useState<
-    "playing" | "zoomOut" | "reveal" | "done"
-  >("playing");
+  const [isMounted, setIsMounted] = useState(true);
+  const [shaderPaused, setShaderPaused] = useState(false);
+  const [pointerEventsEnabled, setPointerEventsEnabled] = useState(true);
 
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
 
+  // Offloading animation logic to the GPU via Framer Motion controls
+  const textControls = useAnimation();
+  const shaderControls = useAnimation();
+  const bgControls = useAnimation();
+
   useEffect(() => {
     // Issues 6 & 7: skip animation on page nav or subsequent reloads
     if (sessionStorage.getItem(SPLASH_KEY)) {
-      setPhase("done");
+      setIsMounted(false);
       onCompleteRef.current?.();
       return;
     }
 
     sessionStorage.setItem(SPLASH_KEY, "1");
 
-    const t1 = setTimeout(() => setPhase("zoomOut"), 2000);
-    const t2 = setTimeout(() => {
-      setPhase("reveal");
+    const fireAnimations = async () => {
+      // 1. "Playing" phase — let the shader vibe for 2 seconds
+      await new Promise((res) => setTimeout(res, 2000));
+
+      // 2. "ZoomOut" phase begins
+      setShaderPaused(true); // Kill shader math immediately
+      setPointerEventsEnabled(false); // Stop interactions
+
+      // Fire GPU-heavy animations without React re-rendering the component tree
+      textControls.start({
+        scale: 8,
+        opacity: 0,
+        transition: { type: "spring", stiffness: 200, damping: 25, mass: 1 },
+      });
+
+      shaderControls.start({
+        opacity: 0,
+        transition: { duration: 0.8, ease: "easeInOut" },
+      });
+
+      // Wait 1 second
+      await new Promise((res) => setTimeout(res, 1000));
+
+      // 3. "Reveal" phase begins
       onCompleteRef.current?.();
-    }, 3000);
-    const t3 = setTimeout(() => setPhase("done"), 4800);
+      bgControls.start({
+        opacity: 0,
+        transition: { duration: 1.5, ease: "easeInOut" },
+      });
 
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
+      // Wait 1.8 seconds for the background to fully fade out
+      await new Promise((res) => setTimeout(res, 1800));
+
+      // 4. "Done" phase — Safely unmount everything
+      setIsMounted(false);
     };
-  }, []);
 
-  // Issue 5: pause shader RAF as soon as exit begins → smoother fade FPS
-  const shaderPaused = phase === "zoomOut" || phase === "reveal";
-  const revealing = phase === "reveal";
+    fireAnimations();
+  }, [textControls, shaderControls, bgControls]);
 
   return (
     <AnimatePresence>
-      {phase !== "done" && (
+      {isMounted && (
         <motion.div
           key="intro-splash"
           className="fixed inset-0 z-[60]"
-          style={{ pointerEvents: revealing ? "none" : "auto" }}
+          style={{ pointerEvents: pointerEventsEnabled ? "auto" : "none" }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -60,41 +87,42 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
           <motion.div
             className="absolute inset-0"
             style={{ background: "#000", zIndex: 0 }}
-            animate={{ opacity: revealing ? 0 : 1 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
+            initial={{ opacity: 1 }}
+            animate={bgControls}
           />
 
-          {/* Shader layer — paused during exit so GPU isn't fighting the fade */}
+          {/* Shader layer */}
           <motion.div
             className="absolute inset-0"
             style={{ zIndex: 1 }}
-            animate={{ opacity: shaderPaused ? 0 : 1 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+            initial={{ opacity: 1 }}
+            animate={shaderControls}
           >
             <ShaderAnimation paused={shaderPaused} />
           </motion.div>
 
-          {/* KB_ logo — zooms toward viewer */}
+          {/* KB_ logo — wrapper locked to a hardware-accelerated layer */}
           <div
             className="absolute inset-0 flex items-center justify-center pointer-events-none"
-            style={{ zIndex: 2, perspective: "800px" }}
+            style={{
+              zIndex: 2,
+              perspective: "800px",
+              transform: "translateZ(0)", // Forces a composite layer
+            }}
           >
             <motion.span
               className="font-mono font-bold text-6xl md:text-8xl lg:text-9xl text-white tracking-widest"
               style={{
                 textShadow:
                   "0 0 40px rgba(16,185,129,0.5), 0 0 80px rgba(16,185,129,0.2)",
+                willChange: "transform, opacity",
+                // The dark magic tweaks: flattens the rendering path
+                backfaceVisibility: "hidden",
+                WebkitFontSmoothing: "antialiased",
+                transformStyle: "preserve-3d",
               }}
-              animate={{
-                scale: shaderPaused ? 8 : 1,
-                opacity: shaderPaused ? 0 : 1,
-                filter: shaderPaused ? "blur(12px)" : "blur(0px)",
-              }}
-              transition={{
-                scale: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
-                opacity: { duration: 0.7, ease: "easeOut" },
-                filter: { duration: 0.7, ease: "easeOut" },
-              }}
+              initial={{ scale: 1, opacity: 1 }}
+              animate={textControls}
             >
               KB_
             </motion.span>

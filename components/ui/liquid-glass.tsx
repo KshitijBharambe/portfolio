@@ -13,7 +13,11 @@ export function useLiquidGlass() {
   return React.useContext(LiquidGlassContext);
 }
 
-export function LiquidGlassProvider({ children }: { children: React.ReactNode }) {
+export function LiquidGlassProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [enabled, setEnabled] = React.useState(true);
   const toggle = React.useCallback(() => setEnabled((v) => !v), []);
   return (
@@ -130,17 +134,23 @@ export function LiquidGlass({
         className={cn(
           "absolute inset-0 z-0 pointer-events-none transition-opacity duration-500",
           rounded,
-          shadowStyles[intensity]
+          shadowStyles[intensity],
         )}
       />
 
-      {/* Glass distortion backdrop */}
+      {/* Glass distortion backdrop - GPU OPTIMIZED */}
       <div
         className={cn(
           "absolute inset-0 isolate -z-10 overflow-hidden pointer-events-none",
-          rounded
+          rounded,
         )}
-        style={{ backdropFilter: 'url("#liquid-glass") blur(0.5px)' }}
+        style={{
+          backdropFilter: 'url("#liquid-glass") blur(0.5px)',
+          WebkitBackdropFilter: 'url("#liquid-glass") blur(0.5px)', // Safari fallback
+          transform: "translateZ(0)", // Hardware acceleration
+          backfaceVisibility: "hidden", // Prevents repaints
+          willChange: "transform, backdrop-filter", // GPU Heads-up
+        }}
       />
 
       {/* Content */}
