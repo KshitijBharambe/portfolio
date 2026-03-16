@@ -14,7 +14,7 @@ const LoadingSpinner = () => (
 
 // Dynamically import the ProjectList component with no SSR
 const ProjectList = dynamic(
-  () => import('@/components/Projects/ProjectList'),
+  () => import('@/components/project-list'),
   { 
     ssr: false,
     loading: () => <LoadingSpinner />

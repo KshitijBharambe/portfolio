@@ -122,108 +122,28 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
             </span>
           </motion.div>
 
-          {/* Display name — particle effect (starts 1s after intro completes) */}
+          {/* Display name — particle effect */}
           <motion.div
             custom={1}
             variants={fadeUp}
             initial="hidden"
             animate={animState}
-            className="w-full max-w-3xl mx-auto -my-4"
+            className="w-full max-w-3xl mx-auto"
           >
             {introComplete && <HeroParticleName delay={1000} />}
           </motion.div>
 
-          {/* Description */}
+          {/* One-liner subtitle */}
           <motion.p
             custom={2}
             variants={fadeUp}
             initial="hidden"
             animate={animState}
-            className="mt-8 text-base sm:text-lg max-w-lg mx-auto leading-relaxed font-light tracking-wide"
-            style={{ color: "var(--text-tertiary)" }}
+            className="mt-6 text-sm sm:text-base font-mono tracking-wide"
+            style={{ color: "var(--text-muted)" }}
           >
-            Cloud-native Infrastructure Engineer with deep expertise in AWS,
-            Terraform, and DevSecOps. Building resilient CI/CD pipelines and
-            eliminating configuration drift at scale.
+            Building resilient infrastructure &amp; eliminating drift at scale.
           </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            custom={3}
-            variants={fadeUp}
-            initial="hidden"
-            animate={animState}
-            className="mt-10 flex flex-wrap items-center justify-center gap-4"
-          >
-            <motion.button
-              onClick={() => {
-                const event = new CustomEvent("navigate-section", { detail: "projects" });
-                window.dispatchEvent(event);
-              }}
-              className="btn-primary"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              View Projects
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M7 17l9.2-9.2M17 17V8H8" />
-              </svg>
-            </motion.button>
-            <motion.button
-              onClick={() => {
-                const event = new CustomEvent("navigate-section", { detail: "contact" });
-                window.dispatchEvent(event);
-              }}
-              className="btn-outline"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              Get In Touch
-            </motion.button>
-          </motion.div>
-
-          {/* Floating stat pills (desktop only) */}
-          <div className="hidden lg:block">
-            <motion.div
-              initial={{ opacity: 0, x: -60 }}
-              animate={introComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: -60 }}
-              transition={{ delay: 0.8, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-[4%] top-1/2 -translate-y-1/2 flex flex-col gap-3"
-            >
-              {[
-                { num: "3+",   label: "Years Exp" },
-                { num: "M.S.", label: "CS Degree"  },
-              ].map((s) => (
-                <div
-                  key={s.num}
-                  className="px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm text-center"
-                >
-                  <div className="text-xl font-black text-[var(--accent)]">{s.num}</div>
-                  <div className="text-[9px] font-mono text-[var(--text-muted)] tracking-wider uppercase mt-0.5">{s.label}</div>
-                </div>
-              ))}
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              animate={introComplete ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}
-              transition={{ delay: 1.0, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute right-[4%] top-1/2 -translate-y-1/2 flex flex-col gap-3"
-            >
-              {[
-                { num: "AWS", label: "Certified"     },
-                { num: "ISO", label: "27001 Auditor" },
-              ].map((s) => (
-                <div
-                  key={s.num}
-                  className="px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm text-center"
-                >
-                  <div className="text-xl font-black text-[var(--accent-2)]">{s.num}</div>
-                  <div className="text-[9px] font-mono text-[var(--text-muted)] tracking-wider uppercase mt-0.5">{s.label}</div>
-                </div>
-              ))}
-            </motion.div>
-          </div>
         </div>
       </div>
 

@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
 
 interface CardHoverRevealContextValue {
@@ -20,6 +19,7 @@ const useCardHoverRevealContext = () => {
   }
   return context;
 };
+
 const CardHoverReveal = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -30,15 +30,10 @@ const CardHoverReveal = React.forwardRef<
   const handleMouseLeave = () => setIsHovered(false);
 
   return (
-    <CardHoverRevealContext.Provider
-      value={{
-        isHovered,
-        setIsHovered,
-      }}
-    >
+    <CardHoverRevealContext.Provider value={{ isHovered, setIsHovered }}>
       <div
         ref={ref}
-        className={cn("relative overflow-hidden", className)}
+        className={cn("relative overflow-hidden group", className)}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         {...props}
@@ -71,10 +66,38 @@ const CardHoverRevealMain = React.forwardRef<
 });
 CardHoverRevealMain.displayName = "CardHoverRevealMain";
 
+/* ── Stagger item ── */
+const StaggerChild = ({
+  isHovered,
+  index,
+  delay,
+  children,
+}: {
+  isHovered: boolean;
+  index: number;
+  delay: number;
+  children: React.ReactNode;
+}) => {
+  const d = index * delay;
+  return (
+    <div
+      className="reveal-stagger-child"
+      style={
+        {
+          "--stagger-delay": `${d}s`,
+        } as React.CSSProperties
+      }
+      data-visible={isHovered}
+    >
+      {children}
+    </div>
+  );
+};
+
 const CardHoverRevealContent = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, style, ...props }, ref) => {
+  React.HTMLAttributes<HTMLDivElement> & { staggerDelay?: number }
+>(({ className, style, children, staggerDelay = 0.08, ...props }, ref) => {
   const { isHovered } = useCardHoverRevealContext();
   return (
     <div
@@ -84,13 +107,25 @@ const CardHoverRevealContent = React.forwardRef<
         className,
       )}
       style={{
-        transform: isHovered ? "translateY(0)" : "translateY(12px)",
         opacity: isHovered ? 1 : 0,
-        transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease",
+        transform: isHovered ? "translateY(0)" : "translateY(20px)",
+        transition:
+          "opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+        pointerEvents: isHovered ? "auto" : "none",
         ...style,
       }}
       {...props}
-    />
+    >
+      {React.Children.map(children, (child, i) =>
+        React.isValidElement(child) ? (
+          <StaggerChild isHovered={isHovered} index={i} delay={staggerDelay}>
+            {child}
+          </StaggerChild>
+        ) : (
+          child
+        ),
+      )}
+    </div>
   );
 });
 CardHoverRevealContent.displayName = "CardHoverRevealContent";

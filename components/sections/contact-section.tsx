@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { sendEmail } from "../Server/Server-EmailSend";
+import { sendEmail } from "@/app/actions/send-email";
 import { LiquidGlass } from "@/components/ui/liquid-glass";
 
 const ContactSection = () => {

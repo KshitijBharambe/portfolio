@@ -566,3 +566,20 @@ code, pre, .font-mono {
    MISC
 ═══════════════════════════════════════════════════ */
 .input-underline { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; color: var(--foreground); padding: 0.85rem 1.1rem; width: 100%; outline: none; font-size: 0.875rem; }
+
+/* ═══════════════════════════════════════════════════
+   CARD HOVER REVEAL — stagger children pull-in
+═══════════════════════════════════════════════════ */
+.reveal-stagger-child {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: 0s;
+}
+.reveal-stagger-child[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: var(--stagger-delay, 0s);
+}

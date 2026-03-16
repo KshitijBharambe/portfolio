@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
 import projectsData from "@/public/assets/data/projects_data.json";
-import { ProjectData } from "./ClientHomePage";
+import { ProjectData } from "@/types/project";
 import {
   CardHoverReveal,
   CardHoverRevealMain,
@@ -91,7 +91,7 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
   const displayedProjects = localProjects.slice(0, visibleProjects);
 
   return (
-    <section className="h-screen w-full flex flex-col justify-center px-4 py-10 relative">
+    <section className="min-h-screen w-full flex flex-col justify-center px-4 py-10 relative">
 
       <div className="max-w-6xl mx-auto relative z-10 w-full">
         {/* Section label */}
@@ -250,73 +250,85 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
             onClick={closeModal}
           >
             <motion.div
-              className="glass rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-auto relative"
+              className="glass rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden relative flex flex-col"
               initial={{ opacity: 0, scale: 0.93, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.93, y: 20 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Image header */}
-              <div className="relative h-56 sm:h-72 rounded-t-2xl overflow-hidden bg-black">
-                <Image
-                  src={selectedProject.image || "/api/placeholder/800/400"}
-                  alt={selectedProject.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 800px"
-                  className="object-cover opacity-60"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface)] via-black/30 to-transparent" />
-                <button
-                  className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center border border-white/15 rounded-lg text-white/50 hover:text-white hover:border-[var(--accent)]/50 transition-all backdrop-blur-sm bg-black/30"
-                  onClick={closeModal}
-                >
-                  <CloseIcon />
-                </button>
-                <div className="absolute bottom-0 left-0 p-6">
-                  <h2 className="text-2xl sm:text-3xl font-black text-white">{selectedProject.title}</h2>
-                </div>
-              </div>
+              {/* Close button */}
+              <button
+                className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center border border-white/15 rounded-lg text-white/50 hover:text-white hover:border-[var(--accent)]/50 transition-all backdrop-blur-sm bg-black/30"
+                onClick={closeModal}
+              >
+                <CloseIcon />
+              </button>
 
-              {/* Body */}
-              <div className="p-6 space-y-6">
-                <div>
-                  <p className="text-[10px] font-mono text-[var(--accent)] mb-2 tracking-widest uppercase">Overview</p>
-                  <p className="text-[var(--text-tertiary)] text-sm leading-relaxed whitespace-pre-line">{selectedProject.fullDescription}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] font-mono text-[var(--accent)] mb-3 tracking-widest uppercase">Technologies</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedProject.tags.map((tag: string, i: number) => (
-                      <span key={i} className="text-[10px] font-mono px-2 py-0.5 rounded"
-                        style={{ color: getTagColor(tag), background: `${getTagColor(tag)}14`, border: `1px solid ${getTagColor(tag)}30` }}>
-                        {tag}
-                      </span>
-                    ))}
+              {/* Two-column layout: image left, content right */}
+              <div className="flex flex-col md:flex-row h-full max-h-[90vh]">
+                {/* Left — Image */}
+                <div className="relative w-full md:w-2/5 h-44 md:h-auto flex-shrink-0 bg-black rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none overflow-hidden">
+                  <Image
+                    src={selectedProject.image || "/api/placeholder/800/400"}
+                    alt={selectedProject.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 400px"
+                    className="object-cover opacity-70"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[var(--surface)] via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 p-4 md:p-5">
+                    <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">{selectedProject.title}</h2>
                   </div>
                 </div>
-                <div>
-                  <p className="text-[10px] font-mono text-[var(--accent)] mb-3 tracking-widest uppercase">Key Features</p>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {selectedProject.features.map((feature: string, i: number) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-tertiary)]">
-                        <span className="text-[var(--green)] mt-0.5"><CheckIcon /></span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="flex gap-3 pt-2">
-                  {selectedProject.demoLink && selectedProject.demoLink !== "#" && (
-                    <a href={selectedProject.demoLink} target="_blank" rel="noopener noreferrer" className="btn-primary text-xs">
-                      Live Demo <ExternalLinkIcon />
-                    </a>
-                  )}
-                  {selectedProject.githubLink && selectedProject.githubLink !== "#" && (
-                    <a href={selectedProject.githubLink} target="_blank" rel="noopener noreferrer" className="btn-outline text-xs">
-                      Source Code <GitHubIcon />
-                    </a>
-                  )}
+
+                {/* Right — Content (no scroll) */}
+                <div className="flex-1 p-4 md:p-5 flex flex-col justify-between gap-3 min-h-0">
+                  {/* Overview — truncated */}
+                  <div className="min-h-0">
+                    <p className="text-[10px] font-mono text-[var(--accent)] mb-1 tracking-widest uppercase">Overview</p>
+                    <p className="text-[var(--text-tertiary)] text-xs leading-relaxed line-clamp-4">{selectedProject.description}</p>
+                  </div>
+
+                  {/* Technologies */}
+                  <div>
+                    <p className="text-[10px] font-mono text-[var(--accent)] mb-1.5 tracking-widest uppercase">Technologies</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedProject.tags.map((tag: string, i: number) => (
+                        <span key={i} className="text-[10px] font-mono px-2 py-0.5 rounded"
+                          style={{ color: getTagColor(tag), background: `${getTagColor(tag)}14`, border: `1px solid ${getTagColor(tag)}30` }}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Key Features */}
+                  <div className="min-h-0">
+                    <p className="text-[10px] font-mono text-[var(--accent)] mb-1.5 tracking-widest uppercase">Key Features</p>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                      {selectedProject.features.slice(0, 6).map((feature: string, i: number) => (
+                        <li key={i} className="flex items-start gap-1.5 text-xs text-[var(--text-tertiary)]">
+                          <span className="text-[var(--green)] mt-0.5"><CheckIcon /></span>
+                          <span className="line-clamp-1">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-3 pt-1">
+                    {selectedProject.demoLink && selectedProject.demoLink !== "#" && (
+                      <a href={selectedProject.demoLink} target="_blank" rel="noopener noreferrer" className="btn-primary text-xs">
+                        Live Demo <ExternalLinkIcon />
+                      </a>
+                    )}
+                    {selectedProject.githubLink && selectedProject.githubLink !== "#" && (
+                      <a href={selectedProject.githubLink} target="_blank" rel="noopener noreferrer" className="btn-outline text-xs">
+                        Source Code <GitHubIcon />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             </motion.div>

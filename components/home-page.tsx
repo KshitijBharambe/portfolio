@@ -2,55 +2,43 @@
 
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import HeroSection from "./HeroSection";
-import AboutMeSection from "./AboutSection/ClientAboutSection";
-import ClientProjectsSection from "./ClientProjectSection";
-import ContactSection from "./ClientContactSection";
+import HeroSection from "./sections/hero-section";
+import AboutMeSection from "./sections/about-section";
+import ClientProjectsSection from "./sections/projects-section";
+import ContactSection from "./sections/contact-section";
 import { useScroll, SECTIONS } from "@/context/ScrollContext";
 import Footer from "@/components/layout/Footer";
-import IntroSplash from "./IntroSplash";
+import IntroSplash from "./intro-splash";
 import { EtheralShadow } from "@/components/ui/etheral-shadow";
 import { LiquidGlassFilter, LiquidGlassToggle } from "@/components/ui/liquid-glass";
-
-export interface ProjectData {
-  id: number | string;
-  title: string;
-  description: string;
-  image: string;
-  tags: string[];
-  features: string[];
-  technologies: string;
-  githubLink: string;
-  demoLink: string;
-  fullDescription: string;
-}
+import { ProjectData } from "@/types/project";
 
 interface ClientHomePageProps {
   projects?: ProjectData[];
 }
 
-/* ── Slide transition variants (GPU-only: transform + opacity) ── */
+/* ── Card-swap transition variants (GPU-only: transform + opacity) ── */
 const sectionVariants = {
-  enter: (direction: number) => ({
-    y: direction > 0 ? "60%" : "-60%",
+  enter: () => ({
     opacity: 0,
-    scale: 0.97,
+    scale: 0.92,
+    y: "4%",
   }),
   center: {
-    y: 0,
     opacity: 1,
     scale: 1,
+    y: 0,
     transition: {
-      duration: 0.55,
+      duration: 0.5,
       ease: [0.22, 1, 0.36, 1],
     },
   },
-  exit: (direction: number) => ({
-    y: direction > 0 ? "-40%" : "40%",
+  exit: () => ({
     opacity: 0,
-    scale: 0.97,
+    scale: 0.92,
+    y: "-4%",
     transition: {
-      duration: 0.4,
+      duration: 0.35,
       ease: [0.22, 1, 0.36, 1],
     },
   }),
@@ -99,6 +87,8 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
     };
 
     const onWheel = (e: WheelEvent) => {
+      // Skip section navigation when a modal overlay is open
+      if (document.body.style.overflow === "hidden") return;
       if (!isAtScrollBoundary(e.deltaY)) return;
       e.preventDefault();
       const ctx = getCtx();
@@ -113,6 +103,7 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
       touchStartY = e.touches[0].clientY;
     };
     const onTouchEnd = (e: TouchEvent) => {
+      if (document.body.style.overflow === "hidden") return;
       const ctx = getCtx();
       if (!ctx || ctx.isTransitioning) return;
       const deltaY = touchStartY - e.changedTouches[0].clientY;
@@ -123,6 +114,7 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
     };
 
     const onKey = (e: KeyboardEvent) => {
+      if (document.body.style.overflow === "hidden") return;
       const ctx = getCtx();
       if (!ctx || ctx.isTransitioning) return;
       if (e.key === "ArrowDown" || e.key === "PageDown") {
