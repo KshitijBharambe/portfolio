@@ -65,6 +65,31 @@
       "githubLink": "https://github.com/KshitijBharambe/influencer-Analysis-For-Business-Marketing",
       "demoLink": "#",
       "fullDescription": "This project provides a data-driven approach to influencer marketing by analyzing performance metrics across multiple social media platforms. The analysis helps businesses identify the most effective influencers and optimize their marketing strategies.\n\nKey Insights and Analysis:\n- Platform Comparison: Evaluated performance differences between TikTok, Instagram, and YouTube influencers\n- Engagement Metrics: Analyzed likes, comments, shares, and views to determine true engagement rates\n- Follower Analysis: Studied the relationship between follower count and engagement quality\n- Content Performance: Identified which types of content generate the highest engagement\n- Demographic Insights: Mapped influencer reach across different regions and audience segments\n\nTechnical Implementation:\n- Data Collection: Aggregated data from multiple social media platforms\n- Data Cleaning: Processed and normalized datasets using Pandas and NumPy\n- Statistical Analysis: Performed correlation and regression analysis on engagement metrics\n- Visualization: Created interactive visualizations using Matplotlib and Seaborn\n- Tools: Jupyter Notebook for reproducible analysis and documentation\n\nBusiness Impact:\n- Helps businesses identify cost-effective influencers with high engagement rates\n- Provides data-backed recommendations for influencer selection\n- Enables precise targeting of marketing campaigns\n- Reduces marketing spend wastage by focusing on high-performing content types\n\nThis project showcases my ability to transform raw social media data into actionable business intelligence, demonstrating strong skills in data analysis, visualization, and strategic thinking."
+    },
+    {
+      "id": "4",
+      "title": "Automated Infrastructure Provisioner",
+      "description": "An Infrastructure-as-Code framework using Terraform and Ansible to provision secure AWS environments (VPC, EC2, networking), with integrated server hardening, CloudWatch monitoring, and DevSecOps workflows.",
+      "image": "/assets/projects/IaC.png",
+      "tags": [
+        "Terraform",
+        "Ansible",
+        "AWS",
+        "DevSecOps",
+        "IaC"
+      ],
+      "features": [
+        "Automated provisioning of secure AWS environments (VPC, EC2, networking)",
+        "Server hardening and CloudWatch monitoring integration",
+        "DevSecOps workflows with CI/CD integration",
+        "Makefile automation for streamlined operations",
+        "Reusable templates and standardized tagging",
+        "Designed to reduce setup effort by 60%"
+      ],
+      "technologies": "Terraform, Ansible, AWS (VPC, EC2, IAM), GitHub Actions, Bash, CloudWatch",
+      "githubLink": "#",
+      "demoLink": "#",
+      "fullDescription": "An Automated Infrastructure Framework (IaC) built using Terraform and Ansible to provision secure AWS environments including VPC, EC2 instances, and networking components, with integrated server hardening and CloudWatch monitoring.\n\nKey Features:\n- Infrastructure-as-Code using Terraform for declarative AWS resource provisioning\n- Ansible playbooks for server configuration and security hardening\n- CloudWatch monitoring integration for observability\n- DevSecOps workflows with CI/CD pipeline integration\n- Makefile automation for common infrastructure operations\n- Reusable templates and standardized tagging for consistency\n\nTechnical Implementation:\n- Terraform modules for VPC, EC2, IAM, and networking\n- Ansible roles for server hardening and configuration management\n- GitHub Actions for CI/CD pipeline automation\n- Bash scripting for operational automation\n- CloudWatch for monitoring and alerting\n\nThis framework is designed to reduce infrastructure setup effort by 60% through reusable templates and standardized workflows."
     }
   ]
 }

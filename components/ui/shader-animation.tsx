@@ -92,13 +92,14 @@ export function ShaderAnimation({ paused = false }: ShaderAnimationProps) {
     window.addEventListener("resize", onWindowResize, false);
 
     const animate = () => {
-      if (pausedRef.current) return; // stop loop when paused
+      if (pausedRef.current) {
+        // Store a self-recheck so we can resume without remounting
+        sceneRef.current!.animationId = requestAnimationFrame(animate);
+        return;
+      }
       uniforms.time.value += 0.05;
       renderer.render(scene, camera);
-      const animationId = requestAnimationFrame(animate);
-      if (sceneRef.current) {
-        sceneRef.current.animationId = animationId;
-      }
+      sceneRef.current!.animationId = requestAnimationFrame(animate);
     };
 
     sceneRef.current = {
@@ -121,9 +122,11 @@ export function ShaderAnimation({ paused = false }: ShaderAnimationProps) {
           container.removeChild(sceneRef.current.renderer.domElement);
         }
 
-        sceneRef.current.renderer.dispose();
+        scene.remove(mesh);
         geometry.dispose();
         material.dispose();
+        sceneRef.current.renderer.dispose();
+        sceneRef.current.renderer.forceContextLoss();
       }
     };
   }, []);

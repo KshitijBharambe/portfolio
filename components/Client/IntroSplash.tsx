@@ -24,7 +24,7 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
   const bgControls = useAnimation();
 
   useEffect(() => {
-    // Issues 6 & 7: skip animation on page nav or subsequent reloads
+    // Skip animation on page nav or subsequent reloads
     if (sessionStorage.getItem(SPLASH_KEY)) {
       setIsMounted(false);
       onCompleteRef.current?.();
@@ -32,16 +32,24 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
     }
 
     sessionStorage.setItem(SPLASH_KEY, "1");
+    let cancelled = false;
+
+    const delay = (ms: number) =>
+      new Promise<void>((res) => {
+        const id = setTimeout(() => { if (!cancelled) res(); }, ms);
+        // Store for cleanup
+        timerIds.push(id);
+      });
+
+    const timerIds: ReturnType<typeof setTimeout>[] = [];
 
     const fireAnimations = async () => {
-      // 1. "Playing" phase — let the shader vibe for 2 seconds
-      await new Promise((res) => setTimeout(res, 2000));
+      await delay(2000);
+      if (cancelled) return;
 
-      // 2. "ZoomOut" phase begins
-      setShaderPaused(true); // Kill shader math immediately
-      setPointerEventsEnabled(false); // Stop interactions
+      setShaderPaused(true);
+      setPointerEventsEnabled(false);
 
-      // Fire GPU-heavy animations without React re-rendering the component tree
       textControls.start({
         scale: 8,
         opacity: 0,
@@ -53,24 +61,27 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
         transition: { duration: 0.8, ease: "easeInOut" },
       });
 
-      // Wait 1 second
-      await new Promise((res) => setTimeout(res, 1000));
+      await delay(1000);
+      if (cancelled) return;
 
-      // 3. "Reveal" phase begins
       onCompleteRef.current?.();
       bgControls.start({
         opacity: 0,
         transition: { duration: 1.5, ease: "easeInOut" },
       });
 
-      // Wait 1.8 seconds for the background to fully fade out
-      await new Promise((res) => setTimeout(res, 1800));
+      await delay(1800);
+      if (cancelled) return;
 
-      // 4. "Done" phase — Safely unmount everything
       setIsMounted(false);
     };
 
     fireAnimations();
+
+    return () => {
+      cancelled = true;
+      timerIds.forEach(clearTimeout);
+    };
   }, [textControls, shaderControls, bgControls]);
 
   return (

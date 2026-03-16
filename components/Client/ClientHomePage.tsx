@@ -29,31 +29,28 @@ interface ClientHomePageProps {
   projects?: ProjectData[];
 }
 
-/* ── Slide transition variants ── */
+/* ── Slide transition variants (GPU-only: transform + opacity) ── */
 const sectionVariants = {
   enter: (direction: number) => ({
-    y: direction > 0 ? "100%" : "-100%",
+    y: direction > 0 ? "60%" : "-60%",
     opacity: 0,
-    scale: 0.95,
-    filter: "blur(12px)",
+    scale: 0.97,
   }),
   center: {
     y: 0,
     opacity: 1,
     scale: 1,
-    filter: "blur(0px)",
     transition: {
-      duration: 0.7,
+      duration: 0.55,
       ease: [0.22, 1, 0.36, 1],
     },
   },
   exit: (direction: number) => ({
-    y: direction > 0 ? "-80%" : "80%",
+    y: direction > 0 ? "-40%" : "40%",
     opacity: 0,
-    scale: 0.92,
-    filter: "blur(10px)",
+    scale: 0.97,
     transition: {
-      duration: 0.6,
+      duration: 0.4,
       ease: [0.22, 1, 0.36, 1],
     },
   }),
@@ -64,6 +61,8 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
   const [introComplete, setIntroComplete] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionContentRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef(scrollContext);
+  scrollRef.current = scrollContext;
 
   const handleIntroComplete = useCallback(() => {
     setIntroComplete(true);
@@ -76,106 +75,78 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
     }
   }, [scrollContext?.activeSection]);
 
-  /* ── Custom navigation events (from CTA buttons etc.) ── */
+  /* ── All navigation listeners (single useEffect, stable refs) ── */
   useEffect(() => {
-    if (!scrollContext) return;
-    const handler = (e: Event) => {
-      const name = (e as CustomEvent).detail;
-      scrollContext.goToSectionByName(name);
-    };
-    window.addEventListener("navigate-section", handler);
-    return () => window.removeEventListener("navigate-section", handler);
-  }, [scrollContext]);
+    const getCtx = () => scrollRef.current;
 
-  /* ── Wheel / scroll hijack ── */
-  useEffect(() => {
-    if (!scrollContext) return;
-    const { nextSection, prevSection, isTransitioning } = scrollContext;
+    const handler = (e: Event) => {
+      const ctx = getCtx();
+      if (!ctx) return;
+      const name = (e as CustomEvent).detail;
+      ctx.goToSectionByName(name);
+    };
+
+    const isAtScrollBoundary = (deltaY: number): boolean => {
+      const el = sectionContentRef.current;
+      if (!el) return true;
+      const hasOverflow = el.scrollHeight > el.clientHeight;
+      if (!hasOverflow) return true;
+      const atTop = el.scrollTop <= 0;
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
+      if (deltaY > 0 && !atBottom) return false;
+      if (deltaY < 0 && !atTop) return false;
+      return true;
+    };
 
     const onWheel = (e: WheelEvent) => {
-      // Allow internal scrolling for overflowing section content
-      const el = sectionContentRef.current;
-      if (el) {
-        const hasOverflow = el.scrollHeight > el.clientHeight;
-        if (hasOverflow) {
-          const atTop = el.scrollTop <= 0;
-          const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
-          // Only hijack if we're at the boundary in scroll direction
-          if (e.deltaY > 0 && !atBottom) return;
-          if (e.deltaY < 0 && !atTop) return;
-        }
-      }
-
+      if (!isAtScrollBoundary(e.deltaY)) return;
       e.preventDefault();
-      if (isTransitioning) return;
-      if (Math.abs(e.deltaY) < 30) return; // ignore tiny trackpad ticks
-
-      if (e.deltaY > 0) nextSection();
-      else prevSection();
+      const ctx = getCtx();
+      if (!ctx || ctx.isTransitioning) return;
+      if (Math.abs(e.deltaY) < 30) return;
+      if (e.deltaY > 0) ctx.nextSection();
+      else ctx.prevSection();
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => window.removeEventListener("wheel", onWheel);
-  }, [scrollContext]);
-
-  /* ── Touch swipe ── */
-  useEffect(() => {
-    if (!scrollContext) return;
-    const { nextSection, prevSection, isTransitioning } = scrollContext;
     let touchStartY = 0;
-
     const onTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
     };
-
     const onTouchEnd = (e: TouchEvent) => {
-      if (isTransitioning) return;
+      const ctx = getCtx();
+      if (!ctx || ctx.isTransitioning) return;
       const deltaY = touchStartY - e.changedTouches[0].clientY;
       if (Math.abs(deltaY) < 60) return;
-
-      // Same internal-scroll boundary check
-      const el = sectionContentRef.current;
-      if (el) {
-        const hasOverflow = el.scrollHeight > el.clientHeight;
-        if (hasOverflow) {
-          const atTop = el.scrollTop <= 0;
-          const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
-          if (deltaY > 0 && !atBottom) return;
-          if (deltaY < 0 && !atTop) return;
-        }
-      }
-
-      if (deltaY > 0) nextSection();
-      else prevSection();
+      if (!isAtScrollBoundary(deltaY)) return;
+      if (deltaY > 0) ctx.nextSection();
+      else ctx.prevSection();
     };
-
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchend", onTouchEnd, { passive: true });
-    return () => {
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchend", onTouchEnd);
-    };
-  }, [scrollContext]);
-
-  /* ── Keyboard navigation ── */
-  useEffect(() => {
-    if (!scrollContext) return;
-    const { nextSection, prevSection, isTransitioning } = scrollContext;
 
     const onKey = (e: KeyboardEvent) => {
-      if (isTransitioning) return;
+      const ctx = getCtx();
+      if (!ctx || ctx.isTransitioning) return;
       if (e.key === "ArrowDown" || e.key === "PageDown") {
         e.preventDefault();
-        nextSection();
+        ctx.nextSection();
       } else if (e.key === "ArrowUp" || e.key === "PageUp") {
         e.preventDefault();
-        prevSection();
+        ctx.prevSection();
       }
     };
 
+    window.addEventListener("navigate-section", handler);
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [scrollContext]);
+    return () => {
+      window.removeEventListener("navigate-section", handler);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []);
 
   if (!scrollContext) return null;
 
@@ -231,7 +202,7 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
         </div>
 
         {/* SECTION PANE */}
-        <AnimatePresence mode="wait" custom={direction}>
+        <AnimatePresence mode="sync" custom={direction}>
           <motion.section
             key={SECTIONS[activeSection]}
             custom={direction}
@@ -240,6 +211,7 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
             animate="center"
             exit="exit"
             className="absolute inset-0 z-[1] flex items-center justify-center"
+            style={{ willChange: "transform, opacity" }}
           >
             <div
               ref={sectionContentRef}

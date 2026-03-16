@@ -15,6 +15,7 @@ const skillCategories = [
       { name: "Docker", icon: "docker" },
       { name: "Linux", icon: "linux" },
       { name: "GitHub Actions", icon: "githubactions" },
+      { name: "Lambda", icon: "lambda", customIcon: true },
     ],
     description:
       "Architecting resilient CI/CD pipelines and scalable cloud infrastructure on AWS.",
@@ -27,6 +28,7 @@ const skillCategories = [
       { name: "Ansible", icon: "ansible" },
       { name: "Bash", icon: "bash" },
       { name: "PowerShell", icon: "powershell" },
+      { name: "IaC", icon: "iac", customIcon: true },
     ],
     description:
       "Automating provisioning, configuration management, and eliminating drift with IaC.",
@@ -151,6 +153,42 @@ const SkillsTabsSection = () => {
             strokeLinejoin="round"
             strokeWidth={1.5}
             d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+          />
+        </svg>
+      );
+    }
+    if (tech.icon === "iac") {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          className="w-8 h-8"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+          />
+        </svg>
+      );
+    }
+    if (tech.icon === "lambda") {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          className="w-8 h-8"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M7 21l5-12 5 12M4 4l8 8M20 4l-8 8"
           />
         </svg>
       );

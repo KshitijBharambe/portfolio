@@ -19,13 +19,14 @@ const ScrollContext = createContext<ScrollContextType | null>(null);
 
 export const useScroll = () => useContext(ScrollContext);
 
-const TRANSITION_DURATION = 800; // ms — matches framer-motion exit/enter
+const TRANSITION_DURATION = 600; // ms — matches framer-motion exit/enter overlap
 
 export const ScrollProvider = ({ children }: { children: ReactNode }) => {
   const [activeSection, setActiveSection] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const cooldownRef = useRef(false);
+  const cooldownTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const goToSection = useCallback(
     (index: number) => {
@@ -35,7 +36,8 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
       setDirection(index > activeSection ? 1 : -1);
       setActiveSection(index);
 
-      setTimeout(() => {
+      clearTimeout(cooldownTimerRef.current);
+      cooldownTimerRef.current = setTimeout(() => {
         cooldownRef.current = false;
         setIsTransitioning(false);
       }, TRANSITION_DURATION);

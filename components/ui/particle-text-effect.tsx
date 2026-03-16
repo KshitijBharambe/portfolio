@@ -272,6 +272,7 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     return () => {
       clearTimeout(timer)
       if (animationRef.current) cancelAnimationFrame(animationRef.current)
+      particlesRef.current = []
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -360,16 +361,20 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     canvas.width = 1000; canvas.height = 500
     nextWord(words[0], canvas)
     let rafId: number
+    let mounted = true
     const loop = () => {
+      if (!mounted) return
       const ctx = canvas.getContext("2d")!
       ctx.fillStyle = "rgba(0,0,0,0.1)"
       ctx.fillRect(0, 0, canvas.width, canvas.height)
-      particlesRef.current.forEach((p, i) => {
+      const particles = particlesRef.current
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i]
         p.move(); p.draw(ctx)
         if (p.isKilled && (p.pos.x < 0 || p.pos.x > canvas.width || p.pos.y < 0 || p.pos.y > canvas.height)) {
-          particlesRef.current.splice(i, 1)
+          particles.splice(i, 1)
         }
-      })
+      }
       frameCountRef.current++
       if (frameCountRef.current % 240 === 0) {
         wordIndexRef.current = (wordIndexRef.current + 1) % words.length
@@ -379,7 +384,11 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     }
     rafId = requestAnimationFrame(loop)
     animationRef.current = rafId
-    return () => cancelAnimationFrame(rafId)
+    return () => {
+      mounted = false
+      cancelAnimationFrame(rafId)
+      particlesRef.current = []
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

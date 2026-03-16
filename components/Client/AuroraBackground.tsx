@@ -26,6 +26,7 @@ export default function AuroraBackground() {
 
     let animationId: number;
     let time = 0;
+    let mounted = true;
 
     const resize = () => {
       canvas.width  = window.innerWidth;
@@ -59,7 +60,7 @@ export default function AuroraBackground() {
     }
 
     function draw() {
-      if (!ctx || !canvas) return;
+      if (!ctx || !canvas || !mounted) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       time++;
 
@@ -94,6 +95,7 @@ export default function AuroraBackground() {
     draw();
 
     return () => {
+      mounted = false;
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);
     };

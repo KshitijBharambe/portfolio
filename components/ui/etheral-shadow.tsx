@@ -82,6 +82,7 @@ export function EtheralShadow({
     if (feColorMatrixRef.current && animationEnabled) {
       if (hueRotateAnimation.current) {
         hueRotateAnimation.current.stop();
+        hueRotateAnimation.current = null;
       }
       hueRotateMotionValue.set(0);
       hueRotateAnimation.current = animate(hueRotateMotionValue, 360, {
@@ -97,13 +98,14 @@ export function EtheralShadow({
           }
         },
       });
-
-      return () => {
-        if (hueRotateAnimation.current) {
-          hueRotateAnimation.current.stop();
-        }
-      };
     }
+
+    return () => {
+      if (hueRotateAnimation.current) {
+        hueRotateAnimation.current.stop();
+        hueRotateAnimation.current = null;
+      }
+    };
   }, [animationEnabled, animationDuration, hueRotateMotionValue]);
 
   return (
