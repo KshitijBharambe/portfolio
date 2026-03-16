@@ -1,13 +1,6 @@
 "use server";
 
 import { Resend } from "resend";
-// Ensure API key exists
-const resendApiKey = process.env.RESEND_API_KEY;
-if (!resendApiKey) {
-  throw new Error("RESEND_API_KEY is not defined in environment variables");
-}
-// Initialize Resend with your API key from environment variables
-const resend = new Resend(resendApiKey);
 
 // Define the structure of the email form data
 interface EmailData {
@@ -20,6 +13,12 @@ interface EmailData {
 // Server action to send email
 export async function sendEmail(formData: EmailData) {
   try {
+    const resendApiKey = process.env.RESEND_API_KEY;
+    if (!resendApiKey) {
+      return { success: false, error: "Email service is not configured." };
+    }
+    const resend = new Resend(resendApiKey);
+
     // Validate input
     if (!formData.name || !formData.email || !formData.message) {
       return {

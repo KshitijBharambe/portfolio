@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Layout from "@/components/layout/Layout";
 import { ScrollProvider } from "@/context/ScrollContext";
+import { ThemeProvider } from "@/context/ThemeContext";
+import { LiquidGlassProvider } from "@/components/ui/liquid-glass";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,11 +49,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased
         theme-transition text-theme-primary`}
       >
-        <ScrollProvider>
-          <Layout>
-            {children}
-          </Layout>
-        </ScrollProvider>
+        <ThemeProvider>
+          <LiquidGlassProvider>
+            <ScrollProvider>
+              <Layout>
+                {children}
+              </Layout>
+            </ScrollProvider>
+          </LiquidGlassProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

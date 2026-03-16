@@ -1,1 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180"><rect width="180" height="180" rx="30" fill="#1e3a8a"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="80" font-family="monospace" fill="#ffffff">KB</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glow-amber" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="180" height="180" rx="24" fill="#050508"/>
+
+  <!-- Subtle inner border -->
+  <rect x="2.5" y="2.5" width="175" height="175" rx="22" fill="none" stroke="#10b981" stroke-width="1.5" opacity="0.35"/>
+
+  <!-- Top-left corner bracket (emerald) -->
+  <path d="M16,40 L16,16 L40,16" stroke="#10b981" stroke-width="4" fill="none" stroke-linecap="square" filter="url(#glow)"/>
+
+  <!-- Bottom-right corner bracket (amber) -->
+  <path d="M140,164 L164,164 L164,140" stroke="#f59e0b" stroke-width="4" fill="none" stroke-linecap="square" filter="url(#glow-amber)"/>
+
+  <!-- KB text -->
+  <text
+    x="90"
+    y="98"
+    dominant-baseline="middle"
+    text-anchor="middle"
+    font-size="72"
+    font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, monospace"
+    fill="#10b981"
+    font-weight="700"
+    letter-spacing="-2"
+    filter="url(#glow)"
+  >KB</text>
+</svg>

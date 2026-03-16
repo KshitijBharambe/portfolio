@@ -1,7 +1,6 @@
-// app/page.tsx
-import HomePage from "@/components/Server/Server-Side_HomePage";
+import HomePage from "@/components/home-page";
+import projectsData from "@/public/assets/data/projects_data.json";
 
-// This is a Server Component that will fetch data from GitHub
-export default async function Home() {
-  return <HomePage />;
+export default function Home() {
+  return <HomePage projects={projectsData.projects} />;
 }
