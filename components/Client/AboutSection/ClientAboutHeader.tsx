@@ -27,14 +27,14 @@ const AboutHeader = () => {
         02
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-start">
         {/* ── LEFT: Profile column ── */}
         <motion.div
           custom={0}
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          className="lg:col-span-2 flex flex-col items-center lg:items-start gap-6"
+          className="lg:col-span-2 flex flex-col items-center lg:items-start gap-4"
         >
           {/* Profile photo with gradient ring */}
           <div className="relative">
@@ -44,7 +44,7 @@ const AboutHeader = () => {
                 background: "conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent))",
               }}
             />
-            <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-[var(--bg)]">
+            <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-[var(--bg)]">
               <Image
                 src="/assets/profile-pic.jpeg"
                 alt="Kshitij Bharambe"
@@ -146,7 +146,7 @@ const AboutHeader = () => {
         </motion.div>
 
         {/* ── RIGHT: Bio content ── */}
-        <div className="lg:col-span-3 space-y-8">
+        <div className="lg:col-span-3 space-y-4">
           {/* Section label */}
           <motion.div
             custom={0}
@@ -166,7 +166,7 @@ const AboutHeader = () => {
             initial="hidden"
             animate="visible"
             className="font-black leading-[0.88] tracking-tight"
-            style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)" }}
+            style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
           >
             I BUILD
             <br />

@@ -1,49 +1,63 @@
 'use client';
 
-import React, { createContext, useContext, useRef, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef, ReactNode } from 'react';
+
+export const SECTIONS = ['home', 'about', 'projects', 'contact'] as const;
+export type SectionName = (typeof SECTIONS)[number];
 
 interface ScrollContextType {
-  scrollContainerRef: React.MutableRefObject<HTMLDivElement | null>;
-  homeSectionRef: React.MutableRefObject<HTMLDivElement | null>;
-  aboutSectionRef: React.MutableRefObject<HTMLDivElement | null>;
-  projectsSectionRef: React.MutableRefObject<HTMLDivElement | null>;
-  contactSectionRef: React.MutableRefObject<HTMLDivElement | null>;
-  scrollToSection: (ref: React.MutableRefObject<HTMLDivElement | null>) => void;
+  activeSection: number;
+  direction: 1 | -1;
+  goToSection: (index: number) => void;
+  goToSectionByName: (name: SectionName) => void;
+  nextSection: () => void;
+  prevSection: () => void;
+  isTransitioning: boolean;
 }
 
 const ScrollContext = createContext<ScrollContextType | null>(null);
 
-export const useScroll = () => {
-  return useContext(ScrollContext);
-};
+export const useScroll = () => useContext(ScrollContext);
+
+const TRANSITION_DURATION = 800; // ms — matches framer-motion exit/enter
 
 export const ScrollProvider = ({ children }: { children: ReactNode }) => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const homeSectionRef = useRef<HTMLDivElement>(null);
-  const aboutSectionRef = useRef<HTMLDivElement>(null);
-  const projectsSectionRef = useRef<HTMLDivElement>(null);
-  const contactSectionRef = useRef<HTMLDivElement>(null);
+  const [activeSection, setActiveSection] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const cooldownRef = useRef(false);
 
-    const scrollToSection = (ref: React.MutableRefObject<HTMLDivElement | null>) => {
-        if (ref?.current) {
-            ref.current.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    };
+  const goToSection = useCallback(
+    (index: number) => {
+      if (index < 0 || index >= SECTIONS.length || index === activeSection || cooldownRef.current) return;
+      cooldownRef.current = true;
+      setIsTransitioning(true);
+      setDirection(index > activeSection ? 1 : -1);
+      setActiveSection(index);
 
-    const value: ScrollContextType = {
-    scrollContainerRef,
-    homeSectionRef,
-    aboutSectionRef,
-    projectsSectionRef,
-    contactSectionRef,
-    scrollToSection,
-  };
+      setTimeout(() => {
+        cooldownRef.current = false;
+        setIsTransitioning(false);
+      }, TRANSITION_DURATION);
+    },
+    [activeSection],
+  );
+
+  const goToSectionByName = useCallback(
+    (name: SectionName) => {
+      const idx = SECTIONS.indexOf(name);
+      if (idx !== -1) goToSection(idx);
+    },
+    [goToSection],
+  );
+
+  const nextSection = useCallback(() => goToSection(activeSection + 1), [activeSection, goToSection]);
+  const prevSection = useCallback(() => goToSection(activeSection - 1), [activeSection, goToSection]);
 
   return (
-    <ScrollContext.Provider value={value}>
+    <ScrollContext.Provider
+      value={{ activeSection, direction, goToSection, goToSectionByName, nextSection, prevSection, isTransitioning }}
+    >
       {children}
     </ScrollContext.Provider>
   );

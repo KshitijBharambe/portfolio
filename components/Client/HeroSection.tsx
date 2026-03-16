@@ -155,8 +155,11 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
             animate={animState}
             className="mt-10 flex flex-wrap items-center justify-center gap-4"
           >
-            <motion.a
-              href="#projects"
+            <motion.button
+              onClick={() => {
+                const event = new CustomEvent("navigate-section", { detail: "projects" });
+                window.dispatchEvent(event);
+              }}
               className="btn-primary"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
@@ -165,15 +168,18 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M7 17l9.2-9.2M17 17V8H8" />
               </svg>
-            </motion.a>
-            <motion.a
-              href="#contact"
+            </motion.button>
+            <motion.button
+              onClick={() => {
+                const event = new CustomEvent("navigate-section", { detail: "contact" });
+                window.dispatchEvent(event);
+              }}
               className="btn-outline"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
               Get In Touch
-            </motion.a>
+            </motion.button>
           </motion.div>
 
           {/* Floating stat pills (desktop only) */}

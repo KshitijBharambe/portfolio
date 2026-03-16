@@ -91,11 +91,11 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
   const displayedProjects = localProjects.slice(0, visibleProjects);
 
   return (
-    <section className="py-28 px-4 relative w-full">
+    <section className="h-screen w-full flex flex-col justify-center px-4 py-10 relative">
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-6xl mx-auto relative z-10 w-full">
         {/* Section label */}
-        <div className="flex items-center gap-4 mb-16">
+        <div className="flex items-center gap-4 mb-6">
           <span className="font-mono text-[10px] text-[var(--accent)] tracking-[0.3em] uppercase">03 / Projects</span>
           <div className="flex-1 h-px" style={{ background: "var(--divider)" }} />
         </div>
@@ -105,15 +105,15 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-16"
+          className="mb-8"
         >
-          <h2 className="font-black leading-[0.88] tracking-tight mb-4"
-            style={{ fontSize: "clamp(2.8rem, 8vw, 6rem)" }}>
+          <h2 className="font-black leading-[0.88] tracking-tight mb-2"
+            style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>
             FEATURED
             <br />
             <span className="gradient-text">WORK.</span>
           </h2>
-          <p className="text-[var(--text-tertiary)] text-base max-w-xl leading-relaxed">
+          <p className="text-[var(--text-tertiary)] text-sm max-w-xl leading-relaxed">
             A selection of projects in AI, cloud, and full-stack development —
             each designed to solve real problems with modern tools.
           </p>
@@ -140,7 +140,7 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
               whileHover={{ y: -6, transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] } }}
             >
               <CardHoverReveal
-                className="h-[420px] rounded-2xl cursor-pointer border border-[var(--card-border)] hover:border-[var(--accent)]/30 transition-[border-color,box-shadow] duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.3),0_0_40px_rgba(16,185,129,0.06)]"
+                className="h-[320px] rounded-2xl cursor-pointer border border-[var(--card-border)] hover:border-[var(--accent)]/30 transition-[border-color,box-shadow] duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.3),0_0_40px_rgba(16,185,129,0.06)]"
                 onClick={() => openModal(project)}
               >
                 <CardHoverRevealMain>
@@ -225,7 +225,7 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
 
         {/* Show more */}
         {visibleProjects < localProjects.length && (
-          <div className="text-center mt-12">
+          <div className="text-center mt-6">
             <button
               onClick={() => setVisibleProjects(localProjects.length)}
               className="btn-outline mx-auto"

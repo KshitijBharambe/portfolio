@@ -216,7 +216,7 @@ const SkillsTabsSection = () => {
   return (
     <div className="max-w-7xl mx-auto w-full">
       {/* Glass pill tab navigation */}
-      <LiquidGlass rounded="rounded-xl" intensity="medium" className="mb-8 w-fit">
+      <LiquidGlass rounded="rounded-xl" intensity="medium" className="mb-4 w-fit">
       <div className="glass rounded-xl p-1 flex items-center gap-1">
         {tabs.map(({ id, label, num }) => (
           <button
@@ -249,7 +249,7 @@ const SkillsTabsSection = () => {
       </div>
       </LiquidGlass>
 
-      <div ref={tabContainerRef} style={{ minHeight: 300 }}>
+      <div ref={tabContainerRef}>
       <AnimatePresence mode="wait">
         {/* ── SKILLS TAB ── */}
         {activeTab === "skills" && (
