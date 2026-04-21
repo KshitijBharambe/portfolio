@@ -1,4 +1,4 @@
-export function middleware(request) {
+export function proxy(request) {
   // Check if maintenance mode is enabled
   const maintenanceMode = process.env.MAINTENANCE_MODE === 'false';
   
