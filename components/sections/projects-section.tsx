@@ -91,7 +91,7 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
   const displayedProjects = localProjects.slice(0, visibleProjects);
 
   return (
-    <section className="min-h-screen w-full flex flex-col justify-center px-4 py-10 relative">
+    <section className="min-h-[80vh] md:min-h-screen w-full flex flex-col justify-center px-4 py-10 md:py-10 relative">
 
       <div className="max-w-6xl mx-auto relative z-10 w-full">
         {/* Section label */}
@@ -140,7 +140,7 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
               whileHover={{ y: -6, transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] } }}
             >
               <CardHoverReveal
-                className="h-[320px] rounded-2xl cursor-pointer border border-[var(--card-border)] hover:border-[var(--accent)]/30 transition-[border-color,box-shadow] duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.3),0_0_40px_rgba(16,185,129,0.06)]"
+                className="h-[280px] md:h-[320px] rounded-2xl cursor-pointer border border-[var(--card-border)] hover:border-[var(--accent)]/30 transition-[border-color,box-shadow] duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.3),0_0_40px_rgba(16,185,129,0.06)]"
                 onClick={() => openModal(project)}
               >
                 <CardHoverRevealMain>
@@ -250,7 +250,7 @@ export default function ClientProjectsSection({ projects = [] }: ClientProjectsS
             onClick={closeModal}
           >
             <motion.div
-              className="glass rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden relative flex flex-col"
+              className="glass rounded-2xl max-w-5xl w-full max-h-[85vh] md:max-h-[90vh] overflow-y-auto md:overflow-hidden relative flex flex-col"
               initial={{ opacity: 0, scale: 0.93, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.93, y: 20 }}

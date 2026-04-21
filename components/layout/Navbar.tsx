@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useScroll, SECTIONS, SectionName } from "@/context/ScrollContext";
+import { useScroll, SECTIONS } from "@/context/ScrollContext";
 import { useTheme } from "@/context/ThemeContext";
 
 const navItems = [
@@ -25,8 +25,9 @@ const Navbar: React.FC = () => {
   const handleNav = (target: string) => {
     setMobileOpen(false);
     const isHome = pathname === "/";
-    if (isHome && scrollContext) {
-      scrollContext.goToSectionByName(target as SectionName);
+    if (isHome) {
+      // Dispatch event so both mobile (scrollIntoView) and desktop (section swap) can handle it
+      window.dispatchEvent(new CustomEvent("navigate-section", { detail: target }));
     }
   };
 
@@ -94,7 +95,7 @@ const Navbar: React.FC = () => {
                     </span>
                     <span
                       className={`text-sm font-medium transition-colors duration-300 ${
-                        isActive ? "text-white" : "text-[var(--text-tertiary)] hover:text-[var(--foreground)]"
+                        isActive ? "text-[var(--foreground)]" : "text-[var(--text-tertiary)] hover:text-[var(--foreground)]"
                       }`}
                     >
                       {label}
@@ -272,7 +273,7 @@ const Navbar: React.FC = () => {
                       </span>
                       <span
                         className={`text-2xl font-bold transition-colors duration-300 ${
-                          isActive ? "text-[var(--accent)]" : "text-white"
+                          isActive ? "text-[var(--accent)]" : "text-[var(--foreground)]"
                         }`}
                       >
                         {label}

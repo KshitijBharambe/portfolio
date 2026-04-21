@@ -92,8 +92,7 @@ export function ShaderAnimation({ paused = false }: ShaderAnimationProps) {
     window.addEventListener("resize", onWindowResize, false);
 
     const animate = () => {
-      if (pausedRef.current) {
-        // Store a self-recheck so we can resume without remounting
+      if (pausedRef.current || document.hidden) {
         sceneRef.current!.animationId = requestAnimationFrame(animate);
         return;
       }

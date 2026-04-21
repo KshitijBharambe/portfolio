@@ -117,8 +117,8 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-70" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--accent)]" />
             </span>
-            <span className="text-xs font-mono tracking-[0.25em] text-[var(--text-secondary)] uppercase">
-              Cloud Engineer &middot; DevOps &middot; AWS
+            <span className="text-[10px] sm:text-xs font-mono tracking-[0.2em] sm:tracking-[0.25em] text-[var(--text-secondary)] uppercase">
+              Cloud Engineer &middot; DevOps &middot; AWS &middot; Azure
             </span>
           </motion.div>
 
@@ -142,7 +142,7 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
             className="mt-6 text-sm sm:text-base font-mono tracking-wide"
             style={{ color: "var(--text-muted)" }}
           >
-            Building resilient infrastructure &amp; eliminating drift at scale.
+            Building resilient infrastructure, eliminating drift &amp; enforcing cost governance at scale.
           </motion.p>
         </div>
       </div>

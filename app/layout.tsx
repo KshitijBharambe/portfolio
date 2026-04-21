@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import Layout from "@/components/layout/Layout";
 import { ScrollProvider } from "@/context/ScrollContext";
@@ -57,6 +58,7 @@ export default function RootLayout({
               </Layout>
             </ScrollProvider>
           </LiquidGlassProvider>
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

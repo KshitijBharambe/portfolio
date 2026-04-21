@@ -94,7 +94,7 @@ const ContactSection = () => {
     },
     {
       label: "Location",
-      value: "Syracuse, NY",
+      value: "Princeton, NJ",
       href: undefined,
       icon: (
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -106,7 +106,7 @@ const ContactSection = () => {
   ];
 
   return (
-    <section className="py-24 px-4 relative w-full min-h-screen flex items-center overflow-hidden">
+    <section className="py-16 md:py-24 px-4 relative w-full min-h-[80vh] md:min-h-screen flex items-center overflow-hidden">
 
       <div className="max-w-5xl mx-auto w-full relative z-10">
         {/* Section label */}

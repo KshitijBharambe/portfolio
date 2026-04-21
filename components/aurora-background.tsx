@@ -61,6 +61,11 @@ export default function AuroraBackground() {
 
     function draw() {
       if (!ctx || !canvas || !mounted) return;
+      // Skip rendering when tab is hidden
+      if (document.hidden) {
+        animationId = requestAnimationFrame(draw);
+        return;
+      }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       time++;
 

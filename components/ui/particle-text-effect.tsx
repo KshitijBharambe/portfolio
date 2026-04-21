@@ -221,7 +221,15 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     }
   }
 
+  const visibleRef = useRef(true)
+
   function animate(canvas: HTMLCanvasElement) {
+    // Pause when tab is hidden to save CPU/GPU
+    if (document.hidden || !visibleRef.current) {
+      animationRef.current = requestAnimationFrame(() => animate(canvas))
+      return
+    }
+
     const ctx = canvas.getContext("2d")!
     const particles = particlesRef.current
 
@@ -260,6 +268,13 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     const ctx = canvas.getContext("2d")!
     ctx.clearRect(0, 0, W, H)
 
+    // Pause when canvas is off-screen (section switched)
+    const observer = new IntersectionObserver(
+      ([entry]) => { visibleRef.current = entry.isIntersecting },
+      { threshold: 0.1 }
+    )
+    observer.observe(canvas)
+
     const timer = setTimeout(() => {
       if (!startedRef.current) {
         startedRef.current = true
@@ -271,6 +286,7 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
 
     return () => {
       clearTimeout(timer)
+      observer.disconnect()
       if (animationRef.current) cancelAnimationFrame(animationRef.current)
       particlesRef.current = []
     }

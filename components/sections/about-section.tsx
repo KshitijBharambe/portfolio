@@ -12,6 +12,7 @@ const skillCategories = [
     title: "Cloud & DevOps",
     technologies: [
       { name: "AWS", icon: "amazonwebservices" },
+      { name: "Azure", icon: "azure" },
       { name: "Terraform", icon: "terraform" },
       { name: "Docker", icon: "docker" },
       { name: "Linux", icon: "linux" },
@@ -48,9 +49,9 @@ const skillCategories = [
 ];
 
 const experience = [
-  { position: "Cloud Deployment Engineer", company: "Sequretek", period: "Feb 2026 – Present" },
-  { position: "DevOps Intern", company: "Sequretek", period: "Jun – Aug 2024" },
-  { position: "Software & Cloud Engineer", company: "Cognologix", period: "Jun 2022 – May 2023" },
+  { position: "Cloud Deployment Engineer", company: "Sequretek", period: "Feb 2026 – Present", location: "Princeton, NJ" },
+  { position: "DevOps Intern", company: "Sequretek", period: "Jun – Aug 2024", location: "Andheri, India" },
+  { position: "Software & Cloud Engineer", company: "Cognologix", period: "Jun 2022 – May 2023", location: "Remote" },
 ];
 
 const education = [
@@ -107,7 +108,7 @@ const AboutSection = () => {
   const category = skillCategories.find((c) => c.id === activeCategory) || skillCategories[0];
 
   return (
-    <section className="h-screen w-full flex flex-col justify-center px-6 md:px-10 lg:px-14 py-16 relative overflow-hidden">
+    <section className="min-h-screen md:h-screen w-full flex flex-col justify-center px-4 sm:px-6 md:px-10 lg:px-14 py-16 relative overflow-hidden">
       <div className="max-w-6xl mx-auto w-full">
 
         {/* ── Top row: profile + bio ── */}
@@ -147,8 +148,8 @@ const AboutSection = () => {
             </motion.h2>
 
             <motion.p custom={2} variants={fadeUp} initial="hidden" animate="visible" className="text-[var(--text-secondary)] text-sm leading-relaxed max-w-2xl">
-              Cloud-native Infrastructure Engineer with a Master&apos;s in CS, specializing in AWS, Terraform, and DevSecOps.
-              Building resilient multi-tenant security infrastructure &mdash; CI/CD pipelines, cloud automation, and high-traffic APIs at scale.
+              Cloud-native Infrastructure Engineer with a Master&apos;s in CS, specializing in AWS, Azure, Terraform, and DevSecOps.
+              Deploying multi-tenant EDR/XDR security infrastructure, architecting CI/CD pipelines, and enforcing FinOps cost governance at scale.
             </motion.p>
           </div>
 

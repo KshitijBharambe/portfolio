@@ -13,6 +13,7 @@ const SPLASH_KEY = "splashShown";
 export default function IntroSplash({ onComplete }: IntroSplashProps) {
   const [isMounted, setIsMounted] = useState(true);
   const [shaderPaused, setShaderPaused] = useState(false);
+  const [shaderReady, setShaderReady] = useState(false);
   const [pointerEventsEnabled, setPointerEventsEnabled] = useState(true);
 
   const onCompleteRef = useRef(onComplete);
@@ -20,7 +21,6 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
 
   // Offloading animation logic to the GPU via Framer Motion controls
   const textControls = useAnimation();
-  const shaderControls = useAnimation();
   const bgControls = useAnimation();
 
   useEffect(() => {
@@ -44,7 +44,12 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
     const timerIds: ReturnType<typeof setTimeout>[] = [];
 
     const fireAnimations = async () => {
-      await delay(2000);
+      // Small delay before shader starts to let the page settle
+      await delay(500);
+      if (cancelled) return;
+      setShaderReady(true);
+
+      await delay(1500);
       if (cancelled) return;
 
       setShaderPaused(true);
@@ -56,10 +61,7 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
         transition: { type: "spring", stiffness: 200, damping: 25, mass: 1 },
       });
 
-      shaderControls.start({
-        opacity: 0,
-        transition: { duration: 0.8, ease: "easeInOut" },
-      });
+      setShaderReady(false);
 
       await delay(1000);
       if (cancelled) return;
@@ -82,7 +84,7 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
       cancelled = true;
       timerIds.forEach(clearTimeout);
     };
-  }, [textControls, shaderControls, bgControls]);
+  }, [textControls, bgControls]);
 
   return (
     <AnimatePresence>
@@ -102,14 +104,15 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
             animate={bgControls}
           />
 
-          {/* Shader layer */}
+          {/* Shader layer — delayed 0.5s to let the page settle */}
           <motion.div
             className="absolute inset-0"
             style={{ zIndex: 1 }}
-            initial={{ opacity: 1 }}
-            animate={shaderControls}
+            initial={{ opacity: 0 }}
+            animate={shaderReady ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <ShaderAnimation paused={shaderPaused} />
+            {shaderReady && <ShaderAnimation paused={shaderPaused} />}
           </motion.div>
 
           {/* KB_ logo — wrapper locked to a hardware-accelerated layer */}

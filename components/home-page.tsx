@@ -44,6 +44,19 @@ const sectionVariants = {
   }),
 };
 
+/* ── Mobile detection hook ── */
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    setIsMobile(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
   const scrollContext = useScroll();
   const [introComplete, setIntroComplete] = useState(false);
@@ -51,20 +64,23 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
   const sectionContentRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef(scrollContext);
   scrollRef.current = scrollContext;
+  const isMobile = useIsMobile();
 
   const handleIntroComplete = useCallback(() => {
     setIntroComplete(true);
   }, []);
 
-  /* ── Reset internal scroll when section changes ── */
+  /* ── Reset internal scroll when section changes (desktop only) ── */
   useEffect(() => {
-    if (sectionContentRef.current) {
+    if (!isMobile && sectionContentRef.current) {
       sectionContentRef.current.scrollTop = 0;
     }
-  }, [scrollContext?.activeSection]);
+  }, [scrollContext?.activeSection, isMobile]);
 
-  /* ── All navigation listeners (single useEffect, stable refs) ── */
+  /* ── Desktop: section-swap navigation listeners ── */
   useEffect(() => {
+    if (isMobile) return; // Mobile uses natural scroll — no listeners needed
+
     const getCtx = () => scrollRef.current;
 
     const handler = (e: Event) => {
@@ -87,7 +103,6 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
     };
 
     const onWheel = (e: WheelEvent) => {
-      // Skip section navigation when a modal overlay is open
       if (document.body.style.overflow === "hidden") return;
       if (!isAtScrollBoundary(e.deltaY)) return;
       e.preventDefault();
@@ -95,21 +110,6 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
       if (!ctx || ctx.isTransitioning) return;
       if (Math.abs(e.deltaY) < 30) return;
       if (e.deltaY > 0) ctx.nextSection();
-      else ctx.prevSection();
-    };
-
-    let touchStartY = 0;
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-    };
-    const onTouchEnd = (e: TouchEvent) => {
-      if (document.body.style.overflow === "hidden") return;
-      const ctx = getCtx();
-      if (!ctx || ctx.isTransitioning) return;
-      const deltaY = touchStartY - e.changedTouches[0].clientY;
-      if (Math.abs(deltaY) < 60) return;
-      if (!isAtScrollBoundary(deltaY)) return;
-      if (deltaY > 0) ctx.nextSection();
       else ctx.prevSection();
     };
 
@@ -128,24 +128,68 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
 
     window.addEventListener("navigate-section", handler);
     window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchend", onTouchEnd, { passive: true });
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("navigate-section", handler);
       window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", onKey);
     };
-  }, []);
+  }, [isMobile]);
+
+  /* ── Mobile: track active section via scroll position ── */
+  useEffect(() => {
+    if (!isMobile) return;
+    const container = containerRef.current;
+    if (!container) return;
+
+    const sectionIds = ["mobile-home", "mobile-about", "mobile-projects", "mobile-contact"];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+            const idx = sectionIds.indexOf(entry.target.id);
+            if (idx !== -1 && scrollContext) {
+              scrollContext.goToSection(idx);
+            }
+          }
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    // Handle navigate-section events on mobile (from navbar)
+    const handler = (e: Event) => {
+      const name = (e as CustomEvent).detail;
+      const idx = SECTIONS.indexOf(name);
+      if (idx !== -1) {
+        const el = document.getElementById(sectionIds[idx]);
+        el?.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+    window.addEventListener("navigate-section", handler);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("navigate-section", handler);
+    };
+  }, [isMobile, scrollContext]);
 
   if (!scrollContext) return null;
 
   const { activeSection, direction } = scrollContext;
 
   const handleScrollToAbout = () => {
-    scrollContext.goToSectionByName("about");
+    if (isMobile) {
+      document.getElementById("mobile-about")?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      scrollContext.goToSectionByName("about");
+    }
   };
 
   /* ── Render the active section ── */
@@ -169,9 +213,51 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
     }
   };
 
+  /* ═══ MOBILE: natural scroll layout ═══ */
+  if (isMobile) {
+    return (
+      <>
+        <IntroSplash onComplete={handleIntroComplete} />
+
+        <div
+          ref={containerRef}
+          className="min-h-screen"
+          style={{ background: "var(--bg)", color: "var(--foreground)" }}
+        >
+          {/* Background */}
+          <div className="fixed inset-0 z-0 pointer-events-none">
+            <EtheralShadow
+              color="rgba(160,160,150,0.6)"
+              animation={{ scale: 80, speed: 70 }}
+              noise={{ opacity: 0.6, scale: 1.2 }}
+              sizing="fill"
+            />
+          </div>
+
+          {/* Sections stacked naturally */}
+          <div className="relative z-[1]">
+            <section id="mobile-home">
+              <HeroSection handleScrollToAbout={handleScrollToAbout} introComplete={introComplete} />
+            </section>
+            <section id="mobile-about">
+              <AboutMeSection />
+            </section>
+            <section id="mobile-projects">
+              <ClientProjectsSection projects={projects} />
+            </section>
+            <section id="mobile-contact">
+              <ContactSection />
+              <Footer />
+            </section>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  /* ═══ DESKTOP: section-swap layout ═══ */
   return (
     <>
-      {/* INTRO SPLASH */}
       <IntroSplash onComplete={handleIntroComplete} />
 
       <div
@@ -179,7 +265,6 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
         className="fixed inset-0 overflow-hidden"
         style={{ background: "var(--bg)", color: "var(--foreground)" }}
       >
-        {/* Liquid glass SVG filter */}
         <LiquidGlassFilter />
         <LiquidGlassToggle />
 
@@ -214,8 +299,8 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
           </motion.section>
         </AnimatePresence>
 
-        {/* Section indicator dots */}
-        <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+        {/* Section indicator dots — desktop only */}
+        <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-3">
           {SECTIONS.map((name, i) => (
             <button
               key={name}
@@ -232,7 +317,6 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
                 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               />
-              {/* Tooltip */}
               <span className="absolute right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-[10px] font-mono uppercase tracking-wider text-[var(--text-muted)] whitespace-nowrap pointer-events-none">
                 {name}
               </span>

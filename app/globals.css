@@ -21,9 +21,9 @@
   --radius:      14px;
 
   --text-primary:   #fafafa;
-  --text-secondary: rgba(255,255,255,0.5);
-  --text-tertiary:  rgba(255,255,255,0.35);
-  --text-muted:     #71717a;
+  --text-secondary: rgba(255,255,255,0.65);
+  --text-tertiary:  rgba(255,255,255,0.48);
+  --text-muted:     #a1a1aa;
   --card-bg:        rgba(255,255,255,0.02);
   --card-border:    rgba(255,255,255,0.07);
   --card-hover-bg:  rgba(255,255,255,0.04);
@@ -56,15 +56,15 @@
   --foreground:  #1c1917;
 
   --text-primary:   #1c1917;
-  --text-secondary: rgba(28,25,23,0.65);
-  --text-tertiary:  rgba(28,25,23,0.45);
-  --text-muted:     #78716c;
-  --card-bg:        rgba(0,0,0,0.025);
-  --card-border:    rgba(0,0,0,0.1);
-  --card-hover-bg:  rgba(0,0,0,0.04);
-  --card-hover-border: rgba(5,150,105,0.3);
-  --glass-bg:       rgba(255,255,255,0.8);
-  --glass-border:   rgba(0,0,0,0.1);
+  --text-secondary: rgba(28,25,23,0.75);
+  --text-tertiary:  rgba(28,25,23,0.58);
+  --text-muted:     #57534e;
+  --card-bg:        rgba(0,0,0,0.04);
+  --card-border:    rgba(0,0,0,0.13);
+  --card-hover-bg:  rgba(0,0,0,0.06);
+  --card-hover-border: rgba(5,150,105,0.35);
+  --glass-bg:       rgba(255,255,255,0.85);
+  --glass-border:   rgba(0,0,0,0.12);
   --nav-bg:         rgba(245,245,240,0.8);
   --nav-scrolled-bg: rgba(245,245,240,0.92);
   --divider:        rgba(0,0,0,0.08);

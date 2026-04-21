@@ -23,7 +23,8 @@ const fadeUp = {
 const tabs = [
   { id: "background", label: "My Journey", num: "01" },
   { id: "philosophy", label: "Philosophy", num: "02" },
-  { id: "hobbies", label: "Beyond Coding", num: "03" },
+  { id: "certifications", label: "Certifications", num: "03" },
+  { id: "hobbies", label: "Beyond Coding", num: "04" },
 ];
 
 export default function AboutPage() {
@@ -134,7 +135,7 @@ export default function AboutPage() {
           initial="hidden"
           animate="visible"
         >
-          <div className="glass rounded-xl p-1 flex items-center gap-1 mb-8 w-fit">
+          <div className="glass rounded-xl p-1 flex flex-wrap items-center gap-1 mb-8 w-fit">
             {tabs.map(({ id, label, num }) => (
               <button
                 key={id}
@@ -268,6 +269,54 @@ export default function AboutPage() {
                     ))}
                   </ul>
                 </div>
+              </motion.div>
+            )}
+
+            {/* Certifications */}
+            {activeTab === "certifications" && (
+              <motion.div
+                key="certifications"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="space-y-4"
+              >
+                {[
+                  {
+                    title: "AWS Certified Solutions Architect – Associate",
+                    issuer: "Amazon Web Services",
+                    description: "Validated expertise in designing distributed systems, cost-optimized architectures, and resilient applications on AWS.",
+                  },
+                  {
+                    title: "ISO/IEC 27001:2022 Lead Auditor",
+                    issuer: "BSI Training",
+                    description: "Certified to lead audits of Information Security Management Systems, ensuring compliance with international security standards.",
+                  },
+                ].map((cert, index) => (
+                  <div
+                    key={index}
+                    className="spotlight-card rounded-2xl p-6 relative overflow-hidden"
+                  >
+                    <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(to right, transparent, var(--accent), transparent)`, opacity: 0.2 }} />
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 flex items-center justify-center rounded-xl flex-shrink-0" style={{ background: "var(--accent-dim)" }}>
+                        <span className="text-[var(--accent)]">
+                          {renderIcon("shield", "h-5 w-5")}
+                        </span>
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold mb-1" style={{ color: "var(--text-primary)" }}>
+                          {cert.title}
+                        </h3>
+                        <p className="text-xs font-mono text-[var(--accent)] mb-2">{cert.issuer}</p>
+                        <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                          {cert.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </motion.div>
             )}
 
