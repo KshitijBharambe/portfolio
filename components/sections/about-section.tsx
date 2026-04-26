@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,50 +13,57 @@ const skillCategories = [
     title: "Cloud & DevOps",
     technologies: [
       { name: "AWS", icon: "amazonwebservices" },
+      { name: "GCP", icon: "googlecloud" },
+      { name: "Kubernetes", icon: "kubernetes" },
       { name: "Terraform", icon: "terraform" },
       { name: "Docker", icon: "docker" },
-      { name: "Linux", icon: "linux" },
       { name: "GitHub Actions", icon: "githubactions" },
     ],
   },
   {
-    id: "infra-automation",
-    title: "Infra & Automation",
-    technologies: [
-      { name: "Ansible", icon: "ansible" },
-      { name: "Bash", icon: "bash" },
-      { name: "PowerShell", icon: "powershell" },
-    ],
-  },
-  {
     id: "backend-api",
-    title: "Backend & Databases",
+    title: "Backend & APIs",
     technologies: [
       { name: "Python", icon: "python" },
       { name: "FastAPI", icon: "fastapi" },
-      { name: "PostgreSQL", icon: "postgresql" },
-      { name: "MySQL", icon: "mysql" },
+      { name: "Django", icon: "django" },
+      { name: "Node.js", icon: "nodejs" },
+      { name: "GraphQL", icon: "graphql" },
     ],
   },
   {
-    id: "monitoring",
-    title: "Observability",
+    id: "ai-ml",
+    title: "AI & ML",
     technologies: [
-      { name: "CloudWatch", icon: "cloudwatch", customIcon: true },
+      { name: "LangChain", icon: "chain", customIcon: true },
+      { name: "MCP", icon: "mcp", customIcon: true },
+      { name: "SageMaker", icon: "sagemaker", customIcon: true },
+      { name: "Spark", icon: "apachespark" },
+    ],
+  },
+  {
+    id: "data-observability",
+    title: "Data & Observability",
+    technologies: [
+      { name: "Kafka", icon: "apachekafka" },
+      { name: "PostgreSQL", icon: "postgresql" },
+      { name: "Redis", icon: "redis" },
+      { name: "Prometheus", icon: "prometheus" },
       { name: "Grafana", icon: "grafana" },
+      { name: "Jaeger", icon: "jaeger", customIcon: true },
     ],
   },
 ];
 
 const experience = [
-  { position: "Cloud Deployment Engineer", company: "Sequretek", period: "Feb 2026 – Present" },
-  { position: "DevOps Intern", company: "Sequretek", period: "Jun – Aug 2024" },
-  { position: "Software & Cloud Engineer", company: "Cognologix", period: "Jun 2022 – May 2023" },
+  { position: "Software Engineer II, QuickBooks Platform", company: "Intuit", period: "Jan 2025 - Present", location: "Mountain View, CA" },
+  { position: "Software Engineer II", company: "Razorpay", period: "Oct 2021 - Jul 2023", location: "Bengaluru, India" },
+  { position: "Associate Developer", company: "Razorpay", period: "Feb 2021 - Sep 2021", location: "Bengaluru, India" },
 ];
 
 const education = [
-  { degree: "M.S. Computer Science", institution: "Syracuse University", period: "2023 – 2025" },
-  { degree: "B.E. Computer Engineering", institution: "University of Mumbai", period: "2019 – 2023" },
+  { degree: "M.S. Computer Science", institution: "Syracuse University", period: "2023 - 2025" },
+  { degree: "B.E. Computer Engineering", institution: "New Horizon Institute of Technology and Management", period: "2019 - 2023" },
 ];
 
 const tabs = [
@@ -73,41 +81,88 @@ const fadeUp = {
   }),
 };
 
-/* ── Icon helpers ── */
-const getIconSrc = (icon: string, failed: Record<string, string>) => {
-  if (failed[icon] === "retry")
-    return `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${icon}/${icon}-plain.svg`;
-  return `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${icon}/${icon}-original.svg`;
+const iconSlugs: Record<string, string> = {
+  googlecloud: "googlecloud",
+  kubernetes: "kubernetes",
+  terraform: "terraform",
+  docker: "docker",
+  githubactions: "githubactions",
+  python: "python",
+  fastapi: "fastapi",
+  django: "django",
+  nodejs: "nodedotjs",
+  graphql: "graphql",
+  apachespark: "apachespark",
+  apachekafka: "apachekafka",
+  postgresql: "postgresql",
+  redis: "redis",
+  prometheus: "prometheus",
+  grafana: "grafana",
 };
 
-const renderCustomIcon = (icon: string) => {
-  if (icon === "cloudwatch")
+const customSkillIcon = (icon: string) => {
+  if (icon === "amazonwebservices") {
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-7 h-7">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12h4l3-9 4 18 3-9h4" />
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M6 17.5h11a4 4 0 0 0 .7-7.94A6 6 0 0 0 6.35 8.2 4.75 4.75 0 0 0 6 17.5Z" />
+        <path d="M8 13h8M10.5 10.5 8 13l2.5 2.5M13.5 10.5 16 13l-2.5 2.5" />
       </svg>
     );
+  }
+
+  if (icon === "chain") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M10.5 7.5 9 6a4.25 4.25 0 0 0-6 6l2.5 2.5a4.25 4.25 0 0 0 6 0" />
+        <path d="m13.5 16.5 1.5 1.5a4.25 4.25 0 0 0 6-6l-2.5-2.5a4.25 4.25 0 0 0-6 0" />
+        <path d="m8.5 15.5 7-7" />
+      </svg>
+    );
+  }
+
+  if (icon === "mcp") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M4 17V7l8-4 8 4v10l-8 4-8-4Z" />
+        <path d="M8 9v6M12 8v8M16 9v6" />
+      </svg>
+    );
+  }
+
+  if (icon === "sagemaker") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M4 18V6l8-3 8 3v12l-8 3-8-3Z" />
+        <path d="M8 14c1.5-3 3.5-4.5 8-4" />
+        <path d="M8 10h.01M12 14h.01M16 10h.01" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (icon === "jaeger") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="6" cy="12" r="2.5" />
+        <circle cx="18" cy="7" r="2.5" />
+        <circle cx="18" cy="17" r="2.5" />
+        <path d="M8.2 10.8 15.8 8.2M8.2 13.2l7.6 2.6" />
+      </svg>
+    );
+  }
+
   return null;
 };
 
 /* ── Component ── */
 const AboutSection = () => {
+  const { ref, inView } = useInView({ threshold: 0.15 });
   const [activeTab, setActiveTab] = useState("skills");
   const [activeCategory, setActiveCategory] = useState(skillCategories[0].id);
-  const [failedIcons, setFailedIcons] = useState<Record<string, string>>({});
-
-  const handleImageError = useCallback((icon: string) => {
-    setFailedIcons((prev) => {
-      if (!prev[icon]) return { ...prev, [icon]: "retry" };
-      if (prev[icon] === "retry") return { ...prev, [icon]: "failed" };
-      return prev;
-    });
-  }, []);
 
   const category = skillCategories.find((c) => c.id === activeCategory) || skillCategories[0];
 
   return (
-    <section className="h-screen w-full flex flex-col justify-center px-6 md:px-10 lg:px-14 py-16 relative overflow-hidden">
+    <section ref={ref} className="min-h-screen md:h-screen w-full flex flex-col justify-center px-4 sm:px-6 md:px-10 lg:px-14 py-16 relative overflow-hidden">
       <div className="max-w-6xl mx-auto w-full">
 
         {/* ── Top row: profile + bio ── */}
@@ -116,11 +171,11 @@ const AboutSection = () => {
           <motion.div custom={0} variants={fadeUp} initial="hidden" animate="visible" className="flex-shrink-0 hidden md:block">
             <div className="relative">
               <div
-                className="absolute inset-[-2px] rounded-full animate-spin-slow"
+                className={`absolute inset-[-2px] rounded-full ${inView ? "animate-spin-slow" : ""}`}
                 style={{ background: "conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent))" }}
               />
               <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-[var(--bg)]">
-                <Image src="/assets/profile-pic.jpeg" alt="Kshitij Bharambe" fill sizes="6rem" className="object-cover object-center" priority />
+                <Image src="/assets/profile-pic.jpeg" alt="Kshitij Pritish Bharambe" fill sizes="6rem" className="object-cover object-center" priority />
               </div>
               <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-[var(--bg)] flex items-center justify-center">
                 <div className="w-2.5 h-2.5 rounded-full bg-[var(--green)] shadow-[0_0_6px_var(--green)]" />
@@ -143,12 +198,12 @@ const AboutSection = () => {
               className="font-black leading-[0.9] tracking-tight mb-3"
               style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
             >
-              I BUILD <span className="gradient-text">THINGS.</span>
+              I BUILD <span className="gradient-text">SYSTEMS.</span>
             </motion.h2>
 
             <motion.p custom={2} variants={fadeUp} initial="hidden" animate="visible" className="text-[var(--text-secondary)] text-sm leading-relaxed max-w-2xl">
-              Cloud-native Infrastructure Engineer with a Master&apos;s in CS, specializing in AWS, Terraform, and DevSecOps.
-              Building resilient multi-tenant security infrastructure &mdash; CI/CD pipelines, cloud automation, and high-traffic APIs at scale.
+              Backend-focused Software Engineer specializing in Python services, event-driven architecture, AI integrations, and cloud-native platforms.
+              I build systems that reduce latency, improve reliability, and make production behavior easier to observe and operate.
             </motion.p>
           </div>
 
@@ -170,10 +225,10 @@ const AboutSection = () => {
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
-                className={`px-4 py-1.5 text-xs font-mono rounded-lg border transition-all duration-300 ${
+                className={`px-4 py-1.5 text-xs font-mono font-semibold rounded-lg border transition-all duration-300 ${
                   activeTab === id
-                    ? "border-[var(--accent)]/40 text-[var(--accent)] bg-[var(--accent)]/8"
-                    : "border-transparent text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-white/5"
+                    ? "border-[var(--accent)] text-[var(--accent)] bg-transparent shadow-[inset_0_-2px_0_var(--accent)]"
+                    : "border-[var(--card-border)] text-[var(--text-secondary)] bg-transparent hover:border-[var(--accent)]/35 hover:text-[var(--foreground)]"
                 }`}
               >
                 {label}
@@ -193,10 +248,10 @@ const AboutSection = () => {
                   <button
                     key={cat.id}
                     onClick={() => setActiveCategory(cat.id)}
-                    className={`px-3 py-1 text-[11px] font-mono rounded-md border transition-all duration-200 ${
+                    className={`px-3 py-1 text-[11px] font-mono font-semibold rounded-md border transition-all duration-200 ${
                       activeCategory === cat.id
-                        ? "border-[var(--accent)]/40 text-[var(--accent)] bg-[var(--accent)]/8"
-                        : "border-white/8 text-[var(--text-tertiary)] hover:border-white/15 bg-white/[0.02]"
+                        ? "border-[var(--accent)] text-[var(--accent)] bg-transparent shadow-[inset_0_-2px_0_var(--accent)]"
+                        : "border-[var(--card-border)] text-[var(--text-secondary)] bg-transparent hover:border-[var(--accent)]/35 hover:text-[var(--foreground)]"
                     }`}
                   >
                     {cat.title}
@@ -213,25 +268,23 @@ const AboutSection = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.04 }}
                     whileHover={{ y: -3, transition: { duration: 0.15 } }}
-                    className="group flex flex-col items-center gap-1.5 p-3 rounded-xl border border-white/[0.06] hover:border-[var(--accent)]/30 hover:bg-[var(--accent)]/5 transition-all duration-200 cursor-default"
+                    className="group flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 border-[var(--card-border)] bg-transparent hover:border-[var(--accent)]/40 transition-all duration-200 cursor-default"
                   >
-                    <div className="w-7 h-7 flex items-center justify-center text-[var(--accent)]">
-                      {(tech as { customIcon?: boolean }).customIcon ? (
-                        renderCustomIcon(tech.icon)
-                      ) : failedIcons[tech.icon] === "failed" ? (
-                        <span className="text-[9px] font-mono text-[var(--accent)]">{tech.name.split(" ").map((w) => w[0]).join("")}</span>
-                      ) : (
+                    <div className="w-7 h-7 flex items-center justify-center rounded-lg border-2 border-[#047857]/55 bg-transparent text-[#047857]">
+                      {iconSlugs[tech.icon] ? (
                         <Image
-                          src={getIconSrc(tech.icon, failedIcons)}
-                          alt={tech.name}
-                          width={28}
-                          height={28}
-                          className="filter grayscale group-hover:grayscale-0 transition-all duration-300"
-                          onError={() => handleImageError(tech.icon)}
+                          src={`https://cdn.simpleicons.org/${iconSlugs[tech.icon]}/047857`}
+                          alt=""
+                          width={16}
+                          height={16}
+                          unoptimized
+                          className="h-4 w-4 opacity-100 transition-opacity duration-200"
                         />
+                      ) : (
+                        customSkillIcon(tech.icon)
                       )}
                     </div>
-                    <span className="text-[10px] text-center text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] font-mono leading-tight">
+                    <span className="text-[11px] text-center text-[var(--text-secondary)] group-hover:text-[var(--foreground)] font-mono font-medium leading-tight">
                       {tech.name}
                     </span>
                   </motion.div>

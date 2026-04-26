@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useScroll, SECTIONS, SectionName } from "@/context/ScrollContext";
+import { useScroll, SECTIONS } from "@/context/ScrollContext";
 import { useTheme } from "@/context/ThemeContext";
 
 const navItems = [
@@ -14,23 +14,56 @@ const navItems = [
   { label: "Contact", num: "04", target: "contact" },
 ];
 
+const DESKTOP_NAV_BREAKPOINT = 1024;
+const SPLASH_COMPLETE_EVENT = "intro-splash-complete";
+
 const Navbar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const scrollContext = useScroll();
   const { theme, toggleTheme } = useTheme();
+  const [splashCompleted, setSplashCompleted] = useState(false);
 
   const activeItem = scrollContext ? SECTIONS[scrollContext.activeSection] : "home";
+
+  useEffect(() => {
+    const handleViewportChange = () => {
+      if (globalThis.innerWidth >= DESKTOP_NAV_BREAKPOINT) {
+        setMobileOpen(false);
+      }
+    };
+
+    handleViewportChange();
+    globalThis.addEventListener("resize", handleViewportChange);
+    return () => globalThis.removeEventListener("resize", handleViewportChange);
+  }, []);
+
+  useEffect(() => {
+    const handleSplashComplete = () => setSplashCompleted(true);
+    const id = window.setTimeout(() => {
+      if (sessionStorage.getItem("splashShown") === "1") setSplashCompleted(true);
+    }, 0);
+
+    globalThis.addEventListener(SPLASH_COMPLETE_EVENT, handleSplashComplete);
+    return () => {
+      window.clearTimeout(id);
+      globalThis.removeEventListener(SPLASH_COMPLETE_EVENT, handleSplashComplete);
+    };
+  }, []);
 
   const handleNav = (target: string) => {
     setMobileOpen(false);
     const isHome = pathname === "/";
-    if (isHome && scrollContext) {
-      scrollContext.goToSectionByName(target as SectionName);
+    if (isHome) {
+      // Dispatch event so both mobile (scrollIntoView) and desktop (section swap) can handle it
+      globalThis.dispatchEvent(new CustomEvent("navigate-section", { detail: target }));
     }
   };
 
   const isHome = pathname === "/";
+  const hideForSplash = isHome && !splashCompleted;
+
+  if (hideForSplash) return null;
 
   return (
     <>
@@ -38,16 +71,14 @@ const Navbar: React.FC = () => {
       <motion.nav
         initial={{ opacity: 0, y: -40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ type: "spring", stiffness: 260, damping: 20, delay: isHome ? 3.5 : 0.1 }}
-        className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
+        transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}
+        className="fixed inset-x-2 top-4 z-[70] min-[1024px]:left-1/2 min-[1024px]:right-auto min-[1024px]:w-auto min-[1024px]:max-w-[calc(100vw-2rem)] min-[1024px]:-translate-x-1/2"
       >
         <div
-          className="glass-nav rounded-full px-4 md:px-6 py-2.5 flex items-center gap-4 md:gap-6 transition-all duration-500"
+          className="surface-nav mx-auto flex w-full items-center justify-between gap-2 rounded-full px-3 py-2.5 sm:gap-3 sm:px-4 min-[1024px]:w-auto min-[1024px]:justify-start min-[1024px]:gap-3 min-[1024px]:px-4 min-[1280px]:gap-6 min-[1280px]:px-6 transition-all duration-500"
           style={{
             background: "var(--nav-bg)",
-            backdropFilter: "blur(20px) saturate(130%)",
-            WebkitBackdropFilter: "blur(20px) saturate(130%)",
-            border: "1px solid var(--glass-border)",
+            border: "1px solid var(--panel-border)",
             boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
           }}
         >
@@ -63,16 +94,16 @@ const Navbar: React.FC = () => {
           </Link>
 
           {/* Divider */}
-          <div className="hidden md:block w-px h-5 bg-white/10" />
+          <div className="hidden min-[1024px]:block w-px h-5 bg-white/10" />
 
           {/* Desktop nav items */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden min-[1024px]:flex items-center gap-0.5 min-[1280px]:gap-1">
             {navItems.map(({ label, num, target }) => {
               const isActive = activeItem === target;
 
               const inner = (
                 <motion.div
-                  className="relative px-3 py-1.5 rounded-full cursor-pointer"
+                  className="relative cursor-pointer rounded-full px-2.5 py-1.5 min-[1280px]:px-3"
                   whileHover={{ scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 400, damping: 20 }}
                 >
@@ -93,8 +124,8 @@ const Navbar: React.FC = () => {
                       {num}.
                     </span>
                     <span
-                      className={`text-sm font-medium transition-colors duration-300 ${
-                        isActive ? "text-white" : "text-[var(--text-tertiary)] hover:text-[var(--foreground)]"
+                      className={`text-xs min-[1280px]:text-sm font-medium transition-colors duration-300 ${
+                        isActive ? "text-[var(--foreground)]" : "text-[var(--text-tertiary)] hover:text-[var(--foreground)]"
                       }`}
                     >
                       {label}
@@ -129,12 +160,12 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Divider */}
-          <div className="hidden md:block w-px h-5 bg-white/10" />
+          <div className="hidden min-[1120px]:block w-px h-5 bg-white/10" />
 
           {/* Theme toggle */}
           <motion.button
             onClick={toggleTheme}
-            className="hidden md:flex w-8 h-8 items-center justify-center rounded-full border border-white/[0.08] hover:border-[var(--accent)]/40 transition-all duration-300 bg-transparent cursor-pointer"
+            className="hidden min-[1120px]:flex w-8 h-8 items-center justify-center rounded-full border border-white/[0.08] hover:border-[var(--accent)]/40 transition-all duration-300 bg-transparent cursor-pointer"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             aria-label="Toggle theme"
@@ -159,7 +190,7 @@ const Navbar: React.FC = () => {
           </motion.button>
 
           {/* Resume button */}
-          <Link href="/resume" className="hidden md:block">
+          <Link href="/resume" className="hidden min-[1200px]:block">
             <motion.span
               className="btn-neon text-[11px] py-1.5 px-4 rounded-full whitespace-nowrap"
               whileHover={{ scale: 1.04 }}
@@ -171,7 +202,7 @@ const Navbar: React.FC = () => {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden relative w-8 h-8 flex flex-col justify-center items-center gap-1.5 bg-transparent border-none cursor-pointer p-0"
+            className="min-[1024px]:hidden relative w-8 h-8 flex flex-col justify-center items-center gap-1.5 bg-transparent border-none cursor-pointer p-0"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -215,7 +246,7 @@ const Navbar: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-40 bg-black/70 md:hidden"
+              className="fixed inset-0 z-40 bg-black/70 min-[1024px]:hidden"
               onClick={() => setMobileOpen(false)}
             />
 
@@ -225,12 +256,10 @@ const Navbar: React.FC = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="fixed inset-0 z-40 flex flex-col items-center justify-center md:hidden"
+              className="fixed inset-0 z-40 flex flex-col items-center justify-center min-[1024px]:hidden"
               style={{
                 background:
-                  `radial-gradient(ellipse at 50% 0%, rgba(129,140,248,0.04) 0%, transparent 60%), color-mix(in srgb, var(--bg) 95%, transparent)`,
-                backdropFilter: "blur(24px)",
-                WebkitBackdropFilter: "blur(24px)",
+                  `radial-gradient(ellipse at 50% 0%, rgba(16,185,129,0.08) 0%, transparent 60%), var(--bg)`,
               }}
             >
               {/* Close button */}
@@ -272,7 +301,7 @@ const Navbar: React.FC = () => {
                       </span>
                       <span
                         className={`text-2xl font-bold transition-colors duration-300 ${
-                          isActive ? "text-[var(--accent)]" : "text-white"
+                          isActive ? "text-[var(--accent)]" : "text-[var(--foreground)]"
                         }`}
                       >
                         {label}

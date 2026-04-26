@@ -1,91 +1,91 @@
 export const profileData = {
-  name: "Kshitij B.",
-  title: "Software Engineer | Cloud, DevOps & Security",
+  name: "Kshitij Pritish Bharambe",
+  title: "Backend Software Engineer | AI, Distributed Systems & Cloud",
   initials: "KB",
   bio: [
-    "I'm Kshitij — a recently graduated Computer Science Master’s student from Syracuse University, where I explored everything from AI to operating systems to cloud architecture. Before that, I earned my Bachelor's in Computer Engineering from NHITM, Mumbai.",
-    "Over the last few years, I’ve worked across backend development, cloud infrastructure, and security — from building REST APIs and streamlining CI workflows to conducting vulnerability assessments during a VAPT internship. My current focus? Diving deeper into DevOps and Cloud Engineering while building tools that are scalable, secure, and efficient.",
-    "Lately, I’ve been focused on building tools that blend cloud, automation, and data sanity — including a modular Data Hygiene Toolkit designed to streamline validation and anomaly tracking. My approach is all about writing clean, scalable code while staying grounded in security and real-world usability.",
+    "I'm Kshitij, a backend-focused Software Engineer with 4+ years of experience building distributed systems, cloud-native microservices, and production-grade AI integrations.",
+    "My work spans Python/FastAPI services, Kafka event streams, AWS infrastructure, Kubernetes deployments, and observability pipelines that support high-scale product platforms.",
+    "Recently I have been focused on agentic AI systems, real-time financial data synchronization, and resilient backend architecture that improves latency, reliability, and operational visibility.",
   ],
 };
 
 export const journeyData = [
   {
-    title: "The Beginning",
+    title: "Backend Foundation",
     content: [
-      "My tech journey started with a fascination for how things work — not just using software, but breaking it apart to understand what’s under the hood. During undergrad, I got into core CS concepts and started building small projects while learning the basics of security and infrastructure.",
-      "Python quickly became my go-to — I’ve used it for scripting, backend work, automation, and honestly anything that needed doing.",
+      "I started with core computer engineering fundamentals, then moved deeper into backend systems where APIs, databases, and reliability constraints meet real product requirements.",
+      "Python became my primary tool for service development, automation, data pipelines, and AI integration work.",
     ],
   },
   {
-    title: "The Evolution",
+    title: "Distributed Systems at Scale",
     content: [
-      "As I explored more, I started caring less about just writing code and more about where it runs, how it scales, and how secure it is. That naturally led me to DevOps and cloud.",
-      "In my internships, I built APIs with FastAPI, automated workflows using GitHub Actions, and did real-world VAPT — spotting vulnerabilities and thinking like an attacker to build better defenses. Every part of the stack started making sense as a system, not just isolated lines of code.",
+      "At Razorpay, I worked on payment and reconciliation systems where uptime, idempotency, retries, and data correctness directly shaped business outcomes.",
+      "That experience pushed me toward event-driven architecture, streaming systems, multi-cloud failover, and production patterns for services that cannot afford silent failure.",
     ],
   },
   {
-    title: "Today and Beyond",
+    title: "AI-Native Engineering",
     content: [
-      "I’ve built tools that blend backend design, cloud infrastructure, and automation — including a modular data hygiene platform designed for scalable validation and anomaly tracking.",
-      "Moving forward, I aim to keep building systems that are secure, efficient, and easy to maintain — not just for users, but for the developers behind them.",
+      "At Intuit, my work centers on backend modernization, real-time synchronization, GenAI services, and agentic AI tooling for high-volume financial workflows.",
+      "I am focused on building systems that combine durable backend engineering with practical AI: measurable latency improvements, safer automation, and production-grade observability.",
     ],
   },
 ];
 
 export const philosophyData = {
   intro:
-    "I believe good tech isn’t just about working — it’s about being reliable, secure, and something people actually want to use. Whether I’m building backend systems, working in the cloud, or automating workflows, I focus on writing code that holds up in the real world, not just in ideal conditions.",
+    "I believe good engineering is measured by production behavior: latency, correctness, recoverability, and how confidently teams can operate what they ship.",
   principles: [
     {
-      title: "Security-First Mindset",
+      title: "Reliability by Design",
       icon: "lock",
       color: "blue",
       description:
-        "Security isn’t a patch or an afterthought — it’s built in from day one. I approach every system with a privacy-first attitude, making sure user data and infrastructure are protected by design. ",
+        "Distributed systems need explicit failure handling. I design with idempotency, retries, observability, and graceful degradation in mind from the start.",
     },
     {
       title: "Scalable Architecture",
       icon: "scale",
       color: "green",
       description:
-        "Creating solutions that can grow with user needs is paramount. I design systems with scalability in mind, ensuring they can handle increasing loads without compromising performance.",
+        "I optimize for systems that can grow without creating operational drag, using event-driven patterns, clear service boundaries, and cloud-native deployment practices.",
     },
     {
-      title: "Automation",
+      title: "Automation with Guardrails",
       icon: "refresh",
       color: "purple",
       description:
-        "Streamlining processes to improve reliability and reduce human error is a core value. I invest time in creating automated workflows that ensure consistent quality and faster delivery.",
+        "Automation should reduce toil without hiding risk. I pair CI/CD, infrastructure automation, and AI workflows with metrics, tests, and rollback paths.",
     },
     {
-      title: "Continuous Learning",
+      title: "Measurable Impact",
       icon: "book",
       color: "yellow",
       description:
-        "Staying at the forefront of technology through research and experimentation is essential. I dedicate time to learning new tools and techniques, ensuring my solutions leverage the best available technologies.",
+        "The strongest engineering work connects technical choices to measurable outcomes like lower latency, fewer incidents, higher throughput, or clearer developer workflows.",
     },
   ],
   values: [
     {
-      name: "Clean Code",
+      name: "Clear Interfaces",
       description:
-        "Writing maintainable, well-documented code that others can easily understand and extend.",
+        "Designing APIs, contracts, and data flows that are easy for other engineers to reason about.",
     },
     {
-      name: "Test-Driven Development",
+      name: "Operational Visibility",
       description:
-        "Ensuring quality and reliability through comprehensive testing strategies.",
+        "Treating tracing, metrics, alerts, and dashboards as first-class parts of production software.",
     },
     {
-      name: "User-Centered Design",
+      name: "Async-Safe Systems",
       description:
-        "Creating interfaces and experiences that prioritize user needs and accessibility.",
+        "Using idempotent processing, retries, and backpressure-aware design for event-driven services.",
     },
     {
-      name: "Collaborative Development",
+      name: "Practical AI",
       description:
-        "Embracing teamwork and knowledge sharing to create better solutions.",
+        "Applying agentic and GenAI systems where they improve real workflows, not just demos.",
     },
   ],
 };

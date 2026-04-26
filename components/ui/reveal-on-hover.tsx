@@ -7,46 +7,41 @@ interface CardHoverRevealContextValue {
   isHovered: boolean;
   setIsHovered: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const CardHoverRevealContext = React.createContext<CardHoverRevealContextValue>(
-  {} as CardHoverRevealContextValue,
-);
+
+const CardHoverRevealContext = React.createContext<CardHoverRevealContextValue | null>(null);
+
 const useCardHoverRevealContext = () => {
   const context = React.useContext(CardHoverRevealContext);
   if (!context) {
-    throw new Error(
-      "useCardHoverRevealContext must be used within a CardHoverRevealProvider",
-    );
+    throw new Error("useCardHoverRevealContext must be used within a CardHoverRevealProvider");
   }
   return context;
 };
 
-const CardHoverReveal = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-  const [isHovered, setIsHovered] = React.useState<boolean>(false);
+const CardHoverReveal = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => {
+    const [isHovered, setIsHovered] = React.useState(false);
 
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => setIsHovered(false);
-
-  return (
-    <CardHoverRevealContext.Provider value={{ isHovered, setIsHovered }}>
-      <div
-        ref={ref}
-        className={cn("relative overflow-hidden group", className)}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        {...props}
-      />
-    </CardHoverRevealContext.Provider>
-  );
-});
+    return (
+      <CardHoverRevealContext.Provider value={{ isHovered, setIsHovered }}>
+        <div
+          ref={ref}
+          className={cn("relative overflow-hidden group", className)}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          {...props}
+        />
+      </CardHoverRevealContext.Provider>
+    );
+  }
+);
 CardHoverReveal.displayName = "CardHoverReveal";
 
 interface CardHoverRevealMainProps {
   initialScale?: number;
   hoverScale?: number;
 }
+
 const CardHoverRevealMain = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & CardHoverRevealMainProps
@@ -66,7 +61,6 @@ const CardHoverRevealMain = React.forwardRef<
 });
 CardHoverRevealMain.displayName = "CardHoverRevealMain";
 
-/* ── Stagger item ── */
 const StaggerChild = ({
   isHovered,
   index,
@@ -78,15 +72,10 @@ const StaggerChild = ({
   delay: number;
   children: React.ReactNode;
 }) => {
-  const d = index * delay;
   return (
     <div
       className="reveal-stagger-child"
-      style={
-        {
-          "--stagger-delay": `${d}s`,
-        } as React.CSSProperties
-      }
+      style={{ "--stagger-delay": `${index * delay}s` } as React.CSSProperties}
       data-visible={isHovered}
     >
       {children}
@@ -102,10 +91,7 @@ const CardHoverRevealContent = React.forwardRef<
   return (
     <div
       ref={ref}
-      className={cn(
-        "absolute inset-[auto_1.5rem_1.5rem] p-6 backdrop-blur-lg",
-        className,
-      )}
+      className={cn("absolute inset-[auto_1.5rem_1.5rem] p-6", className)}
       style={{
         opacity: isHovered ? 1 : 0,
         transform: isHovered ? "translateY(0)" : "translateY(20px)",
@@ -123,7 +109,7 @@ const CardHoverRevealContent = React.forwardRef<
           </StaggerChild>
         ) : (
           child
-        ),
+        )
       )}
     </div>
   );

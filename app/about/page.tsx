@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -23,10 +24,12 @@ const fadeUp = {
 const tabs = [
   { id: "background", label: "My Journey", num: "01" },
   { id: "philosophy", label: "Philosophy", num: "02" },
-  { id: "hobbies", label: "Beyond Coding", num: "03" },
+  { id: "certifications", label: "Certifications", num: "03" },
+  { id: "hobbies", label: "Beyond Coding", num: "04" },
 ];
 
 export default function AboutPage() {
+  const { ref, inView } = useInView({ threshold: 0.15 });
   const [activeTab, setActiveTab] = useState("background");
 
   const handleTabChange = useCallback((tabId: string) => {
@@ -38,7 +41,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <div className="min-h-screen pt-24 px-4" style={{ background: "var(--bg)" }}>
+    <div ref={ref} className="min-h-screen pt-24 px-4" style={{ background: "var(--bg)" }}>
       <div className="max-w-5xl mx-auto pb-20">
         {/* Header */}
         <motion.div
@@ -63,7 +66,7 @@ export default function AboutPage() {
             <span className="gradient-text">ME.</span>
           </h1>
           <p className="text-base max-w-xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-            Background, philosophies, and what drives me as an engineer.
+            Background, operating principles, and the engineering problems I like to solve.
           </p>
         </motion.div>
 
@@ -80,7 +83,7 @@ export default function AboutPage() {
             <div className="flex-shrink-0">
               <div className="relative">
                 <div
-                  className="absolute inset-[-3px] rounded-full animate-spin-slow"
+                  className={`absolute inset-[-3px] rounded-full ${inView ? "animate-spin-slow" : ""}`}
                   style={{
                     background: "conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent))",
                   }}
@@ -134,7 +137,7 @@ export default function AboutPage() {
           initial="hidden"
           animate="visible"
         >
-          <div className="glass rounded-xl p-1 flex items-center gap-1 mb-8 w-fit">
+          <div className="surface-panel rounded-xl p-1 flex flex-wrap items-center gap-1 mb-8 w-fit">
             {tabs.map(({ id, label, num }) => (
               <button
                 key={id}
@@ -268,6 +271,49 @@ export default function AboutPage() {
                     ))}
                   </ul>
                 </div>
+              </motion.div>
+            )}
+
+            {/* Certifications */}
+            {activeTab === "certifications" && (
+              <motion.div
+                key="certifications"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="space-y-4"
+              >
+                {[
+                  {
+                    title: "AWS Certified Solutions Architect Associate",
+                    issuer: "Amazon Web Services",
+                    description: "Validated knowledge of designing resilient, scalable, and cloud-native architectures on AWS.",
+                  },
+                ].map((cert, index) => (
+                  <div
+                    key={index}
+                    className="spotlight-card rounded-2xl p-6 relative overflow-hidden"
+                  >
+                    <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(to right, transparent, var(--accent), transparent)`, opacity: 0.2 }} />
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 flex items-center justify-center rounded-xl flex-shrink-0" style={{ background: "var(--accent-dim)" }}>
+                        <span className="text-[var(--accent)]">
+                          {renderIcon("shield", "h-5 w-5")}
+                        </span>
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold mb-1" style={{ color: "var(--text-primary)" }}>
+                          {cert.title}
+                        </h3>
+                        <p className="text-xs font-mono text-[var(--accent)] mb-2">{cert.issuer}</p>
+                        <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                          {cert.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </motion.div>
             )}
 

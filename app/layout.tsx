@@ -1,11 +1,11 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import Layout from "@/components/layout/Layout";
 import { ScrollProvider } from "@/context/ScrollContext";
 import { ThemeProvider } from "@/context/ThemeContext";
-import { LiquidGlassProvider } from "@/components/ui/liquid-glass";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kshitij B | Portfolio",
-  description: "Showcasing AI, DevOps, and Cloud projects",
+  title: "Kshitij Pritish Bharambe | Portfolio",
+  description: "Backend software engineering, AI systems, distributed systems, and cloud-native projects",
   manifest: "/favicon/manifest.json",
   icons: {
     icon: [
@@ -44,19 +44,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased
         theme-transition text-theme-primary`}
       >
         <ThemeProvider>
-          <LiquidGlassProvider>
-            <ScrollProvider>
-              <Layout>
-                {children}
-              </Layout>
-            </ScrollProvider>
-          </LiquidGlassProvider>
+          <ScrollProvider>
+            <Layout>
+              {children}
+            </Layout>
+          </ScrollProvider>
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

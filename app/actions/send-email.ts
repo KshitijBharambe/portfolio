@@ -39,7 +39,7 @@ export async function sendEmail(formData: EmailData) {
     // Send email using Resend
     const { error } = await resend.emails.send({
       from: "Portfolio Contact Form <onboarding@resend.dev>", // Replace with your verified domain
-      to: ["kshitij.bharambe@gmail.com"], // Your primary email address
+      to: ["kshitij.b@mailmywork.com"], // Primary portfolio contact address
       subject: formData.subject || "New Portfolio Contact Form Submission",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f4;">

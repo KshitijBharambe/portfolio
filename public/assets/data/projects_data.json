@@ -2,94 +2,71 @@
   "projects": [
     {
       "id": "1",
-      "title": "Data Hygiene Toolkit",
-      "description": "A centralized platform for managing data quality workflows at scale — this toolkit enables teams to define, execute, and monitor custom data validation and cleaning rules across datasets. It blends rule-based logic with flexibility for custom SQL checks, while supporting collaboration, user roles, and auditability.",
-      "image": "/assets/projects/Datahygiene.png",
+      "title": "AgentFlow: Multi-Agent Task Orchestration Framework",
+      "description": "A multi-agent orchestration framework built with LangChain, MCP tool integrations, and FastAPI async APIs, load-tested for 50+ concurrent agent sessions with sub-200ms task dispatch latency.",
       "tags": [
         "Python",
-        "PostgreSQL",
-        "Nextjs",
-        "Data Validation",
-        "Data Standardization"
+        "LangChain",
+        "FastAPI",
+        "Redis",
+        "Docker",
+        "MCP",
+        "pgvector"
       ],
       "features": [
-        "Custom Rule Engine where users define their own validation logic",
-        "Schema-aware rule builder with a flexible form-based interface",
-        "Multi-format export support (CSV, Excel, JSON)",
-        "User auth system with roles (admin, analyst, viewer) and secure access control",
-        "Integration tests simulating full validation workflows",
-        "Fully containerized for local dev & production deploys"
+        "Built LangChain-based multi-agent task orchestration with MCP tool integrations",
+        "Exposed async FastAPI endpoints for low-latency task dispatch",
+        "Load-tested 50+ concurrent agent sessions with sub-200ms dispatch latency",
+        "Implemented Redis vector memory for low-latency in-session retrieval",
+        "Used pgvector for durable long-term cross-session memory",
+        "Improved task completion accuracy by 31% over a stateless baseline"
       ],
-      "technologies": "FastAPI, PostgreSQL, Next.js, Tailwindcss, Power BI, Python, Docker",
+      "technologies": "Python, LangChain, FastAPI, Redis, Docker, MCP, pgvector",
       "githubLink": "#",
-      "demoLink": "https://github.com/KshitijBharambe/DataHygiene",
-      "fullDescription": "A comprehensive data hygiene solution designed to improve data quality through validation, standardization, and monitoring. The tool provides a modular framework for defining and applying data quality rules across various datasets.\n\nKey Features:\n- Modular validation system with 30+ built-in rules for common data quality checks\n- Editable grid interface for efficient data review and correction\n- Comprehensive Power BI dashboards for monitoring data quality metrics\n- Support for multiple export formats (CSV, Excel, JSON)\n- User management and permission system for team collaboration\n\nTechnical Implementation:\n- Backend: FastAPI with PostgreSQL for data storage and processing\n- Frontend: Angular with Material Design components\n- Analytics: Power BI integration for data visualization\n- Deployment: Containerized with Docker for easy deployment\n\nThis tool helps organizations maintain high-quality data by providing a centralized platform for data validation, cleaning, and monitoring."
+      "demoLink": "#",
+      "fullDescription": "AgentFlow is a multi-agent task orchestration framework for coordinating agent sessions, MCP-backed tools, and memory-aware task execution. It combines LangChain agents with FastAPI async APIs, Redis vector memory, and pgvector-backed durable context.\n\nKey outcomes:\n- Load-tested to 50+ concurrent agent sessions\n- Kept task dispatch latency under 200ms in Locust benchmarks\n- Implemented low-latency Redis vector memory for active sessions\n- Added pgvector long-term memory for durable cross-session retrieval\n- Improved task completion accuracy by 31% over a stateless baseline on a 1,000-task benchmark suite"
     },
     {
       "id": "2",
-      "title": "InsightBot – AI-Powered University Chatbot",
-      "description": "A Streamlit-based chatbot that helps international students explore universities by budget, weather, and field, with personalized recommendations using OpenAI API and ChromaDB.",
-      "image": "/assets/projects/CB.png",
-      "tags": ["AI", "Python", "Streamlit", "OpenAI API", "ChromaDB"],
+      "title": "SmartPipe: Real-Time ML Data Pipeline",
+      "description": "A streaming ML data pipeline that ingests 50K events/sec with Kafka and Spark Streaming, then automates feature store refreshes through Apache Airflow DAGs.",
+      "tags": ["Python", "Kafka", "Spark Streaming", "AWS S3", "Airflow", "ML Pipeline"],
       "features": [
-        "Personalized university recommendations based on budget and preferences",
-        "Integration with OpenWeather API for climate information",
-        "Cost and job data analysis across 25+ US states",
-        "Context-aware responses using ChromaDB for knowledge retrieval",
-        "User-friendly interface for exploring educational options"
+        "Designed a streaming ML pipeline ingesting 50K events/sec",
+        "Used Kafka and Spark Streaming for real-time event processing",
+        "Stored pipeline data in AWS S3 for downstream model workflows",
+        "Automated feature store refreshes with Apache Airflow DAGs",
+        "Benchmarked streaming architecture against an equivalent batch baseline",
+        "Reduced data-to-model feedback loop from 6 hours to 22 minutes"
       ],
-      "technologies": "Python, Streamlit, OpenAI API, ChromaDB, OpenWeather API",
-      "githubLink": "https://github.com/KshitijBharambe/insightbot",
+      "technologies": "Python, Kafka, Spark Streaming, AWS S3, Apache Airflow",
+      "githubLink": "#",
       "demoLink": "#",
-      "fullDescription": "InsightBot is an AI-powered chatbot designed to assist international students in making informed decisions about their higher education in the United States. The application provides personalized recommendations based on various factors including academic preferences, budget constraints, and lifestyle considerations.\n\nKey Features:\n- Natural language processing for intuitive user interactions\n- Context-aware recommendations using OpenAI's language models\n- Integration with OpenWeather API for climate information\n- Comprehensive database of universities with detailed program information\n- Cost of living and job market analysis for different regions\n\nTechnical Implementation:\n- Frontend: Streamlit for rapid application development\n- AI: OpenAI API for natural language understanding and generation\n- Database: ChromaDB for efficient vector storage and retrieval\n- External APIs: OpenWeather for climate data, various sources for cost and job data\n\nThis project demonstrates my ability to build practical AI applications that solve real-world problems by combining multiple technologies and data sources."
+      "fullDescription": "SmartPipe is an end-to-end real-time ML data pipeline designed for fast feedback between streaming data and model workflows. It uses Kafka and Spark Streaming for high-throughput ingestion, AWS S3 for storage, and Apache Airflow for automated feature refresh.\n\nKey outcomes:\n- Ingested 50K events/sec in streaming benchmarks\n- Automated feature store refresh with zero manual intervention\n- Compared streaming and batch baselines on identical datasets\n- Reduced data-to-model feedback from 6 hours to 22 minutes\n- Documented benchmark scripts for reproducible evaluation"
     }, 
     {
       "id": "3",
-      "title": "Influencer Analysis for Business Marketing",
-      "description": "A comprehensive data analysis project that evaluates influencer marketing effectiveness across TikTok, Instagram, and YouTube, providing actionable insights for business marketing strategies.",
-      "image": "/assets/projects/IA.png",
+      "title": "DistributedKV: Fault-Tolerant Key-Value Store",
+      "description": "A distributed key-value store built from scratch in Python with Raft consensus, gRPC client APIs, and chaos-style validation across simulated node failures and network delays.",
       "tags": [
         "Python",
-        "Pandas",
-        "Data Analysis",
-        "Matplotlib"
+        "Raft Consensus",
+        "gRPC",
+        "Docker",
+        "Distributed Systems",
+        "Chaos Testing"
       ],
       "features": [
-        "Cross-platform analysis of 3,000+ influencers (TikTok, Instagram, YouTube)",
-        "Engagement rate analysis and performance metrics comparison",
-        "Data visualization of influencer reach and audience demographics",
-        "Statistical modeling of engagement patterns",
-        "Actionable insights for influencer selection and campaign strategy"
+        "Implemented Raft leader election, log replication, and snapshotting",
+        "Maintained linearizable reads and writes across a 3-node cluster",
+        "Designed a gRPC client interface with retries and leader redirects",
+        "Validated behavior under simulated network partitions",
+        "Ran 500+ chaos test iterations with random failures and network delays"
       ],
-      "technologies": "Python, Pandas, NumPy, Matplotlib, Seaborn, Jupyter",
-      "githubLink": "https://github.com/KshitijBharambe/influencer-Analysis-For-Business-Marketing",
-      "demoLink": "#",
-      "fullDescription": "This project provides a data-driven approach to influencer marketing by analyzing performance metrics across multiple social media platforms. The analysis helps businesses identify the most effective influencers and optimize their marketing strategies.\n\nKey Insights and Analysis:\n- Platform Comparison: Evaluated performance differences between TikTok, Instagram, and YouTube influencers\n- Engagement Metrics: Analyzed likes, comments, shares, and views to determine true engagement rates\n- Follower Analysis: Studied the relationship between follower count and engagement quality\n- Content Performance: Identified which types of content generate the highest engagement\n- Demographic Insights: Mapped influencer reach across different regions and audience segments\n\nTechnical Implementation:\n- Data Collection: Aggregated data from multiple social media platforms\n- Data Cleaning: Processed and normalized datasets using Pandas and NumPy\n- Statistical Analysis: Performed correlation and regression analysis on engagement metrics\n- Visualization: Created interactive visualizations using Matplotlib and Seaborn\n- Tools: Jupyter Notebook for reproducible analysis and documentation\n\nBusiness Impact:\n- Helps businesses identify cost-effective influencers with high engagement rates\n- Provides data-backed recommendations for influencer selection\n- Enables precise targeting of marketing campaigns\n- Reduces marketing spend wastage by focusing on high-performing content types\n\nThis project showcases my ability to transform raw social media data into actionable business intelligence, demonstrating strong skills in data analysis, visualization, and strategic thinking."
-    },
-    {
-      "id": "4",
-      "title": "Automated Infrastructure Provisioner",
-      "description": "An Infrastructure-as-Code framework using Terraform and Ansible to provision secure AWS environments (VPC, EC2, networking), with integrated server hardening, CloudWatch monitoring, and DevSecOps workflows.",
-      "image": "/assets/projects/IaC.png",
-      "tags": [
-        "Terraform",
-        "Ansible",
-        "AWS",
-        "DevSecOps",
-        "IaC"
-      ],
-      "features": [
-        "Automated provisioning of secure AWS environments (VPC, EC2, networking)",
-        "Server hardening and CloudWatch monitoring integration",
-        "DevSecOps workflows with CI/CD integration",
-        "Makefile automation for streamlined operations",
-        "Reusable templates and standardized tagging",
-        "Designed to reduce setup effort by 60%"
-      ],
-      "technologies": "Terraform, Ansible, AWS (VPC, EC2, IAM), GitHub Actions, Bash, CloudWatch",
+      "technologies": "Python, Raft Consensus, gRPC, Docker",
       "githubLink": "#",
       "demoLink": "#",
-      "fullDescription": "An Automated Infrastructure Framework (IaC) built using Terraform and Ansible to provision secure AWS environments including VPC, EC2 instances, and networking components, with integrated server hardening and CloudWatch monitoring.\n\nKey Features:\n- Infrastructure-as-Code using Terraform for declarative AWS resource provisioning\n- Ansible playbooks for server configuration and security hardening\n- CloudWatch monitoring integration for observability\n- DevSecOps workflows with CI/CD pipeline integration\n- Makefile automation for common infrastructure operations\n- Reusable templates and standardized tagging for consistency\n\nTechnical Implementation:\n- Terraform modules for VPC, EC2, IAM, and networking\n- Ansible roles for server hardening and configuration management\n- GitHub Actions for CI/CD pipeline automation\n- Bash scripting for operational automation\n- CloudWatch for monitoring and alerting\n\nThis framework is designed to reduce infrastructure setup effort by 60% through reusable templates and standardized workflows."
+      "fullDescription": "DistributedKV is a fault-tolerant key-value store built from scratch in Python to explore correctness, consensus, and resilient client behavior. It implements the Raft consensus algorithm with leader election, log replication, snapshotting, and a gRPC API.\n\nKey outcomes:\n- Maintained linearizable reads and writes across a 3-node cluster\n- Implemented leader election, log replication, and snapshotting\n- Added gRPC client retries and leader-redirect logic\n- Validated correctness with Jepsen-style chaos tests\n- Ran 500+ random node failure and network delay test iterations"
     }
   ]
 }

@@ -134,14 +134,14 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
   const particlesRef = useRef<Particle[]>([])
   const startedRef = useRef(false)
   const frameCountRef = useRef(0)
-  const paletteIndexRef = useRef(0)
-  const lastRespawnRef = useRef(0)
+  const runningRef = useRef(false)
 
   const pixelSteps = 6
   const W = 1000
   const H = 320
-  const RESPAWN_INTERVAL = 240
-  const SETTLE_FRAMES = 180
+  const SETTLE_DISTANCE = 1.5
+  const SETTLE_SPEED = 0.2
+  const MAX_SETTLE_FRAMES = 900
 
   function spawnText(paletteIndex: number) {
     const offscreen = document.createElement("canvas")
@@ -154,7 +154,7 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     octx.font = `900 ${fontSize}px Arial`
     octx.textAlign = "center"
     octx.textBaseline = "alphabetic"
-    octx.fillText("KSHITIJ", W / 2, H / 2 - 4)
+    octx.fillText("KSHITIJ P.", W / 2, H / 2 - 4)
     octx.fillText("BHARAMBE", W / 2, H / 2 + fontSize + 4)
 
     const imageData = octx.getImageData(0, 0, W, H)
@@ -221,7 +221,15 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     }
   }
 
+  const visibleRef = useRef(true)
+
   function animate(canvas: HTMLCanvasElement) {
+    if (document.hidden || !visibleRef.current) {
+      runningRef.current = false
+      animationRef.current = 0
+      return
+    }
+
     const ctx = canvas.getContext("2d")!
     const particles = particlesRef.current
 
@@ -238,16 +246,32 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
 
     frameCountRef.current++
 
-    if (frameCountRef.current > SETTLE_FRAMES) {
-      const framesSinceLastRespawn = frameCountRef.current - lastRespawnRef.current
-      if (framesSinceLastRespawn >= RESPAWN_INTERVAL) {
-        paletteIndexRef.current++
-        lastRespawnRef.current = frameCountRef.current
-        spawnText(paletteIndexRef.current)
-      }
+    const allSettled = particles.every((p) => {
+      if (p.isKilled) return false
+      const dx = p.pos.x - p.target.x
+      const dy = p.pos.y - p.target.y
+      const speed = Math.sqrt(p.vel.x * p.vel.x + p.vel.y * p.vel.y)
+      return Math.sqrt(dx * dx + dy * dy) <= SETTLE_DISTANCE && speed <= SETTLE_SPEED
+    })
+
+    if (allSettled || frameCountRef.current >= MAX_SETTLE_FRAMES) {
+      stopLoop()
+      return
     }
 
     animationRef.current = requestAnimationFrame(() => animate(canvas))
+  }
+
+  function startLoop(canvas: HTMLCanvasElement) {
+    if (runningRef.current || document.hidden || !visibleRef.current) return
+    runningRef.current = true
+    animationRef.current = requestAnimationFrame(() => animate(canvas))
+  }
+
+  function stopLoop() {
+    if (animationRef.current) cancelAnimationFrame(animationRef.current)
+    animationRef.current = 0
+    runningRef.current = false
   }
 
   useEffect(() => {
@@ -260,18 +284,36 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     const ctx = canvas.getContext("2d")!
     ctx.clearRect(0, 0, W, H)
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visibleRef.current = entry.isIntersecting
+        if (entry.isIntersecting && startedRef.current) startLoop(canvas)
+        else stopLoop()
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(canvas)
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) stopLoop()
+      else if (startedRef.current) startLoop(canvas)
+    }
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+
     const timer = setTimeout(() => {
       if (!startedRef.current) {
         startedRef.current = true
-        lastRespawnRef.current = 0
+        frameCountRef.current = 0
         spawnText(0)
-        animate(canvas)
+        startLoop(canvas)
       }
     }, delay)
 
     return () => {
       clearTimeout(timer)
-      if (animationRef.current) cancelAnimationFrame(animationRef.current)
+      observer.disconnect()
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
+      stopLoop()
       particlesRef.current = []
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -281,120 +323,7 @@ export function HeroParticleName({ delay = 800 }: HeroParticleNameProps) {
     <canvas
       ref={canvasRef}
       style={{ width: "100%", height: "auto", display: "block" }}
-      aria-label="Kshitij Bharambe"
+      aria-label="Kshitij Pritish Bharambe"
     />
-  )
-}
-
-
-/* ─────────────────────────────────────────────
-   General-purpose cycling variant (original behavior)
-───────────────────────────────────────────── */
-interface ParticleTextEffectProps {
-  words?: string[]
-}
-
-const DEFAULT_WORDS = ["HELLO", "21st.dev", "ParticleTextEffect"]
-
-export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffectProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
-  const particlesRef = useRef<Particle[]>([])
-  const frameCountRef = useRef(0)
-  const wordIndexRef = useRef(0)
-
-  const pixelSteps = 6
-
-  function nextWord(word: string, canvas: HTMLCanvasElement) {
-    const offscreen = document.createElement("canvas")
-    offscreen.width = canvas.width
-    offscreen.height = canvas.height
-    const octx = offscreen.getContext("2d")!
-    octx.fillStyle = "white"
-    octx.font = "bold 100px Arial"
-    octx.textAlign = "center"
-    octx.textBaseline = "middle"
-    octx.fillText(word, canvas.width / 2, canvas.height / 2)
-
-    const imageData = octx.getImageData(0, 0, canvas.width, canvas.height)
-    const pixels = imageData.data
-    const newColor = { r: Math.random() * 255, g: Math.random() * 255, b: Math.random() * 255 }
-    const particles = particlesRef.current
-    let particleIndex = 0
-    const coordsIndexes: number[] = []
-    for (let i = 0; i < pixels.length; i += pixelSteps * 4) coordsIndexes.push(i)
-    for (let i = coordsIndexes.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[coordsIndexes[i], coordsIndexes[j]] = [coordsIndexes[j], coordsIndexes[i]]
-    }
-    for (const coordIndex of coordsIndexes) {
-      if (pixels[coordIndex + 3] > 0) {
-        const x = (coordIndex / 4) % canvas.width
-        const y = Math.floor(coordIndex / 4 / canvas.width)
-        let particle: Particle
-        if (particleIndex < particles.length) {
-          particle = particles[particleIndex]; particle.isKilled = false; particleIndex++
-        } else {
-          particle = new Particle()
-          const pos = generateEdgePos(canvas.width, canvas.height)
-          particle.pos.x = pos.x; particle.pos.y = pos.y
-          particle.maxSpeed = Math.random() * 6 + 4
-          particle.maxForce = particle.maxSpeed * 0.05
-          particle.colorBlendRate = Math.random() * 0.0275 + 0.0025
-          particles.push(particle)
-        }
-        particle.startColor = {
-          r: particle.startColor.r + (particle.targetColor.r - particle.startColor.r) * particle.colorWeight,
-          g: particle.startColor.g + (particle.targetColor.g - particle.startColor.g) * particle.colorWeight,
-          b: particle.startColor.b + (particle.targetColor.b - particle.startColor.b) * particle.colorWeight,
-        }
-        particle.targetColor = newColor; particle.colorWeight = 0
-        particle.target.x = x; particle.target.y = y
-      }
-    }
-    for (let i = particleIndex; i < particles.length; i++) particles[i].kill(canvas.width, canvas.height)
-  }
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    canvas.width = 1000; canvas.height = 500
-    nextWord(words[0], canvas)
-    let rafId: number
-    let mounted = true
-    const loop = () => {
-      if (!mounted) return
-      const ctx = canvas.getContext("2d")!
-      ctx.fillStyle = "rgba(0,0,0,0.1)"
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-      const particles = particlesRef.current
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i]
-        p.move(); p.draw(ctx)
-        if (p.isKilled && (p.pos.x < 0 || p.pos.x > canvas.width || p.pos.y < 0 || p.pos.y > canvas.height)) {
-          particles.splice(i, 1)
-        }
-      }
-      frameCountRef.current++
-      if (frameCountRef.current % 240 === 0) {
-        wordIndexRef.current = (wordIndexRef.current + 1) % words.length
-        nextWord(words[wordIndexRef.current], canvas)
-      }
-      rafId = requestAnimationFrame(loop)
-    }
-    rafId = requestAnimationFrame(loop)
-    animationRef.current = rafId
-    return () => {
-      mounted = false
-      cancelAnimationFrame(rafId)
-      particlesRef.current = []
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black p-4">
-      <canvas ref={canvasRef} className="border border-gray-800 rounded-lg" style={{ maxWidth: "100%", height: "auto" }} />
-    </div>
   )
 }
