@@ -15,12 +15,14 @@ const navItems = [
 ];
 
 const DESKTOP_NAV_BREAKPOINT = 1024;
+const SPLASH_COMPLETE_EVENT = "intro-splash-complete";
 
 const Navbar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const scrollContext = useScroll();
   const { theme, toggleTheme } = useTheme();
+  const [splashCompleted, setSplashCompleted] = useState(false);
 
   const activeItem = scrollContext ? SECTIONS[scrollContext.activeSection] : "home";
 
@@ -36,6 +38,19 @@ const Navbar: React.FC = () => {
     return () => globalThis.removeEventListener("resize", handleViewportChange);
   }, []);
 
+  useEffect(() => {
+    const handleSplashComplete = () => setSplashCompleted(true);
+    const id = window.setTimeout(() => {
+      if (sessionStorage.getItem("splashShown") === "1") setSplashCompleted(true);
+    }, 0);
+
+    globalThis.addEventListener(SPLASH_COMPLETE_EVENT, handleSplashComplete);
+    return () => {
+      window.clearTimeout(id);
+      globalThis.removeEventListener(SPLASH_COMPLETE_EVENT, handleSplashComplete);
+    };
+  }, []);
+
   const handleNav = (target: string) => {
     setMobileOpen(false);
     const isHome = pathname === "/";
@@ -46,6 +61,9 @@ const Navbar: React.FC = () => {
   };
 
   const isHome = pathname === "/";
+  const hideForSplash = isHome && !splashCompleted;
+
+  if (hideForSplash) return null;
 
   return (
     <>
@@ -57,12 +75,10 @@ const Navbar: React.FC = () => {
         className="fixed inset-x-2 top-4 z-[70] min-[1024px]:left-1/2 min-[1024px]:right-auto min-[1024px]:w-auto min-[1024px]:max-w-[calc(100vw-2rem)] min-[1024px]:-translate-x-1/2"
       >
         <div
-          className="glass-nav mx-auto flex w-full items-center justify-between gap-2 rounded-full px-3 py-2.5 sm:gap-3 sm:px-4 min-[1024px]:w-auto min-[1024px]:justify-start min-[1024px]:gap-3 min-[1024px]:px-4 min-[1280px]:gap-6 min-[1280px]:px-6 transition-all duration-500"
+          className="surface-nav mx-auto flex w-full items-center justify-between gap-2 rounded-full px-3 py-2.5 sm:gap-3 sm:px-4 min-[1024px]:w-auto min-[1024px]:justify-start min-[1024px]:gap-3 min-[1024px]:px-4 min-[1280px]:gap-6 min-[1280px]:px-6 transition-all duration-500"
           style={{
             background: "var(--nav-bg)",
-            backdropFilter: "blur(20px) saturate(130%)",
-            WebkitBackdropFilter: "blur(20px) saturate(130%)",
-            border: "1px solid var(--glass-border)",
+            border: "1px solid var(--panel-border)",
             boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
           }}
         >
@@ -243,9 +259,7 @@ const Navbar: React.FC = () => {
               className="fixed inset-0 z-40 flex flex-col items-center justify-center min-[1024px]:hidden"
               style={{
                 background:
-                  `radial-gradient(ellipse at 50% 0%, rgba(129,140,248,0.04) 0%, transparent 60%), color-mix(in srgb, var(--bg) 95%, transparent)`,
-                backdropFilter: "blur(24px)",
-                WebkitBackdropFilter: "blur(24px)",
+                  `radial-gradient(ellipse at 50% 0%, rgba(16,185,129,0.08) 0%, transparent 60%), var(--bg)`,
               }}
             >
               {/* Close button */}

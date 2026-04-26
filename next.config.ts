@@ -8,28 +8,15 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "github.com",
-        port: "",
-        pathname: "/**",
-      },
-    ],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 7,
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    remotePatterns: [{ protocol: "https", hostname: "cdn.simpleicons.org" }],
   },
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ["framer-motion", "react-icons"],
+    optimizePackageImports: ["framer-motion"],
   },
   compiler: {
     removeConsole:
@@ -56,7 +43,7 @@ const nextConfig: NextConfig = {
         },
         {
           key: "Permissions-Policy",
-          value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
+          value: "camera=(), microphone=(), geolocation=()",
         },
       ],
     },

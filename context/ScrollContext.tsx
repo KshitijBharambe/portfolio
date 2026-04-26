@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useRef, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect, ReactNode } from 'react';
 
 export const SECTIONS = ['home', 'about', 'projects', 'contact'] as const;
 export type SectionName = (typeof SECTIONS)[number];
@@ -27,6 +27,10 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const cooldownRef = useRef(false);
   const cooldownTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  useEffect(() => {
+    return () => clearTimeout(cooldownTimerRef.current);
+  }, []);
 
   const goToSection = useCallback(
     (index: number) => {

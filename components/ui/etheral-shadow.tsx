@@ -1,17 +1,6 @@
 "use client";
 
-import React, { useRef, useId, useEffect, CSSProperties } from "react";
-import {
-  animate,
-  useMotionValue,
-  AnimationPlaybackControls,
-} from "framer-motion";
-
-interface ResponsiveImage {
-  src: string;
-  alt?: string;
-  srcSet?: string;
-}
+import React, { useRef, useId, useEffect, useState, CSSProperties } from "react";
 
 interface AnimationConfig {
   preview?: boolean;
@@ -27,7 +16,6 @@ interface NoiseConfig {
 interface ShadowOverlayProps {
   type?: "preset" | "custom";
   presetIndex?: number;
-  customImage?: ResponsiveImage;
   sizing?: "fill" | "stretch";
   color?: string;
   animation?: AnimationConfig;
@@ -67,9 +55,9 @@ export function EtheralShadow({
 }: ShadowOverlayProps) {
   const id = useInstanceId();
   const animationEnabled = animation && animation.scale > 0;
-  const feColorMatrixRef = useRef<SVGFEColorMatrixElement>(null);
-  const hueRotateMotionValue = useMotionValue(180);
-  const hueRotateAnimation = useRef<AnimationPlaybackControls | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [isDocumentVisible, setIsDocumentVisible] = useState(true);
+  const [isInView, setIsInView] = useState(true);
 
   const displacementScale = animation
     ? mapRange(animation.scale, 1, 100, 20, 100)
@@ -79,37 +67,29 @@ export function EtheralShadow({
     : 1;
 
   useEffect(() => {
-    if (feColorMatrixRef.current && animationEnabled) {
-      if (hueRotateAnimation.current) {
-        hueRotateAnimation.current.stop();
-        hueRotateAnimation.current = null;
-      }
-      hueRotateMotionValue.set(0);
-      hueRotateAnimation.current = animate(hueRotateMotionValue, 360, {
-        duration: animationDuration / 25,
-        repeat: Infinity,
-        repeatType: "loop",
-        repeatDelay: 0,
-        ease: "linear",
-        delay: 0,
-        onUpdate: (value: number) => {
-          if (feColorMatrixRef.current) {
-            feColorMatrixRef.current.setAttribute("values", String(value));
-          }
-        },
-      });
-    }
+    const handleVisibilityChange = () => setIsDocumentVisible(!document.hidden);
+    handleVisibilityChange();
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
 
-    return () => {
-      if (hueRotateAnimation.current) {
-        hueRotateAnimation.current.stop();
-        hueRotateAnimation.current = null;
-      }
-    };
-  }, [animationEnabled, animationDuration, hueRotateMotionValue]);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0.01 }
+    );
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
+
+  const shouldAnimate = animationEnabled && isDocumentVisible && isInView;
 
   return (
     <div
+      ref={rootRef}
       className={className}
       style={{
         overflow: "hidden",
@@ -138,11 +118,20 @@ export function EtheralShadow({
                   type="turbulence"
                 />
                 <feColorMatrix
-                  ref={feColorMatrixRef}
                   in="undulation"
                   type="hueRotate"
-                  values="180"
-                />
+                  values={shouldAnimate ? "0" : "180"}
+                >
+                  {shouldAnimate && (
+                    <animate
+                      attributeName="values"
+                      from="0"
+                      to="360"
+                      dur={`${animationDuration / 25}s`}
+                      repeatCount="indefinite"
+                    />
+                  )}
+                </feColorMatrix>
                 <feColorMatrix
                   in="dist"
                   result="circulation"
@@ -186,7 +175,7 @@ export function EtheralShadow({
             backgroundImage: `url("https://framerusercontent.com/images/g0QcWrxr87K0ufOxIUFBakwYA8.png")`,
             backgroundSize: noise.scale * 200,
             backgroundRepeat: "repeat",
-            opacity: noise.opacity / 2,
+            opacity: `var(--ambient-noise-opacity, ${noise.opacity / 2})`,
           }}
         />
       )}

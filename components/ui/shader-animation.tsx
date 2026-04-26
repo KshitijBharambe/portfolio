@@ -10,7 +10,13 @@ interface ShaderAnimationProps {
 export function ShaderAnimation({ paused = false }: ShaderAnimationProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const pausedRef = useRef(paused);
-  pausedRef.current = paused;
+  const visibleRef = useRef(true);
+  const startLoopRef = useRef<() => void>(() => {});
+
+  useEffect(() => {
+    pausedRef.current = paused;
+    startLoopRef.current();
+  }, [paused]);
 
   const sceneRef = useRef<{
     camera: THREE.Camera;
@@ -92,14 +98,42 @@ export function ShaderAnimation({ paused = false }: ShaderAnimationProps) {
     window.addEventListener("resize", onWindowResize, false);
 
     const animate = () => {
-      if (pausedRef.current || document.hidden) {
-        sceneRef.current!.animationId = requestAnimationFrame(animate);
+      if (pausedRef.current || document.hidden || !visibleRef.current) {
+        if (sceneRef.current) sceneRef.current.animationId = 0;
         return;
       }
       uniforms.time.value += 0.05;
       renderer.render(scene, camera);
       sceneRef.current!.animationId = requestAnimationFrame(animate);
     };
+
+    const startLoop = () => {
+      if (!sceneRef.current || sceneRef.current.animationId) return;
+      if (pausedRef.current || document.hidden || !visibleRef.current) return;
+      sceneRef.current.animationId = requestAnimationFrame(animate);
+    };
+
+    const stopLoop = () => {
+      if (!sceneRef.current?.animationId) return;
+      cancelAnimationFrame(sceneRef.current.animationId);
+      sceneRef.current.animationId = 0;
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visibleRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) startLoop();
+        else stopLoop();
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(container);
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) stopLoop();
+      else startLoop();
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     sceneRef.current = {
       camera,
@@ -109,10 +143,14 @@ export function ShaderAnimation({ paused = false }: ShaderAnimationProps) {
       animationId: 0,
     };
 
-    animate();
+    startLoopRef.current = startLoop;
+    startLoop();
 
     return () => {
+      startLoopRef.current = () => {};
       window.removeEventListener("resize", onWindowResize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      observer.disconnect();
 
       if (sceneRef.current) {
         cancelAnimationFrame(sceneRef.current.animationId);

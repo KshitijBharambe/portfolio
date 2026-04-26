@@ -21,12 +21,17 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
-    const stored = localStorage.getItem('theme') as Theme | null;
-    if (stored) {
-      setTheme(stored);
-      document.documentElement.classList.toggle('light', stored === 'light');
-    }
+    const id = window.setTimeout(() => {
+      const stored = localStorage.getItem('theme');
+      setTheme(stored === 'light' ? 'light' : 'dark');
+    }, 0);
+
+    return () => window.clearTimeout(id);
   }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('light', theme === 'light');
+  }, [theme]);
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';

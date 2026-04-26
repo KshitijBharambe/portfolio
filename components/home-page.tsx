@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useSyncExternalStore } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import HeroSection from "./sections/hero-section";
 import AboutMeSection from "./sections/about-section";
@@ -10,7 +10,6 @@ import { useScroll, SECTIONS } from "@/context/ScrollContext";
 import Footer from "@/components/layout/Footer";
 import IntroSplash from "./intro-splash";
 import { EtheralShadow } from "@/components/ui/etheral-shadow";
-import { LiquidGlassFilter, LiquidGlassToggle } from "@/components/ui/liquid-glass";
 import { ProjectData } from "@/types/project";
 
 interface ClientHomePageProps {
@@ -44,17 +43,25 @@ const sectionVariants = {
   }),
 };
 
+const WHEEL_NAV_THRESHOLD = 30;
+const WHEEL_GESTURE_IDLE_MS = 900;
+const SCROLL_EDGE_THRESHOLD = 2;
+
 /* ── Mobile detection hook ── */
 function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${breakpoint}px)`);
-    setIsMobile(mql.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mql.addEventListener("change", handler);
-    return () => mql.removeEventListener("change", handler);
-  }, [breakpoint]);
-  return isMobile;
+  const query = `(max-width: ${breakpoint}px)`;
+  const subscribe = useCallback((onStoreChange: () => void) => {
+    const mql = window.matchMedia(query);
+    mql.addEventListener("change", onStoreChange);
+    return () => mql.removeEventListener("change", onStoreChange);
+  }, [query]);
+  const getSnapshot = useCallback(() => window.matchMedia(query).matches, [query]);
+
+  return useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    () => false
+  );
 }
 
 const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
@@ -63,8 +70,14 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionContentRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef(scrollContext);
-  scrollRef.current = scrollContext;
+  const lastWheelAtRef = useRef(0);
+  const lastWheelDirectionRef = useRef<1 | -1 | 0>(0);
+  const wheelGestureScrolledSectionRef = useRef(false);
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    scrollRef.current = scrollContext;
+  }, [scrollContext]);
 
   const handleIntroComplete = useCallback(() => {
     setIntroComplete(true);
@@ -90,25 +103,46 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
       ctx.goToSectionByName(name);
     };
 
-    const isAtScrollBoundary = (deltaY: number): boolean => {
+    const canScrollCurrentSection = (deltaY: number): boolean => {
       const el = sectionContentRef.current;
-      if (!el) return true;
-      const hasOverflow = el.scrollHeight > el.clientHeight;
-      if (!hasOverflow) return true;
-      const atTop = el.scrollTop <= 0;
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
-      if (deltaY > 0 && !atBottom) return false;
-      if (deltaY < 0 && !atTop) return false;
-      return true;
+      if (!el) return false;
+      const scrollableDistance = el.scrollHeight - el.clientHeight;
+      if (scrollableDistance <= SCROLL_EDGE_THRESHOLD) return false;
+
+      const atTop = el.scrollTop <= SCROLL_EDGE_THRESHOLD;
+      const atBottom = el.scrollTop >= scrollableDistance - SCROLL_EDGE_THRESHOLD;
+      if (deltaY > 0) return !atBottom;
+      if (deltaY < 0) return !atTop;
+      return false;
     };
 
     const onWheel = (e: WheelEvent) => {
       if (document.body.style.overflow === "hidden") return;
-      if (!isAtScrollBoundary(e.deltaY)) return;
+      if (Math.abs(e.deltaY) < WHEEL_NAV_THRESHOLD) return;
+
+      const now = performance.now();
+      const direction = e.deltaY > 0 ? 1 : -1;
+      const isNewGesture =
+        now - lastWheelAtRef.current > WHEEL_GESTURE_IDLE_MS ||
+        direction !== lastWheelDirectionRef.current;
+
+      if (isNewGesture) wheelGestureScrolledSectionRef.current = false;
+      lastWheelAtRef.current = now;
+      lastWheelDirectionRef.current = direction;
+
+      if (canScrollCurrentSection(e.deltaY)) {
+        wheelGestureScrolledSectionRef.current = true;
+        return;
+      }
+
+      if (wheelGestureScrolledSectionRef.current) {
+        e.preventDefault();
+        return;
+      }
+
       e.preventDefault();
       const ctx = getCtx();
       if (!ctx || ctx.isTransitioning) return;
-      if (Math.abs(e.deltaY) < 30) return;
       if (e.deltaY > 0) ctx.nextSection();
       else ctx.prevSection();
     };
@@ -203,10 +237,10 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
         return <ClientProjectsSection projects={projects} />;
       case "contact":
         return (
-          <>
+          <div className="min-h-full flex flex-col">
             <ContactSection />
             <Footer />
-          </>
+          </div>
         );
       default:
         return null;
@@ -227,7 +261,7 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
           {/* Background */}
           <div className="fixed inset-0 z-0 pointer-events-none">
             <EtheralShadow
-              color="rgba(160,160,150,0.6)"
+              color="var(--ambient-shadow)"
               animation={{ scale: 80, speed: 70 }}
               noise={{ opacity: 0.6, scale: 1.2 }}
               sizing="fill"
@@ -265,13 +299,10 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
         className="fixed inset-0 overflow-hidden"
         style={{ background: "var(--bg)", color: "var(--foreground)" }}
       >
-        <LiquidGlassFilter />
-        <LiquidGlassToggle />
-
         {/* ETHEREAL BACKGROUND */}
         <div className="fixed inset-0 z-0 pointer-events-none">
           <EtheralShadow
-            color="rgba(160,160,150,0.6)"
+            color="var(--ambient-shadow)"
             animation={{ scale: 80, speed: 70 }}
             noise={{ opacity: 0.6, scale: 1.2 }}
             sizing="fill"
@@ -292,7 +323,7 @@ const ClientHomePage: React.FC<ClientHomePageProps> = ({ projects = [] }) => {
           >
             <div
               ref={sectionContentRef}
-              className="w-full h-full overflow-y-auto overflow-x-hidden"
+              className="w-full h-full overflow-y-auto overflow-x-hidden overscroll-contain"
             >
               {renderSection(activeSection)}
             </div>

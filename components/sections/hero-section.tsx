@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import { cn } from "@/lib/utils";
 import { HeroParticleName } from "@/components/ui/particle-text-effect";
 
@@ -12,6 +13,7 @@ function ElegantShape({
   height = 100,
   rotate = 0,
   gradient = "from-white/[0.08]",
+  active = true,
 }: {
   className?: string;
   delay?: number;
@@ -19,6 +21,7 @@ function ElegantShape({
   height?: number;
   rotate?: number;
   gradient?: string;
+  active?: boolean;
 }) {
   return (
     <motion.div
@@ -33,8 +36,8 @@ function ElegantShape({
       className={cn("absolute pointer-events-none", className)}
     >
       <motion.div
-        animate={{ y: [0, 15, 0] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        animate={active ? { y: [0, 15, 0] } : { y: 0 }}
+        transition={active ? { duration: 12, repeat: Infinity, ease: "easeInOut" } : { duration: 0.2 }}
         style={{ width, height }}
         className="relative"
       >
@@ -43,7 +46,7 @@ function ElegantShape({
             "absolute inset-0 rounded-full",
             "bg-gradient-to-r to-transparent",
             gradient,
-            "backdrop-blur-[2px] border border-white/[0.08]",
+            "border border-white/[0.08]",
             "shadow-[0_8px_32px_0_rgba(255,255,255,0.04)]",
             "after:absolute after:inset-0 after:rounded-full",
             "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.08),transparent_70%)]"
@@ -75,10 +78,12 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ handleScrollToAbout, introComplete = false }: HeroSectionProps) {
+  const { ref, inView } = useInView({ threshold: 0.15 });
   const animState = introComplete ? "visible" : "hidden";
+  const animationsActive = introComplete && inView;
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+    <div ref={ref} className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
       {/* ── Background gradient ── */}
       <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/[0.04] via-transparent to-[var(--accent-2)]/[0.04] pointer-events-none" />
 
@@ -90,6 +95,7 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
           height={120}
           rotate={12}
           gradient="from-[var(--accent)]/[0.12]"
+          active={animationsActive}
           className="left-[-10%] md:left-[-5%] top-[20%] md:top-[25%]"
         />
         <ElegantShape
@@ -98,6 +104,7 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
           height={100}
           rotate={-15}
           gradient="from-[var(--accent-2)]/[0.12]"
+          active={animationsActive}
           className="right-[-5%] md:right-[0%] top-[65%] md:top-[70%]"
         />
       </div>
@@ -114,11 +121,11 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
             className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] mb-10"
           >
             <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-70" />
+              <span className={cn(animationsActive && "animate-ping", "absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-70")} />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--accent)]" />
             </span>
             <span className="text-[10px] sm:text-xs font-mono tracking-[0.2em] sm:tracking-[0.25em] text-[var(--text-secondary)] uppercase">
-              Cloud Engineer &middot; DevOps &middot; AWS &middot; Azure
+            Backend Engineer &middot; AI Systems &middot; Distributed Cloud
             </span>
           </motion.div>
 
@@ -142,7 +149,7 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
             className="mt-6 text-sm sm:text-base font-mono tracking-wide"
             style={{ color: "var(--text-muted)" }}
           >
-            Building resilient infrastructure, eliminating drift &amp; enforcing cost governance at scale.
+            Shipping distributed systems, cloud-native microservices, and production AI integrations at scale.
           </motion.p>
         </div>
       </div>
@@ -160,8 +167,8 @@ export default function HeroSection({ handleScrollToAbout, introComplete = false
           Scroll
         </span>
         <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          animate={animationsActive ? { y: [0, 6, 0] } : { y: 0 }}
+          transition={animationsActive ? { duration: 1.5, repeat: Infinity, ease: "easeInOut" } : { duration: 0.2 }}
           className="text-[var(--text-muted)]"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">

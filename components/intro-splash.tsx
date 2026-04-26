@@ -9,6 +9,7 @@ interface IntroSplashProps {
 }
 
 const SPLASH_KEY = "splashShown";
+const SPLASH_COMPLETE_EVENT = "intro-splash-complete";
 
 export default function IntroSplash({ onComplete }: IntroSplashProps) {
   const [isMounted, setIsMounted] = useState(true);
@@ -17,7 +18,10 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
   const [pointerEventsEnabled, setPointerEventsEnabled] = useState(true);
 
   const onCompleteRef = useRef(onComplete);
-  onCompleteRef.current = onComplete;
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   // Offloading animation logic to the GPU via Framer Motion controls
   const textControls = useAnimation();
@@ -26,12 +30,16 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
   useEffect(() => {
     // Skip animation on page nav or subsequent reloads
     if (sessionStorage.getItem(SPLASH_KEY)) {
-      setIsMounted(false);
-      onCompleteRef.current?.();
-      return;
+      const id = window.setTimeout(() => {
+        setPointerEventsEnabled(false);
+        onCompleteRef.current?.();
+        globalThis.dispatchEvent(new Event(SPLASH_COMPLETE_EVENT));
+        setIsMounted(false);
+      }, 0);
+
+      return () => window.clearTimeout(id);
     }
 
-    sessionStorage.setItem(SPLASH_KEY, "1");
     let cancelled = false;
 
     const delay = (ms: number) =>
@@ -66,7 +74,9 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
       await delay(1000);
       if (cancelled) return;
 
+      sessionStorage.setItem(SPLASH_KEY, "1");
       onCompleteRef.current?.();
+      globalThis.dispatchEvent(new Event(SPLASH_COMPLETE_EVENT));
       bgControls.start({
         opacity: 0,
         transition: { duration: 1.5, ease: "easeInOut" },
@@ -91,7 +101,7 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
       {isMounted && (
         <motion.div
           key="intro-splash"
-          className="fixed inset-0 z-[60]"
+          className="fixed inset-0 z-[90]"
           style={{ pointerEvents: pointerEventsEnabled ? "auto" : "none" }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
@@ -127,6 +137,7 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
             <motion.span
               className="font-mono font-bold text-6xl md:text-8xl lg:text-9xl text-white tracking-widest"
               style={{
+                color: "#fff",
                 textShadow:
                   "0 0 40px rgba(16,185,129,0.5), 0 0 80px rgba(16,185,129,0.2)",
                 willChange: "transform, opacity",

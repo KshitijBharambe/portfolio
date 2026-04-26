@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -28,6 +29,7 @@ const tabs = [
 ];
 
 export default function AboutPage() {
+  const { ref, inView } = useInView({ threshold: 0.15 });
   const [activeTab, setActiveTab] = useState("background");
 
   const handleTabChange = useCallback((tabId: string) => {
@@ -39,7 +41,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <div className="min-h-screen pt-24 px-4" style={{ background: "var(--bg)" }}>
+    <div ref={ref} className="min-h-screen pt-24 px-4" style={{ background: "var(--bg)" }}>
       <div className="max-w-5xl mx-auto pb-20">
         {/* Header */}
         <motion.div
@@ -64,7 +66,7 @@ export default function AboutPage() {
             <span className="gradient-text">ME.</span>
           </h1>
           <p className="text-base max-w-xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-            Background, philosophies, and what drives me as an engineer.
+            Background, operating principles, and the engineering problems I like to solve.
           </p>
         </motion.div>
 
@@ -81,7 +83,7 @@ export default function AboutPage() {
             <div className="flex-shrink-0">
               <div className="relative">
                 <div
-                  className="absolute inset-[-3px] rounded-full animate-spin-slow"
+                  className={`absolute inset-[-3px] rounded-full ${inView ? "animate-spin-slow" : ""}`}
                   style={{
                     background: "conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent))",
                   }}
@@ -135,7 +137,7 @@ export default function AboutPage() {
           initial="hidden"
           animate="visible"
         >
-          <div className="glass rounded-xl p-1 flex flex-wrap items-center gap-1 mb-8 w-fit">
+          <div className="surface-panel rounded-xl p-1 flex flex-wrap items-center gap-1 mb-8 w-fit">
             {tabs.map(({ id, label, num }) => (
               <button
                 key={id}
@@ -284,14 +286,9 @@ export default function AboutPage() {
               >
                 {[
                   {
-                    title: "AWS Certified Solutions Architect – Associate",
+                    title: "AWS Certified Solutions Architect Associate",
                     issuer: "Amazon Web Services",
-                    description: "Validated expertise in designing distributed systems, cost-optimized architectures, and resilient applications on AWS.",
-                  },
-                  {
-                    title: "ISO/IEC 27001:2022 Lead Auditor",
-                    issuer: "BSI Training",
-                    description: "Certified to lead audits of Information Security Management Systems, ensuring compliance with international security standards.",
+                    description: "Validated knowledge of designing resilient, scalable, and cloud-native architectures on AWS.",
                   },
                 ].map((cert, index) => (
                   <div
